@@ -104,7 +104,14 @@ fragmentShader = [glsl|
   uniform vec2 textureSize;
   varying vec2 texturePos;
   void main () {
-    gl_FragColor = texture2D(texture, texturePos);
+    //gl_FragColor = texture2D(texture, texturePos);
+    // Fake a lookup :)
+    // TODO figure out how to do a lookup (mapping to an array?)
+    if ( texturePos.x < 0.5 ) {
+        gl_FragColor = vec4(0.5, 0.5, 1.0, 1.0);
+    } else {
+        gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+    }
   }
 |]
 
