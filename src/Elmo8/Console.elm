@@ -27,8 +27,11 @@ import Color
 import Html
 import Html.App
 
+import Elmo8.Display
+
 type alias Model = 
     { console : ConsoleModel
+    , display : Elmo8.Display.Model
     }
 
 -- Private
@@ -39,7 +42,7 @@ type alias ConsoleModel = {}
 -}
 type Console = A ConsoleModel
 
-type Msg = Nothing
+type Msg = DisplayMsg Elmo8.Display.Msg
 
 {-| Commands to give to the console
 
