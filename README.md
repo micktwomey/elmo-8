@@ -17,19 +17,4 @@ Aspirational specs:
 
 - Be a nice little playground
 - Be a simple teaching tool
-
-## Usage
-
-```elm
-import elmo8 exposing (..)
-
-update : 
-
-main : Program Never
-main =
-    elmo8.Game {
-        init = init,
-        update = update,
-        draw = draw
-    }
-```
+- Be a nice way to write small games
