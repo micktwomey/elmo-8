@@ -10,9 +10,9 @@ import Dict
 import Math.Vector2 exposing (Vec2, vec2, fromTuple)
 import Math.Vector3 exposing (Vec3, vec3, fromTuple)
 import WebGL
-import Window
 
-import Elmo8.Layers.Layer
+import Elmo8.Layers.Common exposing (LayerSize)
+-- import Elmo8.Layers.Layer exposing (Layer)
 
 type alias X = Int
 type alias Y = Int
@@ -37,14 +37,14 @@ init : (Model, Cmd Msg)
 init =
     { pixels = Dict.singleton (20, 20) 10 } ! []
 
-layer : Elmo8.Layers.Layer.Layer Model Msg 
-layer =
-    Elmo8.Layers.Layer.layer 
-        { init = init
-        , render = render
-        }
+-- layer : Layer Model Msg 
+-- layer =
+--     Elmo8.Layers.Layer.layer 
+--         { init = init
+--         , render = render
+--         }
 
-render : Elmo8.Layers.Layer.LayerSize -> Model -> List WebGL.Renderable
+render : LayerSize -> Model -> List WebGL.Renderable
 render screenSize model =
     [ 
         WebGL.render
@@ -56,7 +56,7 @@ render screenSize model =
             }
     ]
 
-getPixelPoints : Elmo8.Layers.Layer.LayerSize -> Dict.Dict (Int, Int) Int -> WebGL.Drawable Vertex
+getPixelPoints : LayerSize -> Dict.Dict (Int, Int) Int -> WebGL.Drawable Vertex
 getPixelPoints size points =
     let
         toPoint : (Int, Int) -> Vertex

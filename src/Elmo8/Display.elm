@@ -10,7 +10,8 @@ import Html
 import Html.Attributes
 import WebGL
 import Window
-import Elmo8.Layers.Layer exposing (Layer, LayerSize, renderLayer)
+import Elmo8.Layers.Common exposing (LayerSize)
+import Elmo8.Layers.Layer exposing (Layer, renderLayer)
 
 type alias Model = 
     { windowSize : Window.Size
