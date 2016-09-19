@@ -6,8 +6,11 @@ import Elmo8.Layers.Common exposing (LayerSize)
 
 import Elmo8.Layers.Pixels
 
-type Layer = 
+type Layer =
     PixelsLayer Elmo8.Layers.Pixels.Model
+
+type Msg =
+    PixelMsg Elmo8.Layers.Pixels.Msg
 
 renderLayer : Layer -> LayerSize -> List WebGL.Renderable
 renderLayer layer size =
@@ -15,53 +18,14 @@ renderLayer layer size =
         PixelsLayer pixels ->
             Elmo8.Layers.Pixels.render size pixels
 
+createDefaultLayers : List (Layer, Cmd Msg)
+createDefaultLayers =
+    let
+        (pix, pixmsgs) = Elmo8.Layers.Pixels.init
+    in
+    [ (PixelsLayer pix, Cmd.map PixelMsg pixmsgs)
+    ]
 
--- type Layer model msg = 
---     Layer 
---         { model 
---         | render : LayerSize -> List WebGL.Renderable
---         , init : Cmd msg
---         }
-
--- layer :
---     { model
---     | init : Cmd msg
---     , render : LayerSize -> List WebGL.Renderable 
---     } 
---     -> Layer model msg
--- layer {init, render} =
---     Layer
---         { init = init
---         , render = render
---         }
-
-
--- type Layer model msg = 
---     Layer 
---         { render : LayerSize -> model -> List WebGL.Renderable
---         , init : (model, Cmd msg)
---         }
-
--- layer :
---     { init : (model, Cmd msg)
---     , render : LayerSize -> model -> List WebGL.Renderable 
---     } 
---     -> Layer model msg
--- layer {init, render} =
---     Layer
---         { init = init
---         , render = render
---         }
-
--- renderLayer : LayerSize -> {render : LayerSize -> a -> List WebGL.Renderable} -> a -> List WebGL.Renderable
--- renderLayer size {render} model =
---     render size model
-
--- renderLayer : Layer model msg -> LayerSize -> List WebGL.Renderable
--- renderLayer layer size =
---     -- layer.render size
---     []
-
--- render : ScreenSize -> Layer l -> List WebGL.Renderable
--- render size l =
---     l.render size
+updateLayers : Msg -> List Layer -> (List Layer, Cmd Msg)
+updateLayers msg layers =
+    layers ! []

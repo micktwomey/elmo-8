@@ -37,13 +37,6 @@ init : (Model, Cmd Msg)
 init =
     { pixels = Dict.singleton (20, 20) 10 } ! []
 
--- layer : Layer Model Msg 
--- layer =
---     Elmo8.Layers.Layer.layer 
---         { init = init
---         , render = render
---         }
-
 render : LayerSize -> Model -> List WebGL.Renderable
 render screenSize model =
     [ 
@@ -76,7 +69,7 @@ pixelsVertexShader = [glsl|
     uniform vec2 screenSize;
     varying vec3 colour;
     void main () {
-        gl_PointSize = 10.0;
+        gl_PointSize = 5.0;
 
         gl_Position = vec4(position, 0.0, 1.0);
 
