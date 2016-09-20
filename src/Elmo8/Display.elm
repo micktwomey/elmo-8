@@ -43,7 +43,7 @@ update msg model =
             let
                 (layers, msg) = Elmo8.Layers.Layer.updateLayers layerMessage model.layers
             in
-                { model | layers = layers } ! [] -- [ Cmd.map LayerMsg msg ]
+                { model | layers = layers } ! [ Cmd.map LayerMsg msg ]
 
 getRenderables : Model -> List WebGL.Renderable
 getRenderables model =
