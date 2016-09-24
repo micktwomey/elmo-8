@@ -30,7 +30,7 @@ init layersWithMsgs =
         { windowSize = { width = 128, height = 128 }
         , layerSize = { width = 128.0, height = 128.0}
         , layers = layers
-        } ! layerMessages
+        } ! List.concat [layerMessages]
 
 initWithDefaultLayers : (Model, Cmd Msg)
 initWithDefaultLayers =
@@ -65,6 +65,9 @@ view model =
         -- , Html.Attributes.height model.windowSize.width
         [ Html.Attributes.width 512
         , Html.Attributes.height 512
-        , Html.Attributes.style [ ("display", "block"), ("border", "1px solid red") ]
+        , Html.Attributes.style
+            [ ("display", "block")
+            , ("border", "1px solid red")
+            ]
         ]
         (getRenderables model)
