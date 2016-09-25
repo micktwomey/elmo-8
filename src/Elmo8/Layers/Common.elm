@@ -4,6 +4,9 @@ module Elmo8.Layers.Common exposing (..)
 
 -}
 
-{-| Screen size as a float (easier to deal with in WebGL, less conversion)
+{-| Canvas size is the physical size of the canvas WebGL is rendering to
+
+This is used to scale the pixel sizes correctly.
+
 -}
-type alias LayerSize = { width: Float, height: Float}
+type alias CanvasSize = { width: Float, height: Float}

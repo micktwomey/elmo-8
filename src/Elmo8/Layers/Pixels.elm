@@ -12,7 +12,7 @@ import Math.Vector3 exposing (Vec3, vec3, fromTuple)
 import Math.Matrix4 exposing(Mat4, makeOrtho2D)
 import WebGL
 
-import Elmo8.Layers.Common exposing (LayerSize)
+import Elmo8.Layers.Common exposing (CanvasSize)
 -- import Elmo8.Layers.Layer exposing (Layer)
 
 type alias X = Int
@@ -27,6 +27,7 @@ type alias Vertex = { position : Vec2 }
 
 type alias Model =
     { pixels : Dict.Dict (X, Y) PixelColour
+    , screenSize : { width : Float, height : Float }
     }
 
 type Msg
@@ -47,19 +48,40 @@ corners =
 
 init : (Model, Cmd Msg)
 init =
-    -- { pixels = Dict.singleton (20, 20) 10 } ! []
-    { pixels = corners } ! []
+    { pixels = corners
+    , screenSize = { width = 128.0, height = 128.0 }
+    } ! []
 
-render : LayerSize -> Model -> List WebGL.Renderable
-render screenSize model =
+minX : Float
+minX = 0.0
+
+maxX : Float
+maxX = 127.0
+
+minY : Float
+minY = 0.0
+
+maxY : Float
+maxY = 127.0
+
+pixelSizeScaling : Float
+pixelSizeScaling = 0.5
+
+render : CanvasSize -> Model -> List WebGL.Renderable
+render canvasSize model =
     [
         WebGL.render
             pixelsVertexShader
             pixelsFragmentShader
             (getPixelPoints model.pixels)
-            { screenSize = vec2 screenSize.width screenSize.height
+            { canvasSize = vec2 canvasSize.width canvasSize.height
+            , screenSize = vec2 model.screenSize.width model.screenSize.height
+            , projectionMatrix = makeOrtho2D
+                (minX - pixelSizeScaling)
+                (maxX + pixelSizeScaling)
+                (minX - pixelSizeScaling)
+                (maxX + pixelSizeScaling)
             , colour = vec2 1.0 1.0
-            , projectionMatrix = makeOrtho2D (0.0 - 0.5) (127.0 + 0.5) (0.0 - 0.5) (127.0 + 0.5)
             }
     ]
 
@@ -77,14 +99,15 @@ getPixelPoints points =
         List.map toPoint (Dict.keys points)
             |> WebGL.Points
 
-pixelsVertexShader : WebGL.Shader { attr | position : Vec2 } { unif | screenSize : Vec2, projectionMatrix : Mat4 } { colour : Vec3 }
+pixelsVertexShader : WebGL.Shader { attr | position : Vec2 } { unif | canvasSize : Vec2, screenSize : Vec2, projectionMatrix : Mat4 } { colour : Vec3 }
 pixelsVertexShader = [glsl|
     attribute vec2 position;
+    uniform vec2 canvasSize;
     uniform vec2 screenSize;
     uniform mat4 projectionMatrix;
     varying vec3 colour;
     void main () {
-        gl_PointSize = 512.0 / screenSize.x;
+        gl_PointSize = canvasSize.x / screenSize.x;
 
         gl_Position = projectionMatrix * vec4(position, 0.0, 1.0);
 

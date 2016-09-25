@@ -10,12 +10,12 @@ import Html
 import Html.Attributes
 import WebGL
 import Window
-import Elmo8.Layers.Common exposing (LayerSize)
+import Elmo8.Layers.Common exposing (CanvasSize)
 import Elmo8.Layers.Layer exposing (Layer, renderLayer, createDefaultLayers)
 
 type alias Model =
     { windowSize : Window.Size
-    , layerSize: LayerSize
+    , canvasSize: CanvasSize
     , layers : List Layer
     }
 
@@ -27,8 +27,8 @@ init layersWithMsgs =
         layerMessages = List.map (\(_, msg) -> Cmd.map LayerMsg msg) layersWithMsgs
         layers = List.map (\(l, _) -> l) layersWithMsgs
     in
-        { windowSize = { width = 128, height = 128 }
-        , layerSize = { width = 128.0, height = 128.0}
+        { windowSize = { width = 0, height = 0 }
+        , canvasSize = { width = 512.0, height = 512.0}
         , layers = layers
         } ! List.concat [layerMessages]
 
@@ -49,7 +49,7 @@ getRenderables : Model -> List WebGL.Renderable
 getRenderables model =
     let
         render : Model -> Layer -> List WebGL.Renderable
-        render model layer = renderLayer layer model.layerSize
+        render model layer = renderLayer layer model.canvasSize
 
     in
         List.map (\l -> render model l) model.layers
@@ -63,8 +63,8 @@ view model =
         ]
         -- [ Html.Attributes.width model.windowSize.width
         -- , Html.Attributes.height model.windowSize.width
-        [ Html.Attributes.width 512
-        , Html.Attributes.height 512
+        [ Html.Attributes.width (round model.canvasSize.width)
+        , Html.Attributes.height (round model.canvasSize.height)
         , Html.Attributes.style
             [ ("display", "block")
             , ("border", "1px solid red")

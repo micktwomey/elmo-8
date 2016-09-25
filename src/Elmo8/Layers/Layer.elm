@@ -2,7 +2,7 @@ module Elmo8.Layers.Layer exposing (..)
 
 import WebGL
 
-import Elmo8.Layers.Common exposing (LayerSize)
+import Elmo8.Layers.Common exposing (CanvasSize)
 
 import Elmo8.Layers.Pixels
 
@@ -12,11 +12,11 @@ type Layer =
 type Msg =
     PixelMsg Elmo8.Layers.Pixels.Msg
 
-renderLayer : Layer -> LayerSize -> List WebGL.Renderable
-renderLayer layer size =
+renderLayer : Layer -> CanvasSize -> List WebGL.Renderable
+renderLayer layer canvasSize =
     case layer of
         PixelsLayer pixels ->
-            Elmo8.Layers.Pixels.render size pixels
+            Elmo8.Layers.Pixels.render canvasSize pixels
 
 createDefaultLayers : List (Layer, Cmd Msg)
 createDefaultLayers =
