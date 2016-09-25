@@ -61,7 +61,9 @@ view model =
         , Html.Attributes.height (round model.canvasSize.height)
         , Html.Attributes.style
             [ ("display", "block")
-            , ("border", "1px solid red")
+            -- , ("margin-left", "auto")
+            -- , ("margin-right", "auto")
+            -- , ("border", "1px solid red")
             ]
         ]
         (getRenderables model)

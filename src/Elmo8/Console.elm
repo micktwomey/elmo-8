@@ -25,6 +25,7 @@ During draw you can read state from the Console using the following functions. T
 
 import AnimationFrame
 import Html
+import Html.Attributes
 import Html.App
 import Time exposing (..)
 
@@ -109,7 +110,15 @@ subscriptions model =
 
 view : Model -> Html.Html Msg
 view model =
-    Html.div [] [ Elmo8.Display.view model.display |> Html.App.map DisplayMsg ]
+    Html.body
+        [ Html.Attributes.style
+            [ ( "background-color", "#000" )
+            , ( "display",  "flex" )
+            , ( "align-items", "center")
+            , ("justify-content", "center")
+            ]
+        ]
+        [ Elmo8.Display.view model.display |> Html.App.map DisplayMsg ]
 
 {-| Console configuration
 
