@@ -1,14 +1,14 @@
 import Elmo8.Console as Console
-import Color
+import Elmo8.Palettes.Pico8 as Palette
 
 draw : Console.Console -> List Console.Command
 draw console =
-    [ Console.putPixel 0 0 Color.white
+    [ Console.putPixel 0 0 Palette.peach
     -- , Console.print "Hello" 10 10 Color.white
     ]
 
 main : Program Never
 main =
- Console.boot 
+ Console.boot
     { draw = draw
     }

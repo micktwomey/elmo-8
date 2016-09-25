@@ -13,6 +13,7 @@
     "dependencies": {
         "elm-community/elm-linear-algebra": "2.0.3 <= v < 3.0.0",
         "elm-community/elm-webgl": "3.0.3 <= v < 4.0.0",
+        "elm-lang/animation-frame": "1.0.0 <= v < 2.0.0",
         "elm-lang/core": "4.0.5 <= v < 5.0.0",
         "elm-lang/html": "1.1.0 <= v < 2.0.0",
         "elm-lang/window": "1.0.0 <= v < 2.0.0",

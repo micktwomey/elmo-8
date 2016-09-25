@@ -32,8 +32,12 @@ type alias Model =
 
 type Msg
     = SetPixel X Y PixelColour
-    | GetPixel X Y
-    | Clear PixelColour
+    | Clear
+
+
+setPixel : Model -> Int -> Int -> PixelColour -> Model
+setPixel model x y colour =
+    { model | pixels = Dict.insert (x, y) colour model.pixels }
 
 corners : Dict.Dict (X, Y) PixelColour
 corners =
@@ -48,9 +52,17 @@ corners =
 
 init : (Model, Cmd Msg)
 init =
-    { pixels = corners
+    { pixels = Dict.empty
     , screenSize = { width = 128.0, height = 128.0 }
     } ! []
+
+update : Msg -> Model -> (Model, Cmd Msg)
+update msg model =
+    case msg of
+        SetPixel x y colour ->
+            { model | pixels = Dict.insert (x, y) colour model.pixels } ! []
+        Clear ->
+            { model | pixels = Dict.empty } ! []
 
 minX : Float
 minX = 0.0

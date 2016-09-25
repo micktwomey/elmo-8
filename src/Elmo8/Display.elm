@@ -11,49 +11,45 @@ import Html.Attributes
 import WebGL
 import Window
 import Elmo8.Layers.Common exposing (CanvasSize)
-import Elmo8.Layers.Layer exposing (Layer, renderLayer, createDefaultLayers)
+-- import Elmo8.Layers.Layer exposing (Layer, renderLayer, createDefaultLayers)
+import Elmo8.Layers.Pixels
 
 type alias Model =
     { windowSize : Window.Size
     , canvasSize: CanvasSize
-    , layers : List Layer
+    , pixels : Elmo8.Layers.Pixels.Model
     }
 
-type Msg = LayerMsg Elmo8.Layers.Layer.Msg
+type Msg = PixelsMsg Elmo8.Layers.Pixels.Msg
 
-init : List (Layer, Cmd Elmo8.Layers.Layer.Msg) -> (Model, Cmd Msg)
-init layersWithMsgs =
+setPixel : Model -> Int -> Int -> Int -> Model
+setPixel model x y colour =
+    { model | pixels = Elmo8.Layers.Pixels.setPixel model.pixels x y colour }
+
+init : (Model, Cmd Msg)
+init =
     let
-        layerMessages = List.map (\(_, msg) -> Cmd.map LayerMsg msg) layersWithMsgs
-        layers = List.map (\(l, _) -> l) layersWithMsgs
+        (pixels, pixelsCmd) = Elmo8.Layers.Pixels.init
     in
         { windowSize = { width = 0, height = 0 }
         , canvasSize = { width = 512.0, height = 512.0}
-        , layers = layers
-        } ! List.concat [layerMessages]
-
-initWithDefaultLayers : (Model, Cmd Msg)
-initWithDefaultLayers =
-    init createDefaultLayers
+        , pixels = pixels
+        } ! [ Cmd.map PixelsMsg pixelsCmd ]
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
     case msg of
-        LayerMsg layerMessage ->
+        PixelsMsg pixelsMsg ->
             let
-                (layers, msg) = Elmo8.Layers.Layer.updateLayers layerMessage model.layers
+                (pixels, cmd) = Elmo8.Layers.Pixels.update pixelsMsg model.pixels
             in
-                { model | layers = layers } ! [ Cmd.map LayerMsg msg ]
+                { model | pixels = pixels } ! [ Cmd.map PixelsMsg cmd ]
 
 getRenderables : Model -> List WebGL.Renderable
 getRenderables model =
-    let
-        render : Model -> Layer -> List WebGL.Renderable
-        render model layer = renderLayer layer model.canvasSize
-
-    in
-        List.map (\l -> render model l) model.layers
-            |> List.concat
+    List.concat [
+        Elmo8.Layers.Pixels.render model.canvasSize model.pixels
+    ]
 
 view : Model -> Html.Html Msg
 view model =
@@ -61,8 +57,6 @@ view model =
         [ WebGL.Enable WebGL.Blend
         , WebGL.BlendFunc (WebGL.One, WebGL.OneMinusSrcAlpha)
         ]
-        -- [ Html.Attributes.width model.windowSize.width
-        -- , Html.Attributes.height model.windowSize.width
         [ Html.Attributes.width (round model.canvasSize.width)
         , Html.Attributes.height (round model.canvasSize.height)
         , Html.Attributes.style
