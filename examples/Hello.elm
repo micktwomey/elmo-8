@@ -8,7 +8,7 @@ draw console =
     , Console.putPixel 50 50 Palette.peach
     , Console.putPixel 100 100 Palette.peach
     , Console.putPixel 127 127 Palette.peach
-    -- , Console.print "Hello" 10 10 Color.white
+    , Console.print "Hello" 20 20 Palette.orange
     ]
 
 main : Program Never

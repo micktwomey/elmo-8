@@ -32,18 +32,16 @@ import Time exposing (..)
 import Elmo8.Display
 
 type alias Model =
-    { console : ConsoleModel
-    , display : Elmo8.Display.Model
+    { display : Elmo8.Display.Model
     }
 
 -- Private
 type alias Colour = Int
-type alias ConsoleModel = {}
 
 {-| Represents the console for interacting via functions
 
 -}
-type Console = A ConsoleModel
+type Console = A Model
 
 type Msg
     = DisplayMsg Elmo8.Display.Msg
@@ -70,7 +68,7 @@ putPixel x y colour =
 -}
 getPixel : Console -> Int -> Int -> Colour
 getPixel (A console) x y =
-    0
+    Elmo8.Display.getPixel console.display x y
 
 {-| Print a string at the given position
 
@@ -84,7 +82,7 @@ init =
     let
         (displayModel, displayMsg) = Elmo8.Display.init
     in
-        { console = {}, display = displayModel}
+        { display = displayModel}
         ! [ Cmd.map DisplayMsg displayMsg ]
 
 
@@ -98,11 +96,18 @@ processCommand command model =
 
 update : (Console -> List Command) -> Msg -> Model -> (Model, Cmd Msg)
 update draw msg model =
-    let
-        commands = draw (A model.console)
-        updatedModel = List.foldl processCommand model commands
-    in
-        updatedModel ! [ ]
+    case msg of
+        Tick delta ->
+            let
+                commands = draw (A model)
+                updatedModel = List.foldl processCommand model commands
+            in
+                updatedModel ! [ ]
+        DisplayMsg displayMsg ->
+            let
+                (display, cmd) = Elmo8.Display.update displayMsg model.display
+            in
+                { model | display = display} ! [ Cmd.map DisplayMsg cmd ]
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
@@ -115,7 +120,7 @@ view model =
             [ ( "background-color", "#000" )
             , ( "display",  "flex" )
             , ( "align-items", "center")
-            , ("justify-content", "center")
+            , ( "justify-content", "center" )
             ]
         ]
         [ Elmo8.Display.view model.display |> Html.App.map DisplayMsg ]
@@ -123,6 +128,7 @@ view model =
 {-| Console configuration
 
 draw is a function which can optionally read information from the Console (the previous state) and then emit a bunch of commands to update the console (e.g. drawing).
+
 
 -}
 type alias Config =

@@ -12,7 +12,7 @@ import Math.Vector3 exposing (Vec3, vec3, fromTuple)
 import Math.Matrix4 exposing(Mat4, makeOrtho2D)
 import WebGL
 
-import Elmo8.Layers.Common exposing (CanvasSize)
+import Elmo8.Layers.Common exposing (CanvasSize, Vertex, makeProjectionMatrix)
 -- import Elmo8.Layers.Layer exposing (Layer)
 
 type alias X = Int
@@ -22,8 +22,6 @@ type alias Y = Int
 
 -}
 type alias PixelColour = Int
-
-type alias Vertex = { position : Vec2 }
 
 type alias Model =
     { pixels : Dict.Dict (X, Y) PixelColour
@@ -38,6 +36,11 @@ type Msg
 setPixel : Model -> Int -> Int -> PixelColour -> Model
 setPixel model x y colour =
     { model | pixels = Dict.insert (x, y) colour model.pixels }
+
+getPixel : Model -> Int -> Int -> PixelColour
+getPixel model x y =
+    Dict.get (x, y) model.pixels
+        |> Maybe.withDefault 0
 
 corners : Dict.Dict (X, Y) PixelColour
 corners =
@@ -64,21 +67,6 @@ update msg model =
         Clear ->
             { model | pixels = Dict.empty } ! []
 
-minX : Float
-minX = 0.0
-
-maxX : Float
-maxX = 127.0
-
-minY : Float
-minY = 0.0
-
-maxY : Float
-maxY = 127.0
-
-pixelSizeScaling : Float
-pixelSizeScaling = 0.5
-
 render : CanvasSize -> Model -> List WebGL.Renderable
 render canvasSize model =
     [
@@ -88,11 +76,7 @@ render canvasSize model =
             (getPixelPoints model.pixels)
             { canvasSize = vec2 canvasSize.width canvasSize.height
             , screenSize = vec2 model.screenSize.width model.screenSize.height
-            , projectionMatrix = makeOrtho2D
-                (minX - pixelSizeScaling)
-                (maxX + pixelSizeScaling)
-                (minX - pixelSizeScaling)
-                (maxX + pixelSizeScaling)
+            , projectionMatrix = makeProjectionMatrix
             , colour = vec2 1.0 1.0
             }
     ]
