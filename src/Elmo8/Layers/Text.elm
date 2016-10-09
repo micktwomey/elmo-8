@@ -69,8 +69,8 @@ render canvasSize model =
 mesh : WebGL.Drawable Vertex
 mesh =
     WebGL.Triangle
-        [ ( Vertex (vec2 0 0), Vertex (vec2 1 1), Vertex (vec2 1 0) )
-        , ( Vertex (vec2 0 0), Vertex (vec2 0 1), Vertex (vec2 1 1) )
+        [ ( Vertex (vec2 0 0), Vertex (vec2 8 8), Vertex (vec2 8 0) )
+        , ( Vertex (vec2 0 0), Vertex (vec2 0 8), Vertex (vec2 8 8) )
         ]
 
 -- https://github.com/w0rm/elm-webgl-playground/blob/master/Animation2D.elm

@@ -55,8 +55,8 @@ render canvasSize model =
 mesh : WebGL.Drawable Vertex
 mesh =
     WebGL.Triangle
-        [ ( Vertex (vec2 0 0), Vertex (vec2 1 1), Vertex (vec2 1 0) )
-        , ( Vertex (vec2 0 0), Vertex (vec2 0 1), Vertex (vec2 1 1) )
+        [ ( Vertex (vec2 0 0), Vertex (vec2 127 127), Vertex (vec2 127 0) )
+        , ( Vertex (vec2 0 0), Vertex (vec2 0 127), Vertex (vec2 127 127) )
         ]
 
 vertexShader : WebGL.Shader 
