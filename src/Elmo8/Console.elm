@@ -111,10 +111,10 @@ spr n x y [w h] [flip_x] [flip_y]
 sprite : Int -> Int -> Int -> Command
 sprite index x y = Noop "sprite"
 
-init : model -> (Model model, Cmd Msg)
-init model =
+init : model -> String -> (Model model, Cmd Msg)
+init model spritesUri =
     let
-        (displayModel, displayMsg) = Elmo8.Display.init
+        (displayModel, displayMsg) = Elmo8.Display.init spritesUri
     in
         { display = displayModel, model = model, lastTick = 0 }
         ! [ Cmd.map DisplayMsg displayMsg ]
@@ -180,6 +180,7 @@ type alias Config model =
     { draw: Console model -> model -> List Command
     , update: model -> model
     , init: model
+    , spritesUri : String
     }
 
 {-| Boot your console!
@@ -190,7 +191,7 @@ Supply a Config.
 boot : Config model -> Program Never
 boot config =
     Html.App.program
-        { init = init config.init
+        { init = init config.init config.spritesUri
         , update = update config.draw config.update
         , subscriptions = subscriptions
         , view = view
