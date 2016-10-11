@@ -55,8 +55,8 @@ render canvasSize model =
 mesh : WebGL.Drawable Vertex
 mesh =
     WebGL.Triangle
-        [ ( Vertex (vec2 0 0), Vertex (vec2 127 127), Vertex (vec2 127 0) )
-        , ( Vertex (vec2 0 0), Vertex (vec2 0 127), Vertex (vec2 127 127) )
+        [ ( Vertex (vec2 0 0), Vertex (vec2 15 15), Vertex (vec2 15 0) )
+        , ( Vertex (vec2 0 0), Vertex (vec2 0 15), Vertex (vec2 15 15) )
         ]
 
 vertexShader : WebGL.Shader 
@@ -69,8 +69,10 @@ vertexShader = [glsl|
   uniform mat4 projectionMatrix;
   varying vec2 texturePos;
   void main () {
+    vec2 clipSpace = position / screenSize * 2.0 - 1.0;
+    gl_Position = vec4(clipSpace.x, -clipSpace.y, 0, 1);
     texturePos = position;
-    gl_Position = projectionMatrix * vec4(position, 0.0, 1.0);
+    //gl_Position = projectionMatrix * vec4(position, 0.0, 1.0);
   }
 |]
 
@@ -82,7 +84,11 @@ fragmentShader = [glsl|
   uniform vec2 textureSize;
   varying vec2 texturePos;
   void main () {
-    //gl_FragColor = texture2D(texture, texturePos);
-    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+    vec2 size = vec2(16.0, 16.0) / textureSize;
+    vec2 textureClipSpace = texturePos / textureSize * 2.0 - 1.0;
+    vec4 temp = texture2D(texture, vec2(textureClipSpace.x, -textureClipSpace.y));
+    //float a = temp.a;
+    //gl_FragColor = vec4(temp.r * a, temp.g * a, temp.b * a, a);
+    gl_FragColor = temp + vec4(0.5, 0.5, 0.5, 1.0);
   }
 |]

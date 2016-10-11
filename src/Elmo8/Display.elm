@@ -80,7 +80,7 @@ getRenderables model =
     List.concat
     [ Elmo8.Layers.Text.render model.canvasSize model.text
     , Elmo8.Layers.Pixels.render model.canvasSize model.pixels
-    -- , Elmo8.Layers.Sprites.render model.canvasSize model.sprites
+    , Elmo8.Layers.Sprites.render model.canvasSize model.sprites
     ]
 
 view : Model -> Html.Html Msg

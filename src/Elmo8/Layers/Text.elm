@@ -53,7 +53,7 @@ render canvasSize model =
                     fragmentShader
                     mesh
                     { projectionMatrix = makeProjectionMatrix
-                    , colour = vec4 1.0 1.0 1.0 1.0
+                    , colour = vec4 0.5 1.0 1.0 1.0
                     , charCoords = vec4 64 23 6 10
                     , texSize = 128.0
                     , offset = vec2 0 0
