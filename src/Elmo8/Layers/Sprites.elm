@@ -69,23 +69,31 @@ vertexShader = [glsl|
   uniform mat4 projectionMatrix;
   varying vec2 texturePos;
   void main () {
-    vec2 clipSpace = position / screenSize * 2.0 - 1.0;
-    gl_Position = vec4(clipSpace.x, -clipSpace.y, 0, 1);
-    texturePos = position;
+    //vec2 clipSpace = position / screenSize * 2.0 - 1.0;
+    //gl_Position = projectionMatrix * vec4(clipSpace.x, -clipSpace.y, 0, 1);
+    //texturePos = position;
     //gl_Position = projectionMatrix * vec4(position, 0.0, 1.0);
+
+    texturePos = position;
+    gl_Position = projectionMatrix * vec4(position.x, position.y, 0.0, 1.0);
   }
 |]
 
 
-fragmentShader : WebGL.Shader {} {u | texture : WebGL.Texture, textureSize : Vec2 } {texturePos : Vec2}
+fragmentShader : WebGL.Shader 
+    {} 
+    {u | texture : WebGL.Texture, textureSize : Vec2, projectionMatrix : Mat4 } 
+    {texturePos : Vec2}
 fragmentShader = [glsl|
-  precision mediump float;
+  precision highp float;
+  uniform mat4 projectionMatrix;
   uniform sampler2D texture;
   uniform vec2 textureSize;
   varying vec2 texturePos;
   void main () {
-    vec2 size = vec2(16.0, 16.0) / textureSize;
-    vec2 textureClipSpace = texturePos / textureSize * 2.0 - 1.0;
+    vec2 size = vec2(15.0, 15.0) / textureSize;
+    //vec2 textureClipSpace = texturePos / textureSize * 0.525 - 1.0;
+    vec2 textureClipSpace = (projectionMatrix * vec4(texturePos * size, 0, 1)).xy;
     vec4 temp = texture2D(texture, vec2(textureClipSpace.x, -textureClipSpace.y));
     //float a = temp.a;
     //gl_FragColor = vec4(temp.r * a, temp.g * a, temp.b * a, a);

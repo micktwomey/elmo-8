@@ -78,8 +78,10 @@ update msg model =
 getRenderables : Model -> List WebGL.Renderable
 getRenderables model =
     List.concat
-    [ Elmo8.Layers.Text.render model.canvasSize model.text
-    , Elmo8.Layers.Pixels.render model.canvasSize model.pixels
+    [ 
+        -- Elmo8.Layers.Text.render model.canvasSize model.text
+    -- ,
+     Elmo8.Layers.Pixels.render model.canvasSize model.pixels
     , Elmo8.Layers.Sprites.render model.canvasSize model.sprites
     ]
 
@@ -95,7 +97,7 @@ view model =
             [ ("display", "block")
             -- , ("margin-left", "auto")
             -- , ("margin-right", "auto")
-            -- , ("border", "1px solid red")
+            , ("border", "1px solid red")
             ]
         ]
         (getRenderables model)
