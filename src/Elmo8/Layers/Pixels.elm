@@ -105,7 +105,7 @@ pixelsVertexShader = [glsl|
     void main () {
         gl_PointSize = canvasSize.x / screenSize.x;
 
-        gl_Position = projectionMatrix * vec4(position, 0.0, 1.0);
+        gl_Position = projectionMatrix * vec4(position.x + 0.5, position.y + 0.5, 0.0, 1.0);
 
         // TODO a lookup in the palette
         colour = vec3(0.0, 0.5, 1.0);

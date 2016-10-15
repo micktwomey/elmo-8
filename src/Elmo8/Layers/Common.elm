@@ -38,9 +38,10 @@ scale = 1.0
 -}
 makeProjectionMatrix : Mat4
 makeProjectionMatrix =
-    makeOrtho2D
-        (minX * scale)
-        (maxX * scale)
-        (maxX * scale)
-        (minX * scale)
-        -- |> translate3 0.375 0.375 0
+    -- makeOrtho2D
+    --     (minX * scale)
+    --     (maxX * scale)
+    --     (maxX * scale)
+    --     (minX * scale)
+    --     -- |> translate3 0.375 0.375 0
+    makeOrtho2D 0.0 128.0 128.0 0.0
