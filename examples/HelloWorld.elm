@@ -30,6 +30,7 @@ draw_letter t i j0 =
         , Console.sprite (16+i) (8+i*8 + x)  (round y)
         , Console.putPixel 16 16 5
         , Console.putPixel 127 127 5
+        , Console.putPixel 128 128 5
         ]
 
 draw : Console.Console Model -> Model ->  List Console.Command
