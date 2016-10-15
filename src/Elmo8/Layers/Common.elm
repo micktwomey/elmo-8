@@ -20,13 +20,13 @@ minX : Float
 minX = 0.0
 
 maxX : Float
-maxX = 128.0
+maxX = 127.0
 
 minY : Float
 minY = 0.0
 
 maxY : Float
-maxY = 128.0
+maxY = 127.0
 
 scale : Float
 scale = 1.0

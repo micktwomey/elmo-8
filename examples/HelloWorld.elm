@@ -28,6 +28,9 @@ draw_letter t i j0 =
     in
         [ Console.palette 7 col
         , Console.sprite (16+i) (8+i*8 + x)  (round y)
+        , Console.putPixel 0 0 5
+        , Console.putPixel 7 7 5
+        , Console.putPixel 8 8 5
         , Console.putPixel 16 16 5
         , Console.putPixel 127 127 5
         , Console.putPixel 128 128 5

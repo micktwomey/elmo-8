@@ -55,8 +55,8 @@ render canvasSize model =
 mesh : WebGL.Drawable Vertex
 mesh =
     WebGL.Triangle
-        [ ( Vertex (vec2 0 0), Vertex (vec2 16 16), Vertex (vec2 16 0) )
-        , ( Vertex (vec2 0 0), Vertex (vec2 0 16), Vertex (vec2 16 16) )
+        [ ( Vertex (vec2 0 0), Vertex (vec2 8 8), Vertex (vec2 8 0) )
+        , ( Vertex (vec2 0 0), Vertex (vec2 0 8), Vertex (vec2 8 8) )
         ]
 
 vertexShader : WebGL.Shader 
@@ -91,7 +91,7 @@ fragmentShader = [glsl|
   uniform vec2 textureSize;
   varying vec2 texturePos;
   void main () {
-    vec2 size = vec2(32.0, 32.0) / textureSize;
+    vec2 size = vec2(64.0, 64.0) / textureSize;
     //vec2 textureClipSpace = texturePos / textureSize * 1.0 - 1.0;
     vec2 textureClipSpace = (projectionMatrix * vec4(texturePos * size, 0, 1)).xy;
     vec4 temp = texture2D(texture, textureClipSpace);
