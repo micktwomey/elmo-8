@@ -107,7 +107,7 @@ view model =
             [ ("display", "block")
             -- , ("margin-left", "auto")
             -- , ("margin-right", "auto")
-            , ("border", "1px solid red")
+            -- , ("border", "1px solid red")
             ]
         ]
         (getRenderables model)
