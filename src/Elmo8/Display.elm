@@ -29,6 +29,12 @@ type Msg
     | TextMsg Elmo8.Layers.Text.Msg
     | SpritesMsg Elmo8.Layers.Sprites.Msg
 
+clear : Model -> Model
+clear model =
+    { model 
+    | sprites = Elmo8.Layers.Sprites.clear model.sprites 
+    }
+
 setPixel : Model -> Int -> Int -> Int -> Model
 setPixel model x y colour =
     { model | pixels = Elmo8.Layers.Pixels.setPixel model.pixels x y colour }
@@ -36,6 +42,10 @@ setPixel model x y colour =
 getPixel : Model -> Int -> Int -> Int
 getPixel model x y =
     Elmo8.Layers.Pixels.getPixel model.pixels x y
+
+sprite : Model -> Int -> Int -> Int -> Model
+sprite model index x y =
+    { model | sprites = Elmo8.Layers.Sprites.sprite model.sprites index x y }
 
 init : String -> (Model, Cmd Msg)
 init spritesUri =

@@ -57,6 +57,7 @@ Normally you don't create these directly, instead use the drawing functions to i
 type Command
     = PutPixel Int Int Colour
     | Print Int Int Colour String
+    | Sprite Int Int Int
     | Noop String
 
 {-| Draw a pixel at the given position
@@ -109,7 +110,8 @@ spr n x y [w h] [flip_x] [flip_y]
 
 -}
 sprite : Int -> Int -> Int -> Command
-sprite index x y = Noop "sprite"
+sprite sprite x y =
+    Sprite sprite x y
 
 init : model -> String -> (Model model, Cmd Msg)
 init model spritesUri =
@@ -126,6 +128,8 @@ processCommand command model =
         Noop message -> model
         PutPixel x y colour ->
             { model | display = Elmo8.Display.setPixel model.display x y colour }
+        Sprite index x y ->
+            { model | display = Elmo8.Display.sprite model.display index x y }
         Print x y colour string ->
             model
 
@@ -139,8 +143,9 @@ update draw updateModel msg model =
                 case shouldTick of
                     True ->
                         let
+                            clearedDisplayModel = { model | display = Elmo8.Display.clear model.display }
                             commands = draw (A model) model.model
-                            updatedModel = List.foldl processCommand model commands
+                            updatedModel = List.foldl processCommand clearedDisplayModel commands
                         in
                             { updatedModel | model = updateModel model.model, lastTick = time } ! [ ]
                     False ->

@@ -21,10 +21,10 @@ draw_letter t i j0 =
         j = 7 - j0
         col = 7 + j
         t1 = t + i*4 - j*2
-        -- x = cos(t0) * 5
+        -- x = cos(t) * 5
         -- Bug in PICO-8 example, cos(nil) * 5 -> 1 * 5
         x = 5
-        y = 38 + j + cos(t1/50) * 5
+        y = 38 + j + cos(t1/3.5) * 5
     in
         [ Console.palette 7 col
         , Console.sprite (16+i) (8+i*8 + x)  (round y)
@@ -53,5 +53,5 @@ main =
     { draw = draw
     , init = init
     , update = update
-    , spritesUri = "/hello_world.png"
+    , spritesUri = "/birdwatching.png"
     }

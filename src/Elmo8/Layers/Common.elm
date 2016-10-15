@@ -16,21 +16,6 @@ type alias CanvasSize = { width: Float, height: Float}
 
 type alias Vertex = { position : Vec2 }
 
-minX : Float
-minX = 0.0
-
-maxX : Float
-maxX = 127.0
-
-minY : Float
-minY = 0.0
-
-maxY : Float
-maxY = 127.0
-
-scale : Float
-scale = 1.0
-
 {-| Create a 2D projection matrix.
 
 0,0 is top left and 127,127 is bottom right. This matches up with the PICO-8.
@@ -38,10 +23,4 @@ scale = 1.0
 -}
 makeProjectionMatrix : Mat4
 makeProjectionMatrix =
-    -- makeOrtho2D
-    --     (minX * scale)
-    --     (maxX * scale)
-    --     (maxX * scale)
-    --     (minX * scale)
-    --     -- |> translate3 0.375 0.375 0
     makeOrtho2D 0.0 128.0 128.0 0.0
