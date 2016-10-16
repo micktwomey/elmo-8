@@ -5,7 +5,7 @@ module Elmo8.Layers.Common exposing (..)
 -}
 
 import Math.Vector2 exposing (Vec2)
-import Math.Matrix4 exposing(Mat4, makeOrtho2D)
+import Math.Matrix4 exposing(Mat4, makeOrtho2D, translate3)
 
 {-| Canvas size is the physical size of the canvas WebGL is rendering to
 
@@ -16,25 +16,11 @@ type alias CanvasSize = { width: Float, height: Float}
 
 type alias Vertex = { position : Vec2 }
 
-minX : Float
-minX = 0.0
+{-| Create a 2D projection matrix.
 
-maxX : Float
-maxX = 127.0
+0,0 is top left and 127,127 is bottom right. This matches up with the PICO-8.
 
-minY : Float
-minY = 0.0
-
-maxY : Float
-maxY = 127.0
-
-pixelSizeScaling : Float
-pixelSizeScaling = 0.5
-
+-}
 makeProjectionMatrix : Mat4
 makeProjectionMatrix =
-    makeOrtho2D
-        (minX - pixelSizeScaling)
-        (maxX + pixelSizeScaling)
-        (minX - pixelSizeScaling)
-        (maxX + pixelSizeScaling)
+    makeOrtho2D 0.0 128.0 128.0 0.0

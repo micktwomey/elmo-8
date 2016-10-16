@@ -5,6 +5,8 @@ module Elmo8.Palettes.Pico8 exposing (..)
 Series of constants for the PICO-8 palette
 -}
 
+import Math.Vector4 exposing (Vec4, vec4)
+
 black : Int
 black = 0
 

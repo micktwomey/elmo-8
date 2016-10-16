@@ -1,4 +1,4 @@
-module Elmo8.Console exposing (Command, Console, getPixel, putPixel, print, boot)
+module Elmo8.Console exposing (Command, Console, getPixel, putPixel, print, boot, palette, sprite)
 
 {-| The ELMO-8 Fantasy Console
 
@@ -8,14 +8,14 @@ This is a PICO-8 inspired fantasy "console". This isn't really a console emulato
 @docs boot
 
 # Drawing
-@docs putPixel, print
+@docs putPixel, print, palette, sprite
 
 # Reading state
 During draw you can read state from the Console using the following functions. These apply to the state *before* your drawing commands update it.
 
 @docs getPixel
 
-# Actionsc
+# Actions
 @docs Command
 
 # Data
@@ -31,8 +31,10 @@ import Time exposing (..)
 
 import Elmo8.Display
 
-type alias Model =
+type alias Model model =
     { display : Elmo8.Display.Model
+    , model : model
+    , lastTick : Time.Time
     }
 
 -- Private
@@ -41,7 +43,7 @@ type alias Colour = Int
 {-| Represents the console for interacting via functions
 
 -}
-type Console = A Model
+type Console model = A (Model model)
 
 type Msg
     = DisplayMsg Elmo8.Display.Msg
@@ -55,6 +57,8 @@ Normally you don't create these directly, instead use the drawing functions to i
 type Command
     = PutPixel Int Int Colour
     | Print Int Int Colour String
+    | Sprite Int Int Int
+    | Noop String
 
 {-| Draw a pixel at the given position
 
@@ -66,7 +70,7 @@ putPixel x y colour =
 {-| Read a colour value from the given pixel
 
 -}
-getPixel : Console -> Int -> Int -> Colour
+getPixel : Console model -> Int -> Int -> Colour
 getPixel (A console) x y =
     Elmo8.Display.getPixel console.display x y
 
@@ -77,45 +81,88 @@ print : String -> Int -> Int -> Colour -> Command
 print string x y colour =
     Print x y colour string
 
-init : (Model, Cmd Msg)
-init =
+{-| Remap a colour in the palette used for drawing operations 
+
+pal c0 c1 [p]
+
+	Draw all instances of colour c0 as c1 in subsequent draw calls
+
+	pal() to reset to system defaults (including transparency values)
+	Two types of palette (p; defaults to 0)
+		0 draw palette   : colours are remapped on draw    // e.g. to re-colour sprites
+		1 screen palette : colours are remapped on display // e.g. for fades
+	c0 colour index 0..15
+	c1 colour index to map to
+
+-}
+palette : Colour -> Colour -> Command
+palette old new = Noop "palette"
+
+{-| Render a sprite at the given position 
+
+spr n x y [w h] [flip_x] [flip_y]
+
+	draw sprite n (0..255) at position x,y
+	width and height are 1,1 by default and specify how many sprites wide to blit.
+	Colour 0 drawn as transparent by default (see palt())
+	flip_x=true to flip horizontally
+	flip_y=true to flip vertically
+
+-}
+sprite : Int -> Int -> Int -> Command
+sprite sprite x y =
+    Sprite sprite x y
+
+init : model -> String -> (Model model, Cmd Msg)
+init model spritesUri =
     let
-        (displayModel, displayMsg) = Elmo8.Display.init
+        (displayModel, displayMsg) = Elmo8.Display.init spritesUri
     in
-        { display = displayModel}
+        { display = displayModel, model = model, lastTick = 0 }
         ! [ Cmd.map DisplayMsg displayMsg ]
 
 
-processCommand : Command -> Model -> Model
+processCommand : Command -> Model model -> Model model
 processCommand command model =
     case command of
+        Noop message -> model
         PutPixel x y colour ->
             { model | display = Elmo8.Display.setPixel model.display x y colour }
+        Sprite index x y ->
+            { model | display = Elmo8.Display.sprite model.display index x y }
         Print x y colour string ->
             model
 
-update : (Console -> List Command) -> Msg -> Model -> (Model, Cmd Msg)
-update draw msg model =
+update : (Console model -> model -> List Command) -> (model -> model) -> Msg -> Model model -> (Model model, Cmd Msg)
+update draw updateModel msg model =
     case msg of
-        Tick delta ->
+        Tick time ->
             let
-                commands = draw (A model)
-                updatedModel = List.foldl processCommand model commands
-            in
-                updatedModel ! [ ]
+                shouldTick = (time - model.lastTick) >= (1.0 / 30)
+            in 
+                case shouldTick of
+                    True ->
+                        let
+                            clearedDisplayModel = { model | display = Elmo8.Display.clear model.display }
+                            commands = draw (A model) model.model
+                            updatedModel = List.foldl processCommand clearedDisplayModel commands
+                        in
+                            { updatedModel | model = updateModel model.model, lastTick = time } ! [ ]
+                    False ->
+                        model ! []
         DisplayMsg displayMsg ->
             let
                 (display, cmd) = Elmo8.Display.update displayMsg model.display
             in
                 { model | display = display} ! [ Cmd.map DisplayMsg cmd ]
 
-subscriptions : Model -> Sub Msg
+subscriptions : Model model -> Sub Msg
 subscriptions model =
-    AnimationFrame.diffs (Tick << Time.inSeconds)
+    AnimationFrame.times (Tick << Time.inSeconds)
 
-view : Model -> Html.Html Msg
+view : Model model -> Html.Html Msg
 view model =
-    Html.body
+    Html.div
         [ Html.Attributes.style
             [ ( "background-color", "#000" )
             , ( "display",  "flex" )
@@ -129,10 +176,16 @@ view model =
 
 draw is a function which can optionally read information from the Console (the previous state) and then emit a bunch of commands to update the console (e.g. drawing).
 
+update takes the previous model (state) and returns and updated version.
+
+init returns an initial state for the model.
 
 -}
-type alias Config =
-    { draw: Console -> List Command
+type alias Config model =
+    { draw: Console model -> model -> List Command
+    , update: model -> model
+    , init: model
+    , spritesUri : String
     }
 
 {-| Boot your console!
@@ -140,11 +193,11 @@ type alias Config =
 Supply a Config.
 
 -}
-boot : Config -> Program Never
+boot : Config model -> Program Never
 boot config =
     Html.App.program
-        { init = init
-        , update = update config.draw
+        { init = init config.init config.spritesUri
+        , update = update config.draw config.update
         , subscriptions = subscriptions
         , view = view
         }
