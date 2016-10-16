@@ -27,13 +27,17 @@ draw_letter t i j0 =
         y = 38 + j + cos(t1/3.5) * 5
     in
         [ Console.palette 7 col
-        , Console.sprite (16+i) (8+i*8 + x)  (round y)
+        , Console.sprite (16+i) (8+i*8 + x + 2)  (round y + 2)
+        , Console.sprite (32+i) (8+i*8 + x + 1)  (round y + 1)
+        , Console.sprite (48+i) (8+i*8 + x)  (round y)
         ]
 
 draw : Console.Console Model -> Model ->  List Console.Command
 draw console model =
-    List.map2 (\i j -> draw_letter model.t i j) [1..11] [0..10]
-        |> List.concat
+    [ List.map2 (\i j -> draw_letter model.t i j) [1..11] [0..10] |> List.concat
+    , List.map (\i -> Console.putPixel i 0 i) [0..16]
+    , [ Console.sprite 1 60 100 ]
+    ] |> List.concat
 
 main : Program Never
 main =

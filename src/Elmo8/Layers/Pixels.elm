@@ -10,6 +10,7 @@ import Dict
 import Math.Vector2 exposing (Vec2, vec2, fromTuple)
 import Math.Vector3 exposing (Vec3, vec3, fromTuple)
 import Math.Matrix4 exposing(Mat4, makeOrtho2D)
+import Task
 import WebGL
 
 import Elmo8.Layers.Common exposing (CanvasSize, Vertex, makeProjectionMatrix)
@@ -26,12 +27,17 @@ type alias PixelColour = Int
 type alias Model =
     { pixels : Dict.Dict (X, Y) PixelColour
     , screenSize : { width : Float, height : Float }
+    , maybePalette : Maybe WebGL.Texture
     }
 
 type Msg
     = SetPixel X Y PixelColour
+    | TextureError WebGL.Error
+    | TextureLoad WebGL.Texture
     | Clear
 
+-- x, y, colour index
+type alias Vertex = { position : Vec3 }
 
 setPixel : Model -> Int -> Int -> PixelColour -> Model
 setPixel model x y colour =
@@ -57,7 +63,11 @@ init : (Model, Cmd Msg)
 init =
     { pixels = Dict.empty
     , screenSize = { width = 128.0, height = 128.0 }
-    } ! []
+    , maybePalette = Nothing
+    } 
+    ! 
+    [ WebGL.loadTexture "/pico-8-palette.png" |> Task.perform TextureError TextureLoad
+    ]
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -66,57 +76,71 @@ update msg model =
             { model | pixels = Dict.insert (x, y) colour model.pixels } ! []
         Clear ->
             { model | pixels = Dict.empty } ! []
+        TextureError error ->
+            Debug.crash "Too lazy to handle texture error"
+        TextureLoad texture ->
+            { model | maybePalette = Just texture } ! []
 
 render : CanvasSize -> Model -> List WebGL.Renderable
 render canvasSize model =
-    [
-        WebGL.render
-            pixelsVertexShader
-            pixelsFragmentShader
-            (getPixelPoints model.pixels)
-            { canvasSize = vec2 canvasSize.width canvasSize.height
-            , screenSize = vec2 model.screenSize.width model.screenSize.height
-            , projectionMatrix = makeProjectionMatrix
-            , colour = vec2 1.0 1.0
-            }
-    ]
+    case model.maybePalette of
+        Nothing -> []
+        Just texture ->
+            [
+                WebGL.render
+                    pixelsVertexShader
+                    pixelsFragmentShader
+                    (getPixelPoints model.pixels)
+                    { canvasSize = vec2 canvasSize.width canvasSize.height
+                    , screenSize = vec2 model.screenSize.width model.screenSize.height
+                    , projectionMatrix = makeProjectionMatrix
+                    , paletteTexture = texture
+                    -- , paletteTextureSize = vec2 (toFloat (fst (WebGL.textureSize texture))) (toFloat (snd (WebGL.textureSize texture)))
+                    , paletteWidth = 16.0
+                    }
+            ]
 
 getPixelPoints : Dict.Dict (Int, Int) Int -> WebGL.Drawable Vertex
 getPixelPoints points =
     let
-        toPoint : (Int, Int) -> Vertex
-        toPoint (x, y) =
+        toPoint : ((Int, Int), Int) -> Vertex
+        toPoint ((x, y), colourIndex) =
             Vertex
-                ( vec2
+                ( vec3
                     (toFloat x)
                     (toFloat y)
+                    (toFloat colourIndex)
                 )
     in
-        List.map toPoint (Dict.keys points)
+        List.map toPoint (Dict.toList points)
             |> WebGL.Points
 
-pixelsVertexShader : WebGL.Shader { attr | position : Vec2 } { unif | canvasSize : Vec2, screenSize : Vec2, projectionMatrix : Mat4 } { colour : Vec3 }
+pixelsVertexShader : WebGL.Shader { attr | position : Vec3 } { unif | canvasSize : Vec2, screenSize : Vec2, projectionMatrix : Mat4 } { colourIndex : Float }
 pixelsVertexShader = [glsl|
-    attribute vec2 position;
+    precision mediump float;
+    attribute vec3 position;
     uniform vec2 canvasSize;
     uniform vec2 screenSize;
     uniform mat4 projectionMatrix;
-    varying vec3 colour;
+    varying float colourIndex;
     void main () {
         gl_PointSize = canvasSize.x / screenSize.x;
 
         gl_Position = projectionMatrix * vec4(position.x + 0.5, position.y + 0.5, 0.0, 1.0);
 
-        // TODO a lookup in the palette
-        colour = vec3(0.0, 0.5, 1.0);
+        colourIndex = position.z;
     }
 |]
 
-pixelsFragmentShader : WebGL.Shader {} { u | colour : Vec2 } { colour : Vec3 }
+pixelsFragmentShader : WebGL.Shader {} { uniform | paletteTexture : WebGL.Texture , paletteWidth : Float } { colourIndex : Float }
 pixelsFragmentShader = [glsl|
-    precision highp float;
-    varying vec3 colour;
+    precision mediump float;
+    uniform sampler2D paletteTexture;
+    uniform float paletteWidth;
+    varying float colourIndex;
     void main () {
-        gl_FragColor = vec4(colour, 1.0);
+        // float index = (colourIndex / (paletteWidth * 2.0)) - 1.0;
+        float index = colourIndex / paletteWidth;
+        gl_FragColor = texture2D(paletteTexture, vec2(index, 0.0));
     }
 |]

@@ -162,7 +162,7 @@ subscriptions model =
 
 view : Model model -> Html.Html Msg
 view model =
-    Html.body
+    Html.div
         [ Html.Attributes.style
             [ ( "background-color", "#000" )
             , ( "display",  "flex" )
