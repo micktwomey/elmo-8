@@ -1,4 +1,4 @@
-module Elmo8.Console exposing (Command, Console, getPixel, putPixel, print, boot, palette, sprite)
+module Elmo8.Console exposing (Command, Console, getPixel, putPixel, print, boot, palette, sprite, resetPalette, screenPalette)
 
 {-| The ELMO-8 Fantasy Console
 
@@ -8,7 +8,7 @@ This is a PICO-8 inspired fantasy "console". This isn't really a console emulato
 @docs boot
 
 # Drawing
-@docs putPixel, print, palette, sprite
+@docs putPixel, print, palette, screenPalette, resetPalette, sprite
 
 # Reading state
 During draw you can read state from the Console using the following functions. These apply to the state *before* your drawing commands update it.
@@ -58,6 +58,9 @@ type Command
     = PutPixel Int Int Colour
     | Print Int Int Colour String
     | Sprite Int Int Int
+    | PixelPalette Int Int
+    | ScreenPalette Int Int
+    | ResetPalette
     | Noop String
 
 {-| Draw a pixel at the given position
@@ -79,9 +82,12 @@ getPixel (A console) x y =
 -}
 print : String -> Int -> Int -> Colour -> Command
 print string x y colour =
-    Print x y colour string
+    -- Print x y colour string
+    Noop "print disabled"
 
-{-| Remap a colour in the palette used for drawing operations 
+{-| Remap a colour in the palette used for drawing operations
+
+(See screenPalette for the `pal c0 c1 1` operation.)
 
 pal c0 c1 [p]
 
@@ -96,9 +102,27 @@ pal c0 c1 [p]
 
 -}
 palette : Colour -> Colour -> Command
-palette old new = Noop "palette"
+palette old new =
+    PixelPalette old new
 
-{-| Render a sprite at the given position 
+{-| Remap a colour globally (screen)
+
+Equivalent to PICO-8 `pal c0 c1 1`
+
+This applies after `palette`, so it can remap again.
+
+-}
+screenPalette : Colour -> Colour -> Command
+screenPalette old new =
+    ScreenPalette old new
+
+{-| Rest all palette remappings
+
+-}
+resetPalette : Command
+resetPalette = ResetPalette
+
+{-| Render a sprite at the given position
 
 spr n x y [w h] [flip_x] [flip_y]
 
@@ -132,6 +156,12 @@ processCommand command model =
             { model | display = Elmo8.Display.sprite model.display index x y }
         Print x y colour string ->
             model
+        PixelPalette from to ->
+            { model | display = Elmo8.Display.pixelPalette model.display from to }
+        ScreenPalette from to ->
+            { model | display = Elmo8.Display.screenPalette model.display from to }
+        ResetPalette ->
+            { model | display = Elmo8.Display.resetPalette model.display }
 
 update : (Console model -> model -> List Command) -> (model -> model) -> Msg -> Model model -> (Model model, Cmd Msg)
 update draw updateModel msg model =
@@ -139,7 +169,7 @@ update draw updateModel msg model =
         Tick time ->
             let
                 shouldTick = (time - model.lastTick) >= (1.0 / 30)
-            in 
+            in
                 case shouldTick of
                     True ->
                         let
