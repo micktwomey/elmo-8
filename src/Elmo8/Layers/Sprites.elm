@@ -76,8 +76,8 @@ renderSprite model texture sprite =
         , spriteIndex = sprite.sprite
         }
 
-render : CanvasSize -> Model -> List WebGL.Renderable
-render canvasSize model =
+render : Model -> List WebGL.Renderable
+render model =
     case model.maybeTexture of
         Nothing -> []
         Just texture ->

@@ -26,17 +26,25 @@ type alias Message =
 
 type alias Model =
     { maybeTexture : Maybe WebGL.Texture
+    , textureSize : Vec2
     , messages : List Message
+    , meshes : Dict.Dict (Int, Int) (WebGL.Drawable Vertex)
+    , canvasSize : Vec2
+    , projectionMatrix : Mat4
     }
 
 type Msg
     = TextureLoad WebGL.Texture
     | TextureError WebGL.Error
 
-init : (Model, Cmd Msg)
-init =
+init : CanvasSize -> (Model, Cmd Msg)
+init canvasSize =
     { maybeTexture = Nothing
     , messages = []
+    , meshes = meshesFromCharacters
+    , canvasSize = vec2 canvasSize.width canvasSize.height
+    , textureSize = vec2 128.0 128.0
+    , projectionMatrix = makeProjectionMatrix
     }
     !
     [ WebGL.loadTexture "/font/pico-8_regular_8.PNG" |> Task.perform TextureError TextureLoad
@@ -50,8 +58,8 @@ update msg model =
         TextureLoad texture ->
             { model | maybeTexture = Just texture } ! []
 
-render : CanvasSize -> Model -> List WebGL.Renderable
-render canvasSize model =
+render : Model -> List WebGL.Renderable
+render model =
     case model.maybeTexture of
         Nothing -> []
         Just texture ->
@@ -59,14 +67,16 @@ render canvasSize model =
                 WebGL.render
                     vertexShader
                     fragmentShader
-                    (mesh 6 10)
-                    { screenSize = vec2 canvasSize.width canvasSize.height
+                    (Dict.get (6, 10) model.meshes |> Maybe.withDefault mesh)
+                    { screenSize = model.canvasSize
                     , fontTexture = texture
-                    , textureSize = vec2 128 128
-                    , projectionMatrix = makeProjectionMatrix
+                    , textureSize = model.textureSize
+                    , projectionMatrix = model.projectionMatrix
                     , characterPosition = vec2 10 80
                     , charCoords = vec2 114 12
                     , colour = vec3 0.5 1.0 1.0
+                    , fontWidth = 6
+                    , fontHeight = 10
                     }
             ]
 
@@ -74,12 +84,24 @@ render canvasSize model =
 {-| mesh for a character
 
 -}
-mesh : Float -> Float -> WebGL.Drawable Vertex
-mesh width height =
+mesh : WebGL.Drawable Vertex
+mesh =
+    WebGL.Triangle
+        [ ( Vertex (vec2 0 0), Vertex (vec2 1 1), Vertex (vec2 1 0) )
+        , ( Vertex (vec2 0 0), Vertex (vec2 0 1), Vertex (vec2 1 1) )
+        ]
+
+meshWidthHeight : Float -> Float -> WebGL.Drawable Vertex
+meshWidthHeight width height =
     WebGL.Triangle
         [ ( Vertex (vec2 0 0), Vertex (vec2 width height), Vertex (vec2 width 0) )
         , ( Vertex (vec2 0 0), Vertex (vec2 0 height), Vertex (vec2 width height) )
         ]
+
+meshesFromCharacters : Dict.Dict (Int, Int) (WebGL.Drawable Vertex)
+meshesFromCharacters =
+    List.map (\(_, char) -> ((char.width, char.height), meshWidthHeight (toFloat char.width) (toFloat char.height))) fontList
+        |> Dict.fromList
 
 vertexShader : WebGL.Shader
     {attr | position : Vec2 }

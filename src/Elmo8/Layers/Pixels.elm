@@ -98,8 +98,8 @@ update msg model =
         TextureLoad texture ->
             { model | maybePalette = Just texture } ! []
 
-render : CanvasSize -> Model -> List WebGL.Renderable
-render canvasSize model =
+render : Model -> List WebGL.Renderable
+render model =
     case model.maybePalette of
         Nothing -> []
         Just texture ->
