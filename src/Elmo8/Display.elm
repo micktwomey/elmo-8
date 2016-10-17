@@ -31,8 +31,8 @@ type Msg
 
 clear : Model -> Model
 clear model =
-    { model 
-    | sprites = Elmo8.Layers.Sprites.clear model.sprites 
+    { model
+    | sprites = Elmo8.Layers.Sprites.clear model.sprites
     }
 
 setPixel : Model -> Int -> Int -> Int -> Model
@@ -46,6 +46,18 @@ getPixel model x y =
 sprite : Model -> Int -> Int -> Int -> Model
 sprite model index x y =
     { model | sprites = Elmo8.Layers.Sprites.sprite model.sprites index x y }
+
+pixelPalette : Model -> Int -> Int -> Model
+pixelPalette model from to =
+    { model | pixels = Elmo8.Layers.Pixels.pixelPalette model.pixels from to }
+
+screenPalette : Model -> Int -> Int -> Model
+screenPalette model from to =
+    { model | pixels = Elmo8.Layers.Pixels.screenPalette model.pixels from to }
+
+resetPalette : Model -> Model
+resetPalette model =
+    { model | pixels = Elmo8.Layers.Pixels.resetPalette model.pixels }
 
 init : String -> (Model, Cmd Msg)
 init spritesUri =
@@ -88,10 +100,10 @@ update msg model =
 getRenderables : Model -> List WebGL.Renderable
 getRenderables model =
     List.concat
-    [ 
-        -- Elmo8.Layers.Text.render model.canvasSize model.text
-    -- ,
-     Elmo8.Layers.Pixels.render model.canvasSize model.pixels
+    [
+    -- TODO: Text disabled due to problems (memory leaks and not working consistently)
+    -- Elmo8.Layers.Text.render model.canvasSize model.text,
+    Elmo8.Layers.Pixels.render model.canvasSize model.pixels
     , Elmo8.Layers.Sprites.render model.canvasSize model.sprites
     ]
 

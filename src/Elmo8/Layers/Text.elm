@@ -1,8 +1,8 @@
 module Elmo8.Layers.Text exposing (..)
 
 import Dict
-import Math.Vector2 exposing (Vec2, vec2, fromTuple)
--- import Math.Vector3 exposing (Vec3, vec3)
+import Math.Vector2 exposing (Vec2, vec2)
+import Math.Vector3 exposing (Vec3, vec3)
 import Math.Vector4 exposing (Vec4, vec4)
 import Math.Matrix4 exposing(Mat4, makeOrtho2D)
 import Task
@@ -18,8 +18,15 @@ type alias Character =
     , height : Int
     }
 
+type alias Message =
+    { x : Int
+    , y : Int
+    , characters : String
+    }
+
 type alias Model =
     { maybeTexture : Maybe WebGL.Texture
+    , messages : List Message
     }
 
 type Msg
@@ -29,6 +36,7 @@ type Msg
 init : (Model, Cmd Msg)
 init =
     { maybeTexture = Nothing
+    , messages = []
     }
     !
     [ WebGL.loadTexture "/font/pico-8_regular_8.PNG" |> Task.perform TextureError TextureLoad
@@ -51,84 +59,72 @@ render canvasSize model =
                 WebGL.render
                     vertexShader
                     fragmentShader
-                    mesh
-                    { projectionMatrix = makeProjectionMatrix
-                    , colour = vec4 0.5 1.0 1.0 1.0
-                    , charCoords = vec4 64 23 6 10
-                    , texSize = 128.0
-                    , offset = vec2 0 0
-                    -- , positio = vec2 1.0 1.0
+                    (mesh 6 10)
+                    { screenSize = vec2 canvasSize.width canvasSize.height
                     , fontTexture = texture
+                    , textureSize = vec2 128 128
+                    , projectionMatrix = makeProjectionMatrix
+                    , characterPosition = vec2 10 80
+                    , charCoords = vec2 114 12
+                    , colour = vec3 0.5 1.0 1.0
                     }
             ]
 
 
-{-| A square, intended for rendering maps, sprites, etc
+{-| mesh for a character
 
 -}
-mesh : WebGL.Drawable Vertex
-mesh =
+mesh : Float -> Float -> WebGL.Drawable Vertex
+mesh width height =
     WebGL.Triangle
-        [ ( Vertex (vec2 0 0), Vertex (vec2 8 8), Vertex (vec2 8 0) )
-        , ( Vertex (vec2 0 0), Vertex (vec2 0 8), Vertex (vec2 8 8) )
+        [ ( Vertex (vec2 0 0), Vertex (vec2 width height), Vertex (vec2 width 0) )
+        , ( Vertex (vec2 0 0), Vertex (vec2 0 height), Vertex (vec2 width height) )
         ]
 
--- https://github.com/w0rm/elm-webgl-playground/blob/master/Animation2D.elm
--- http://stackoverflow.com/questions/22080881/how-to-render-text-in-modern-opengl-with-glsl
 vertexShader : WebGL.Shader
-    { attr | position : Vec2 }
-    { uniform
-        | projectionMatrix : Mat4
-        , charCoords : Vec4
-        , texSize : Float
-        , offset : Vec2
-    }
-    { tc : Vec2 }
+    {attr | position : Vec2 }
+    {unif | screenSize : Vec2, projectionMatrix : Mat4, characterPosition: Vec2 }
+    {texturePos : Vec2}
 vertexShader = [glsl|
-    precision highp float;
-
-    uniform mat4 projectionMatrix;        // The projection-view-model matrix
-    uniform vec4 charCoords;    // The CharCoord struct for the character you are rendering, {x, y, w, h}
-    uniform float texSize;      // The size of the texture which contains the rasterized characters (assuming it is square)
-    uniform vec2 offset;        // The offset at which to paint, w.r.t the first character
-
-    attribute vec2 position;
-
-    varying vec2 tc;
-
-    void main(){
-        tc = (charCoords.xy + charCoords.zw * vec2(position.x, 1. - position.y)) / texSize;
-
-        // Map the vertices of the unit square to a rectangle with correct aspect ratio and positioned at the correct offset
-        float x = (charCoords[2] * position.x + offset.x) / charCoords[3];
-        float y = position.y + offset.y / charCoords[3];
-
-        // Apply the model, view and projection transformations
-        gl_Position = projectionMatrix * vec4(x, y, 0., 1.);
-    }
+  precision mediump float;
+  attribute vec2 position;
+  uniform vec2 characterPosition;
+  uniform vec2 screenSize;
+  uniform mat4 projectionMatrix;
+  varying vec2 texturePos;
+  void main () {
+    texturePos = position;
+    gl_Position = projectionMatrix * vec4(position.x + characterPosition.x, position.y + characterPosition.y, 0.0, 1.0);
+  }
 |]
+
 
 fragmentShader : WebGL.Shader
     {}
-    { uniform | colour : Vec4, fontTexture : WebGL.Texture }
-    { tc : Vec2 }
+    {u | fontTexture : WebGL.Texture, textureSize : Vec2, projectionMatrix : Mat4, charCoords : Vec2, colour : Vec3 }
+    {texturePos : Vec2}
 fragmentShader = [glsl|
-    precision highp float;
+  precision mediump float;
+  uniform mat4 projectionMatrix;
+  uniform sampler2D fontTexture;
+  uniform vec2 textureSize;
+  uniform vec2 charCoords;
+  uniform vec3 colour;
+  varying vec2 texturePos;
+  void main () {
+    vec2 size = vec2(64.0, 64.0) / textureSize;
 
-    uniform vec4 colour;
-    uniform sampler2D fontTexture;
-
-    varying vec2 tc;
-
-    void main() {
-        gl_FragColor = colour * texture2D(fontTexture, tc);
-    }
+    vec2 textureClipSpace = (projectionMatrix * vec4((charCoords + texturePos) * size, 0, 1)).xy;
+    vec4 temp = texture2D(fontTexture, textureClipSpace);
+    // TODO: need to find out what's up with the alpha, using font colour for now
+    gl_FragColor = vec4(temp.rgb, temp.a);
+  }
 |]
 
 -- https://github.com/andryblack/fontbuilder
 -- grep Char fonts/pico-8_regular_8.xml | awk -F'"' '{print ", (\'"$8"\', Character "$6, ")"}' | pbcopy
 fontList : List (Char, Character)
-fontList = 
+fontList =
     [ (' ', Character 1 11 0 0 )
     , ('!', Character 2 1 2 10 )
     , ('"', Character 5 1 6 4 )
