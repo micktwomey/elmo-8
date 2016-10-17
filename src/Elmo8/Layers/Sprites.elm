@@ -12,18 +12,23 @@ type alias Sprite =
     , y : Int
     }
 
-type alias Model = 
+type alias Model =
     { maybeTexture : Maybe WebGL.Texture
     , sprites : List Sprite
+    , canvasSize : CanvasSize
+    , screenSize : Vec2
+    , textureSize : Vec2
+    , projectionMatrix : Mat4
     }
 
-type Msg 
+type Msg
     = TextureLoad WebGL.Texture
     | TextureError WebGL.Error
 
 
 sprite : Model -> Int -> Int -> Int -> Model
 sprite model index x y =
+    -- TODO replace this with something less memory leaky, Set isn't any use, probably use Lazy if possible, or a Dict
     { model | sprites = (Sprite index x y ) :: model.sprites }
 
 clear : Model -> Model
@@ -31,10 +36,14 @@ clear model =
     { model | sprites = [] }
 
 
-init : String -> (Model, Cmd Msg)
-init uri =
+init : CanvasSize -> String -> (Model, Cmd Msg)
+init canvasSize uri =
     { maybeTexture = Nothing
     , sprites = []
+    , canvasSize = canvasSize
+    , screenSize = vec2 canvasSize.width canvasSize.height
+    , textureSize = vec2 0 0
+    , projectionMatrix = makeProjectionMatrix
     } !
     [ WebGL.loadTexture uri |> Task.perform TextureError TextureLoad
     ]
@@ -43,63 +52,70 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
     case msg of
         TextureLoad texture ->
-            {model | maybeTexture = Just texture } ! []
+            {model
+                | maybeTexture = Just texture
+                ,  textureSize = vec2 (toFloat (fst (WebGL.textureSize texture))) (toFloat (snd (WebGL.textureSize texture)))
+            }
+            !
+            []
         TextureError _ ->
             Debug.crash "Error loading texture"
 
-renderSprite : CanvasSize -> WebGL.Texture -> Sprite -> WebGL.Renderable
-renderSprite canvasSize texture sprite =
+renderSprite : Model -> WebGL.Texture -> Sprite -> WebGL.Renderable
+renderSprite model texture sprite =
     WebGL.render
         vertexShader
         fragmentShader
         mesh
-        { screenSize = vec2 canvasSize.width canvasSize.height
+        { screenSize = model.screenSize
         , texture = texture
-        , textureSize = vec2 (toFloat (fst (WebGL.textureSize texture))) (toFloat (snd (WebGL.textureSize texture))) 
-        , projectionMatrix = makeProjectionMatrix 
-        , spritePosition = vec2 (toFloat sprite.x) (toFloat sprite.y)
+        , textureSize = model.textureSize
+        , projectionMatrix = model.projectionMatrix
+        , spriteX = sprite.x
+        , spriteY = sprite.y
         , spriteIndex = sprite.sprite
         }
 
-render : CanvasSize -> Model -> List WebGL.Renderable
-render canvasSize model =
+render : Model -> List WebGL.Renderable
+render model =
     case model.maybeTexture of
         Nothing -> []
         Just texture ->
-            List.map (renderSprite canvasSize texture) model.sprites
+            List.map (renderSprite model texture) model.sprites
 
 
 {-| 8x8 square for a sprite
 
 -}
-mesh : WebGL.Drawable Vertex 
+mesh : WebGL.Drawable Vertex
 mesh  =
     WebGL.Triangle
         [ ( Vertex (vec2 0 0), Vertex (vec2 8 8), Vertex (vec2 8 0) )
         , ( Vertex (vec2 0 0), Vertex (vec2 0 8), Vertex (vec2 8 8) )
         ]
 
-vertexShader : WebGL.Shader 
-    {attr | position : Vec2 } 
-    {unif | screenSize : Vec2, projectionMatrix : Mat4, spritePosition: Vec2 } 
+vertexShader : WebGL.Shader
+    {attr | position : Vec2 }
+    {unif | screenSize : Vec2, projectionMatrix : Mat4, spriteX: Int, spriteY: Int }
     {texturePos : Vec2}
 vertexShader = [glsl|
   precision mediump float;
   attribute vec2 position;
-  uniform vec2 spritePosition;
+  uniform int spriteX;
+  uniform int spriteY;
   uniform vec2 screenSize;
   uniform mat4 projectionMatrix;
   varying vec2 texturePos;
   void main () {
     texturePos = position;
-    gl_Position = projectionMatrix * vec4(position.x + spritePosition.x, position.y + spritePosition.y, 0.0, 1.0);
+    gl_Position = projectionMatrix * vec4(position.x + float(spriteX), position.y + float(spriteY), 0.0, 1.0);
   }
 |]
 
 
-fragmentShader : WebGL.Shader 
-    {} 
-    {u | texture : WebGL.Texture, textureSize : Vec2, projectionMatrix : Mat4, spriteIndex : Int } 
+fragmentShader : WebGL.Shader
+    {}
+    {u | texture : WebGL.Texture, textureSize : Vec2, projectionMatrix : Mat4, spriteIndex : Int }
     {texturePos : Vec2}
 fragmentShader = [glsl|
   precision mediump float;

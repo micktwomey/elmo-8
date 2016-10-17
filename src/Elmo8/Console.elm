@@ -82,8 +82,7 @@ getPixel (A console) x y =
 -}
 print : String -> Int -> Int -> Colour -> Command
 print string x y colour =
-    -- Print x y colour string
-    Noop "print disabled"
+    Print x y colour string
 
 {-| Remap a colour in the palette used for drawing operations
 

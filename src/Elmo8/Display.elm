@@ -62,12 +62,13 @@ resetPalette model =
 init : String -> (Model, Cmd Msg)
 init spritesUri =
     let
-        (pixels, pixelsCmd) = Elmo8.Layers.Pixels.init
-        (text, textCmd) = Elmo8.Layers.Text.init
-        (sprites, spritesCmd) = Elmo8.Layers.Sprites.init spritesUri
+        canvasSize = { width = 512.0, height = 512.0}
+        (pixels, pixelsCmd) = Elmo8.Layers.Pixels.init canvasSize
+        (text, textCmd) = Elmo8.Layers.Text.init canvasSize
+        (sprites, spritesCmd) = Elmo8.Layers.Sprites.init canvasSize spritesUri
     in
         { windowSize = { width = 0, height = 0 }
-        , canvasSize = { width = 512.0, height = 512.0}
+        , canvasSize = canvasSize
         , pixels = pixels
         , text = text
         , sprites = sprites
@@ -101,10 +102,10 @@ getRenderables : Model -> List WebGL.Renderable
 getRenderables model =
     List.concat
     [
-    -- TODO: Text disabled due to problems (memory leaks and not working consistently)
-    -- Elmo8.Layers.Text.render model.canvasSize model.text,
-    Elmo8.Layers.Pixels.render model.canvasSize model.pixels
-    , Elmo8.Layers.Sprites.render model.canvasSize model.sprites
+    -- TODO: Text disabled due to problems
+    -- Elmo8.Layers.Text.render model.text,
+    Elmo8.Layers.Pixels.render model.pixels
+    , Elmo8.Layers.Sprites.render model.sprites
     ]
 
 view : Model -> Html.Html Msg

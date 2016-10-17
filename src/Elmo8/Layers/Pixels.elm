@@ -8,14 +8,11 @@ The most basic layer, theoretically all you need :)
 
 import Dict
 import Math.Vector2 exposing (Vec2, vec2, fromTuple)
-import Math.Vector3 exposing (Vec3, vec3, fromTuple)
-import Math.Vector4 exposing (Vec4, vec4)
 import Math.Matrix4 exposing(Mat4, makeOrtho2D)
 import Task
 import WebGL
 
 import Elmo8.Layers.Common exposing (CanvasSize, Vertex, makeProjectionMatrix)
--- import Elmo8.Layers.Layer exposing (Layer)
 
 type alias X = Int
 type alias Y = Int
@@ -27,10 +24,13 @@ type alias PixelColour = Int
 
 type alias Model =
     { pixels : Dict.Dict (X, Y) PixelColour
-    , screenSize : { width : Float, height : Float }
+    , screenSize : Vec2
     , maybePalette : Maybe WebGL.Texture
     , pixelPalette : Dict.Dict PixelColour PixelColour
     , screenPalette : Dict.Dict PixelColour PixelColour
+    , canvasSize : Vec2
+    , paletteSize : Vec2
+    , projectionMatrix : Mat4
     }
 
 type Msg
@@ -38,10 +38,6 @@ type Msg
     | TextureError WebGL.Error
     | TextureLoad WebGL.Texture
     | Clear
-
--- TODO: instead of colour remap, transparency? (Don't need to use palette map then)
--- x, y, colour index, colour remap
-type alias Vertex = { position : Vec4 }
 
 setPixel : Model -> Int -> Int -> PixelColour -> Model
 setPixel model x y colour =
@@ -75,15 +71,18 @@ corners =
         , ( (63, 63), 5 )
         ]
 
-init : (Model, Cmd Msg)
-init =
+init : CanvasSize -> (Model, Cmd Msg)
+init canvasSize =
     { pixels = Dict.empty
-    , screenSize = { width = 128.0, height = 128.0 }
+    , screenSize = vec2 128.0 128.0
     , maybePalette = Nothing
     , pixelPalette = Dict.empty
     , screenPalette = Dict.empty
-    } 
-    ! 
+    , canvasSize = vec2 canvasSize.width canvasSize.height
+    , paletteSize = vec2 16.0 16.0
+    , projectionMatrix = makeProjectionMatrix
+    }
+    !
     [ WebGL.loadTexture "/pico-8-palette-map.png" |> Task.perform TextureError TextureLoad
     ]
 
@@ -99,63 +98,58 @@ update msg model =
         TextureLoad texture ->
             { model | maybePalette = Just texture } ! []
 
-render : CanvasSize -> Model -> List WebGL.Renderable
-render canvasSize model =
+render : Model -> List WebGL.Renderable
+render model =
     case model.maybePalette of
         Nothing -> []
         Just texture ->
-            [
-                WebGL.render
-                    pixelsVertexShader
-                    pixelsFragmentShader
-                    (getPixelPoints model)
-                    { canvasSize = vec2 canvasSize.width canvasSize.height
-                    , screenSize = vec2 model.screenSize.width model.screenSize.height
-                    , projectionMatrix = makeProjectionMatrix
-                    , paletteTexture = texture
-                    -- , paletteTextureSize = vec2 (toFloat (fst (WebGL.textureSize texture))) (toFloat (snd (WebGL.textureSize texture)))
-                    , paletteSize = vec2 16.0 16.0
-                    }
-            ]
+            Dict.toList model.pixels
+                |> List.map (renderPixel model texture)
 
-getPixelPoints : Model -> WebGL.Drawable Vertex
-getPixelPoints model =
-    let
-        toPoint : ((Int, Int), Int) -> Vertex
-        toPoint ((x, y), colourIndex) =
-            let 
-                -- TODO decide if it's just easier to do the mapping here and remove mapping in shader
-                -- TODO decide on transparency
-                colour = Dict.get colourIndex model.pixelPalette 
-                    |> Maybe.withDefault colourIndex
-            in
-                Vertex
-                    ( vec4
-                        (toFloat x)
-                        (toFloat y)
-                        (toFloat colour)
-                        (Dict.get colour model.screenPalette |> Maybe.withDefault 0 |> toFloat)
-                    )
-    in
-        List.map toPoint (Dict.toList model.pixels)
-            |> WebGL.Points
+renderPixel : Model -> WebGL.Texture -> ((X, Y), PixelColour) -> WebGL.Renderable
+renderPixel model texture ((x, y), colour) =
+    WebGL.render
+        pixelsVertexShader
+        pixelsFragmentShader
+        mesh
+        { canvasSize = model.canvasSize
+        , screenSize = model.screenSize
+        , projectionMatrix = model.projectionMatrix
+        , paletteTexture = texture
+        , paletteSize = model.paletteSize
+        , pixelX = x
+        , pixelY = y
+        , index = Dict.get colour model.pixelPalette |> Maybe.withDefault colour
+        , remap = Dict.get colour model.screenPalette |> Maybe.withDefault 0
+        }
 
-pixelsVertexShader : WebGL.Shader { attr | position : Vec4 } { unif | canvasSize : Vec2, screenSize : Vec2, projectionMatrix : Mat4 } { colourIndex : Float, colourRemap : Float }
+mesh : WebGL.Drawable Vertex
+mesh =
+    WebGL.Points [ Vertex (vec2 0 0)]
+
+pixelsVertexShader : WebGL.Shader
+    { attr | position : Vec2 }
+    { unif | canvasSize : Vec2, screenSize : Vec2, projectionMatrix : Mat4, pixelX : Int, pixelY : Int, index : Int, remap : Int }
+    { colourIndex : Float, colourRemap : Float }
 pixelsVertexShader = [glsl|
     precision mediump float;
-    attribute vec4 position;
+    attribute vec2 position;
     uniform vec2 canvasSize;
     uniform vec2 screenSize;
     uniform mat4 projectionMatrix;
+    uniform int pixelX;
+    uniform int pixelY;
+    uniform int index;
+    uniform int remap;
     varying float colourIndex;
     varying float colourRemap;
     void main () {
         gl_PointSize = canvasSize.x / screenSize.x;
 
-        gl_Position = projectionMatrix * vec4(position.x + 0.5, position.y + 0.5, 0.0, 1.0);
+        gl_Position = projectionMatrix * vec4(position.x + float(pixelX) + 0.5, position.y + float(pixelY) + 0.5, 0.0, 1.0);
 
-        colourIndex = position.z;
-        colourRemap = position.a;
+        colourIndex = float(index);
+        colourRemap = float(remap);
     }
 |]
 
