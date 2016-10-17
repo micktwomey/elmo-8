@@ -62,12 +62,13 @@ resetPalette model =
 init : String -> (Model, Cmd Msg)
 init spritesUri =
     let
+        canvasSize = { width = 512.0, height = 512.0}
         (pixels, pixelsCmd) = Elmo8.Layers.Pixels.init
         (text, textCmd) = Elmo8.Layers.Text.init
-        (sprites, spritesCmd) = Elmo8.Layers.Sprites.init spritesUri
+        (sprites, spritesCmd) = Elmo8.Layers.Sprites.init canvasSize spritesUri
     in
         { windowSize = { width = 0, height = 0 }
-        , canvasSize = { width = 512.0, height = 512.0}
+        , canvasSize = canvasSize
         , pixels = pixels
         , text = text
         , sprites = sprites
