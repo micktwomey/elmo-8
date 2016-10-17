@@ -63,7 +63,7 @@ init : String -> (Model, Cmd Msg)
 init spritesUri =
     let
         canvasSize = { width = 512.0, height = 512.0}
-        (pixels, pixelsCmd) = Elmo8.Layers.Pixels.init
+        (pixels, pixelsCmd) = Elmo8.Layers.Pixels.init canvasSize
         (text, textCmd) = Elmo8.Layers.Text.init
         (sprites, spritesCmd) = Elmo8.Layers.Sprites.init canvasSize spritesUri
     in
