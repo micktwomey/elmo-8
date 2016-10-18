@@ -103,7 +103,7 @@ getRenderables model =
     List.concat
     [
     -- TODO: Text disabled due to problems
-    -- Elmo8.Layers.Text.render model.text,
+    Elmo8.Layers.Text.render model.text,
     Elmo8.Layers.Pixels.render model.pixels
     , Elmo8.Layers.Sprites.render model.sprites
     ]

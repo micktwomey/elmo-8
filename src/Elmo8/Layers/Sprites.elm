@@ -59,7 +59,7 @@ update msg model =
             !
             []
         TextureError _ ->
-            Debug.crash "Error loading texture"
+            model ! []
 
 renderSprite : Model -> WebGL.Texture -> Sprite -> WebGL.Renderable
 renderSprite model texture sprite =

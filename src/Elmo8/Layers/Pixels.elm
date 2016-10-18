@@ -94,7 +94,7 @@ update msg model =
         Clear ->
             { model | pixels = Dict.empty } ! []
         TextureError error ->
-            Debug.crash "Too lazy to handle texture error"
+            model ! []
         TextureLoad texture ->
             { model | maybePalette = Just texture } ! []
 

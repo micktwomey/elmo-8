@@ -47,7 +47,7 @@ init canvasSize =
     , projectionMatrix = makeProjectionMatrix
     }
     !
-    [ WebGL.loadTexture "/font/pico-8_regular_8.PNG" |> Task.perform TextureError TextureLoad
+    [ WebGL.loadTexture "/font/pico-8_regular_8.png" |> Task.perform TextureError TextureLoad
     ]
 
 update : Msg -> Model -> (Model, Cmd Msg)
