@@ -103,7 +103,7 @@ getRenderables model =
     List.concat
     [
     -- TODO: Text disabled due to problems
-    Elmo8.Layers.Text.render model.text,
+    -- Elmo8.Layers.Text.render model.text,
     Elmo8.Layers.Pixels.render model.pixels
     , Elmo8.Layers.Sprites.render model.sprites
     ]
@@ -112,7 +112,7 @@ view : Model -> Html.Html Msg
 view model =
     WebGL.toHtmlWith
         [ WebGL.Enable WebGL.Blend
-        , WebGL.BlendFunc (WebGL.One, WebGL.OneMinusSrcAlpha)
+        , WebGL.BlendFunc (WebGL.SrcAlpha, WebGL.OneMinusSrcAlpha)
         ]
         [ Html.Attributes.width (round model.canvasSize.width)
         , Html.Attributes.height (round model.canvasSize.height)

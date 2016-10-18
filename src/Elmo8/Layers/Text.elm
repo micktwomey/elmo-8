@@ -75,8 +75,6 @@ render model =
                     , characterPosition = vec2 10 80
                     , charCoords = vec2 114 12
                     , colour = vec3 0.5 1.0 1.0
-                    , fontWidth = 6
-                    , fontHeight = 10
                     }
             ]
 
@@ -138,8 +136,7 @@ fragmentShader = [glsl|
 
     vec2 textureClipSpace = (projectionMatrix * vec4((charCoords + texturePos) * size, 0, 1)).xy;
     vec4 temp = texture2D(fontTexture, textureClipSpace);
-    // TODO: need to find out what's up with the alpha, using font colour for now
-    gl_FragColor = vec4(temp.rgb, temp.a);
+    gl_FragColor = vec4(colour.rgb, temp.a);
   }
 |]
 
