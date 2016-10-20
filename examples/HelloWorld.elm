@@ -36,7 +36,7 @@ draw console model =
     [ List.map2 (\i j -> draw_letter model.t i j) [1..11] [0..10] |> List.concat
     , List.map (\i -> Console.putPixel i 0 i) [0..15]
     , [ Console.sprite 1 60 100
-      , Console.print "Welcome to ELMO-8!" 10 90 9
+      , Console.print "Welcome to ELMO-8!" 0 80 9
       ]
     ] |> List.concat
 

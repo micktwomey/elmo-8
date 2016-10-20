@@ -5,6 +5,7 @@ import Math.Vector2 exposing (Vec2, vec2)
 import Math.Vector3 exposing (Vec3, vec3)
 import Math.Vector4 exposing (Vec4, vec4)
 import Math.Matrix4 exposing(Mat4, makeOrtho2D)
+import String
 import Task
 import WebGL
 
@@ -21,6 +22,7 @@ type alias Character =
 type alias Message =
     { x : Int
     , y : Int
+    , colour : Int
     , characters : String
     }
 
@@ -36,6 +38,14 @@ type alias Model =
 type Msg
     = TextureLoad WebGL.Texture
     | TextureError WebGL.Error
+
+clear : Model -> Model
+clear model =
+    { model | messages = [] }
+
+print : Model -> Int -> Int -> Int -> String -> Model
+print model x y colour string =
+    { model | messages = (Message x y colour string) :: model.messages }
 
 init : CanvasSize -> (Model, Cmd Msg)
 init canvasSize =
@@ -58,25 +68,41 @@ update msg model =
         TextureLoad texture ->
             { model | maybeTexture = Just texture } ! []
 
+renderChar : Model -> WebGL.Texture -> (Int, Int) -> Character -> WebGL.Renderable
+renderChar model texture (x, y) character =
+    WebGL.render
+        vertexShader
+        fragmentShader
+        (Dict.get (character.width, character.height) model.meshes |> Maybe.withDefault mesh)
+        { screenSize = model.canvasSize
+        , fontTexture = texture
+        , textureSize = model.textureSize
+        , projectionMatrix = model.projectionMatrix
+        , characterPosition = vec2 (toFloat x) (toFloat y)
+        , charCoords = vec2 (toFloat character.x) (toFloat character.y)
+        , colour = vec3 0.5 1.0 1.0
+        }
+
+getNextPosition : Character -> (Int, Int) -> (Int, Int)
+getNextPosition character (x, y) =
+    (x + 2 + character.width, y)
+
+renderMessage : Model -> WebGL.Texture -> Message -> List WebGL.Renderable
+renderMessage model texture message =
+    let
+        characters = String.toList message.characters
+            |> List.map (\c -> Dict.get c fontMap |> Maybe.withDefault (Character 102 78 14 10))
+        positions = List.scanl getNextPosition (message.x, message.y) characters
+    in
+        List.map2 (renderChar model texture) positions characters
+
 render : Model -> List WebGL.Renderable
 render model =
     case model.maybeTexture of
         Nothing -> []
         Just texture ->
-            [
-                WebGL.render
-                    vertexShader
-                    fragmentShader
-                    (Dict.get (6, 10) model.meshes |> Maybe.withDefault mesh)
-                    { screenSize = model.canvasSize
-                    , fontTexture = texture
-                    , textureSize = model.textureSize
-                    , projectionMatrix = model.projectionMatrix
-                    , characterPosition = vec2 10 80
-                    , charCoords = vec2 114 12
-                    , colour = vec3 0.5 1.0 1.0
-                    }
-            ]
+            List.map (renderMessage model texture) model.messages
+                |> List.concat
 
 
 {-| mesh for a character
