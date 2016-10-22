@@ -49,5 +49,5 @@ main =
     { draw = draw
     , init = init
     , update = update
-    , spritesUri = "/hello_world.png"
+    , spritesUri = "hello_world.png"
     }

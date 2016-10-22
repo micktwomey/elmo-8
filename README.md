@@ -21,14 +21,12 @@ Aspirational specs:
 
 ## Using
 
-1. Clone
-2. Look in `examples/`
-3. elm make examples/Hello.elm
-4. open index.html or `python3 -m http.server`
-5. Go to http://localhost:8000/
-
-Unfortunately elm reactor has a bug in 0.17.1 which prevents it serving static content properly, hence the use of the python server. When that's fixed just use `elm reactor`.
+1. `git clone`
+2. `elm package install` (not required but useful to check dependencies)
+2. `elm reactor`
+3. Look in http://localhost:8000/examples/
 
 ## Posts
 
 - http://www.twoistoomany.com/blog/2016/10/19/working-on-elmo-8
+- http://www.twoistoomany.com/blog/2016/10/20/elmo-8-now-with-fonts

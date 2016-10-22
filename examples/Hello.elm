@@ -22,5 +22,5 @@ main =
     { draw = draw
     , init = { }
     , update = update
-    , spritesUri = "/birdwatching.png"
+    , spritesUri = "birdwatching.png"
     }

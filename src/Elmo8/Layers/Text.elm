@@ -2,14 +2,14 @@ module Elmo8.Layers.Text exposing (..)
 
 import Dict
 import Math.Vector2 exposing (Vec2, vec2)
-import Math.Vector3 exposing (Vec3, vec3)
-import Math.Vector4 exposing (Vec4, vec4)
 import Math.Matrix4 exposing(Mat4, makeOrtho2D)
 import String
 import Task
 import WebGL
 
 import Elmo8.Layers.Common exposing (CanvasSize, Vertex, makeProjectionMatrix)
+import Elmo8.Textures.Pico8Font exposing (pico8FontDataUri)
+import Elmo8.Textures.Pico8PaletteMap exposing (pico8PaletteMapDataUri)
 
 -- <Char width="8" offset="0 0" rect="79 12 6 10" code="A"/>
 type alias Character =
@@ -63,8 +63,8 @@ init canvasSize =
     , paletteTextureSize = vec2 16.0 16.0
     }
     !
-    [ WebGL.loadTexture "/font/pico-8_regular_8.png" |> Task.perform TextureError TextureLoad
-    , WebGL.loadTexture "/pico-8-palette-map.png" |> Task.perform PaletteTextureError PaletteTextureLoad
+    [ WebGL.loadTexture pico8FontDataUri |> Task.perform TextureError TextureLoad
+    , WebGL.loadTexture pico8PaletteMapDataUri |> Task.perform PaletteTextureError PaletteTextureLoad
     ]
 
 update : Msg -> Model -> (Model, Cmd Msg)
