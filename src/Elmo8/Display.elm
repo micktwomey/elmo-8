@@ -43,9 +43,9 @@ getPixel : Model -> Int -> Int -> Int
 getPixel model x y =
     Elmo8.Layers.Pixels.getPixel model.pixels x y
 
-sprite : Model -> Int -> Int -> Int -> Model
-sprite model index x y =
-    { model | sprites = Elmo8.Layers.Sprites.sprite model.sprites index x y }
+sprite : Model -> { x: Int, y: Int, index: Int } -> Model
+sprite model s =
+    { model | sprites = Elmo8.Layers.Sprites.sprite model.sprites s }
 
 pixelPalette : Model -> Int -> Int -> Model
 pixelPalette model from to =

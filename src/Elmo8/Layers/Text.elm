@@ -11,7 +11,7 @@ import Elmo8.Layers.Common exposing (CanvasSize, Vertex, makeProjectionMatrix)
 import Elmo8.Textures.Pico8Font exposing (pico8FontDataUri)
 import Elmo8.Textures.Pico8PaletteMap exposing (pico8PaletteMapDataUri)
 
--- <Char width="8" offset="0 0" rect="79 12 6 10" code="A"/>
+-- TODO: represent more of the metrics for better layout.
 type alias Character =
     { x : Int
     , y : Int
@@ -191,6 +191,8 @@ fragmentShader = [glsl|
 |]
 
 -- https://github.com/andryblack/fontbuilder
+-- <Char width="8" offset="0 0" rect="79 12 6 10" code="A"/>
+-- {char="A",width=8,x=79,y=12,w=6,h=10,ox=0,oy=10}
 -- grep Char fonts/pico-8_regular_8.xml | awk -F'"' '{print ", (\'"$8"\', Character "$6, ")"}' | pbcopy
 fontList : List (Char, Character)
 fontList =

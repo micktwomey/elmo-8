@@ -1,9 +1,11 @@
 {-| PICO-8's Hello.lua redone in ELMO-8
 
+Couple of differences:
+- Use 1 sprite for each colour (colour shifting not implemented yet).
+
 -}
 
 import Elmo8.Console as Console
-import Elmo8.Pico8 as Pico8
 
 type alias Model = {
     t : Int
@@ -32,8 +34,8 @@ draw_letter t i j0 =
         , Console.sprite (48+i) (8+i*8 + x)  (round y)
         ]
 
-draw : Console.Console Model -> Model ->  List Console.Command
-draw console model =
+draw : Model ->  List Console.Command
+draw model =
     [ List.map2 (\i j -> draw_letter model.t i j) [1..11] [0..10] |> List.concat
     , List.map (\i -> Console.putPixel i 0 i) [0..15]
     , [ Console.sprite 1 60 100

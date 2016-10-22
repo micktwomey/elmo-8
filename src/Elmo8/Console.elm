@@ -1,4 +1,4 @@
-module Elmo8.Console exposing (Command, Console, putPixel, print, boot, Config, sprite)
+module Elmo8.Console exposing (Command, putPixel, print, boot, Config, sprite)
 
 {-| The ELMO-8 Fantasy Console
 
@@ -12,8 +12,8 @@ To start up the console you need to do a little bit of configuration (the patter
 
     type alias Model = {}
 
-    draw : Console.Console Model -> Model ->  List Console.Command
-    draw console model =
+    draw : Model ->  List Console.Command
+    draw model =
         [ ]
 
     update : Model -> Model
@@ -35,9 +35,6 @@ To start up the console you need to do a little bit of configuration (the patter
 
 # Actions
 @docs Command
-
-# Data
-@docs Console
 
 -}
 
@@ -74,7 +71,7 @@ Normally you don't create these directly, instead use the drawing functions to i
 type Command
     = PutPixel Int Int Colour
     | Print Int Int Colour String
-    | Sprite Int Int Int
+    | Sprite { x: Int, y: Int, index: Int }
     | PixelPalette Int Int
     | ScreenPalette Int Int
     | ResetPalette
@@ -142,20 +139,18 @@ screenPalette old new =
 resetPalette : Command
 resetPalette = ResetPalette
 
-{-| Render a sprite at the given position
+{-| Render a sprite (n) at the given position (x, y)
 
-spr n x y [w h] [flip_x] [flip_y]
+Note that sprites are rendered on top of each other in the order given, if you want to layer them make sure to issue the draw commands with the top sprite last.
 
-	draw sprite n (0..255) at position x,y
-	width and height are 1,1 by default and specify how many sprites wide to blit.
-	Colour 0 drawn as transparent by default (see palt())
-	flip_x=true to flip horizontally
-	flip_y=true to flip vertically
+To render sprite 0 at (10, 10):
+
+    sprite 0 10 10
 
 -}
 sprite : Int -> Int -> Int -> Command
-sprite sprite x y =
-    Sprite sprite x y
+sprite n x y =
+    Sprite {x = x, y = y, index = n}
 
 init : model -> String -> (Model model, Cmd Msg)
 init model spritesUrl =
@@ -172,8 +167,8 @@ processCommand command model =
         Noop message -> model
         PutPixel x y colour ->
             { model | display = Elmo8.Display.setPixel model.display x y colour }
-        Sprite index x y ->
-            { model | display = Elmo8.Display.sprite model.display index x y }
+        Sprite s ->
+            { model | display = Elmo8.Display.sprite model.display s }
         Print x y colour string ->
             { model | display = Elmo8.Display.print model.display x y colour string }
         PixelPalette from to ->
@@ -183,7 +178,7 @@ processCommand command model =
         ResetPalette ->
             { model | display = Elmo8.Display.resetPalette model.display }
 
-update : (Console model -> model -> List Command) -> (model -> model) -> Msg -> Model model -> (Model model, Cmd Msg)
+update : (model -> List Command) -> (model -> model) -> Msg -> Model model -> (Model model, Cmd Msg)
 update draw updateModel msg model =
     case msg of
         Tick time ->
@@ -194,7 +189,7 @@ update draw updateModel msg model =
                     True ->
                         let
                             clearedDisplayModel = { model | display = Elmo8.Display.clear model.display }
-                            commands = draw (A model) model.model
+                            commands = draw model.model
                             updatedModel = List.foldl processCommand clearedDisplayModel commands
                         in
                             { updatedModel | model = updateModel model.model, lastTick = time } ! [ ]
@@ -224,17 +219,17 @@ view model =
 
 {-| Console configuration
 
-draw is a function which can optionally read information from the Console (the previous state) and then emit a bunch of commands to update the console (e.g. drawing).
+draw emits a bunch of commands to update the console (e.g. drawing).
 
 update takes the previous model (state) and returns and updated version.
 
 init returns an initial state for the model.
 
-spriteUrl is a URL pointing to a 128x128 sprite sheet (16x16 8x8 sprites).
+spriteUrl is a URL pointing to a 128x128 sprite sheet (16x16 8x8 sprites). You reference them by index (e.g. 0 represents a rectangle (0,0) -> (8,8) on the sprite shee).
 
 -}
 type alias Config model =
-    { draw: Console model -> model -> List Command
+    { draw: model -> List Command
     , update: model -> model
     , init: model
     , spritesUrl : String

@@ -137,6 +137,8 @@ spr index x y width height flip_x flip_y =
 {-| Print string (str) at (x,y) using colour (c)
 
 Same as PICO-8's `print str [x y [col]]`.
+
+(Not implemented) If only str is supplied, and the cursor reaches the end of the screen, a carriage return and vertical scroll is automatically applied. (terminal-like behaviour)
 -}
 print : String -> Int -> Int -> Int -> Command
 print string x y colour =
