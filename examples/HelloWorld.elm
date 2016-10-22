@@ -3,6 +3,7 @@
 -}
 
 import Elmo8.Console as Console
+import Elmo8.Pico8 as Pico8
 
 type alias Model = {
     t : Int
@@ -49,5 +50,5 @@ main =
     { draw = draw
     , init = init
     , update = update
-    , spritesUri = "hello_world.png"
+    , spritesUrl = "hello_world.png"
     }

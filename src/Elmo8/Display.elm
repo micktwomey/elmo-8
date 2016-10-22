@@ -64,12 +64,12 @@ print model x y colour string =
     { model | text = Elmo8.Layers.Text.print model.text x y colour string }
 
 init : String -> (Model, Cmd Msg)
-init spritesUri =
+init spritesUrl =
     let
         canvasSize = { width = 512.0, height = 512.0}
         (pixels, pixelsCmd) = Elmo8.Layers.Pixels.init canvasSize
         (text, textCmd) = Elmo8.Layers.Text.init canvasSize
-        (sprites, spritesCmd) = Elmo8.Layers.Sprites.init canvasSize spritesUri
+        (sprites, spritesCmd) = Elmo8.Layers.Sprites.init canvasSize spritesUrl
     in
         { windowSize = { width = 0, height = 0 }
         , canvasSize = canvasSize

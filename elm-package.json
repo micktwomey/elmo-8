@@ -9,6 +9,7 @@
     ],
     "exposed-modules": [
         "Elmo8.Console"
+        , "Elmo8.Pico8"
     ],
     "dependencies": {
         "elm-community/elm-linear-algebra": "2.0.3 <= v < 3.0.0",

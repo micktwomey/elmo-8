@@ -1,19 +1,37 @@
-module Elmo8.Console exposing (Command, Console, getPixel, putPixel, print, boot, palette, sprite, resetPalette, screenPalette)
+module Elmo8.Console exposing (Command, Console, putPixel, print, boot, Config, sprite)
 
 {-| The ELMO-8 Fantasy Console
 
 This is a PICO-8 inspired fantasy "console". This isn't really a console emulator but a simple graphics and game library for creating 8-bit retro games.
 
 # Initialization
-@docs boot
+
+To start up the console you need to do a little bit of configuration (the pattern matches Elm's normal model/view/update):
+
+    import Elmo8.Console as Console
+
+    type alias Model = {}
+
+    draw : Console.Console Model -> Model ->  List Console.Command
+    draw console model =
+        [ ]
+
+    update : Model -> Model
+    update model = model
+
+    main : Program Never
+    main =
+    Console.boot
+        { draw = draw
+        , init = {}
+        , update = update
+        , spritesUri = "somefile.png"
+        }
+
+@docs boot, Config
 
 # Drawing
-@docs putPixel, print, palette, screenPalette, resetPalette, sprite
-
-# Reading state
-During draw you can read state from the Console using the following functions. These apply to the state *before* your drawing commands update it.
-
-@docs getPixel
+@docs putPixel, print, sprite
 
 # Actions
 @docs Command
@@ -37,7 +55,6 @@ type alias Model model =
     , lastTick : Time.Time
     }
 
--- Private
 type alias Colour = Int
 
 {-| Represents the console for interacting via functions
@@ -64,6 +81,10 @@ type Command
     | Noop String
 
 {-| Draw a pixel at the given position
+
+e.g. putPixel 64 64 9 -> draw a pixel in the middle and set the colour to orange (9).
+
+Equivalent to PICO-8's `pset x y c`
 
 -}
 putPixel : Int -> Int -> Colour -> Command
@@ -137,9 +158,9 @@ sprite sprite x y =
     Sprite sprite x y
 
 init : model -> String -> (Model model, Cmd Msg)
-init model spritesUri =
+init model spritesUrl =
     let
-        (displayModel, displayMsg) = Elmo8.Display.init spritesUri
+        (displayModel, displayMsg) = Elmo8.Display.init spritesUrl
     in
         { display = displayModel, model = model, lastTick = 0 }
         ! [ Cmd.map DisplayMsg displayMsg ]
@@ -209,12 +230,14 @@ update takes the previous model (state) and returns and updated version.
 
 init returns an initial state for the model.
 
+spriteUrl is a URL pointing to a 128x128 sprite sheet (16x16 8x8 sprites).
+
 -}
 type alias Config model =
     { draw: Console model -> model -> List Command
     , update: model -> model
     , init: model
-    , spritesUri : String
+    , spritesUrl : String
     }
 
 {-| Boot your console!
@@ -225,7 +248,7 @@ Supply a Config.
 boot : Config model -> Program Never
 boot config =
     Html.App.program
-        { init = init config.init config.spritesUri
+        { init = init config.init config.spritesUrl
         , update = update config.draw config.update
         , subscriptions = subscriptions
         , view = view
