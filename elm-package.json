@@ -1,8 +1,8 @@
 {
     "version": "0.1.0",
-    "summary": "PICO-8 inspired fantasy 8-bit game library",
+    "summary": "ELMO-8: A PICO-8 inspired fantasy 8-bit game library implemented in WebGL.",
     "repository": "https://github.com/micktwomey/elmo-8.git",
-    "license": "BSD3",
+    "license": "MIT",
     "source-directories": [
         "src",
         "examples"
