@@ -22,7 +22,7 @@ draw_letter t i j0 =
         col = 7 + j
         t1 = t + i*4 - j*2
         -- x = cos(t) * 5
-        -- Bug in PICO-8 example, cos(nil) * 5 -> 1 * 5
+        -- PICO-8 example: cos(nil) * 5 -> 1 * 5
         x = 5
         y = 38 + j + cos(t1/3.5) * 5
     in
@@ -36,7 +36,10 @@ draw console model =
     [ List.map2 (\i j -> draw_letter model.t i j) [1..11] [0..10] |> List.concat
     , List.map (\i -> Console.putPixel i 0 i) [0..15]
     , [ Console.sprite 1 60 100
-      , Console.print "Welcome to ELMO-8!" 10 90 9
+      , Console.putPixel 9 79 10
+      , Console.print "Welcome to ELMO-8!" 10 80 9
+      , Console.print "Hello World" 0 1 6
+      , Console.print "Ö" 60 120 5
       ]
     ] |> List.concat
 

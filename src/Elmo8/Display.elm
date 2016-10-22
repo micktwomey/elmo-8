@@ -33,6 +33,7 @@ clear : Model -> Model
 clear model =
     { model
     | sprites = Elmo8.Layers.Sprites.clear model.sprites
+    , text = Elmo8.Layers.Text.clear model.text
     }
 
 setPixel : Model -> Int -> Int -> Int -> Model
@@ -58,6 +59,10 @@ screenPalette model from to =
 resetPalette : Model -> Model
 resetPalette model =
     { model | pixels = Elmo8.Layers.Pixels.resetPalette model.pixels }
+
+print : Model -> Int -> Int -> Int -> String -> Model
+print model x y colour string =
+    { model | text = Elmo8.Layers.Text.print model.text x y colour string }
 
 init : String -> (Model, Cmd Msg)
 init spritesUri =
@@ -103,7 +108,7 @@ getRenderables model =
     List.concat
     [
     -- TODO: Text disabled due to problems
-    -- Elmo8.Layers.Text.render model.text,
+    Elmo8.Layers.Text.render model.text,
     Elmo8.Layers.Pixels.render model.pixels
     , Elmo8.Layers.Sprites.render model.sprites
     ]
@@ -112,7 +117,7 @@ view : Model -> Html.Html Msg
 view model =
     WebGL.toHtmlWith
         [ WebGL.Enable WebGL.Blend
-        , WebGL.BlendFunc (WebGL.One, WebGL.OneMinusSrcAlpha)
+        , WebGL.BlendFunc (WebGL.SrcAlpha, WebGL.OneMinusSrcAlpha)
         ]
         [ Html.Attributes.width (round model.canvasSize.width)
         , Html.Attributes.height (round model.canvasSize.height)

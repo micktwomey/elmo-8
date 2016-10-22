@@ -5,6 +5,7 @@ import Math.Vector2 exposing (Vec2, vec2)
 import Math.Vector3 exposing (Vec3, vec3)
 import Math.Vector4 exposing (Vec4, vec4)
 import Math.Matrix4 exposing(Mat4, makeOrtho2D)
+import String
 import Task
 import WebGL
 
@@ -21,12 +22,15 @@ type alias Character =
 type alias Message =
     { x : Int
     , y : Int
+    , colour : Int
     , characters : String
     }
 
 type alias Model =
     { maybeTexture : Maybe WebGL.Texture
     , textureSize : Vec2
+    , maybePaletteTexture : Maybe WebGL.Texture
+    , paletteTextureSize : Vec2
     , messages : List Message
     , meshes : Dict.Dict (Int, Int) (WebGL.Drawable Vertex)
     , canvasSize : Vec2
@@ -36,6 +40,16 @@ type alias Model =
 type Msg
     = TextureLoad WebGL.Texture
     | TextureError WebGL.Error
+    | PaletteTextureLoad WebGL.Texture
+    | PaletteTextureError WebGL.Error
+
+clear : Model -> Model
+clear model =
+    { model | messages = [] }
+
+print : Model -> Int -> Int -> Int -> String -> Model
+print model x y colour string =
+    { model | messages = (Message x y colour string) :: model.messages }
 
 init : CanvasSize -> (Model, Cmd Msg)
 init canvasSize =
@@ -45,9 +59,12 @@ init canvasSize =
     , canvasSize = vec2 canvasSize.width canvasSize.height
     , textureSize = vec2 128.0 128.0
     , projectionMatrix = makeProjectionMatrix
+    , maybePaletteTexture = Nothing
+    , paletteTextureSize = vec2 16.0 16.0
     }
     !
-    [ WebGL.loadTexture "/font/pico-8_regular_8.PNG" |> Task.perform TextureError TextureLoad
+    [ WebGL.loadTexture "/font/pico-8_regular_8.png" |> Task.perform TextureError TextureLoad
+    , WebGL.loadTexture "/pico-8-palette-map.png" |> Task.perform PaletteTextureError PaletteTextureLoad
     ]
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -57,28 +74,53 @@ update msg model =
             model ! []
         TextureLoad texture ->
             { model | maybeTexture = Just texture } ! []
+        PaletteTextureError error ->
+            model ! []
+        PaletteTextureLoad texture ->
+            { model | maybePaletteTexture = Just texture } ! []
+
+renderChar : Model -> WebGL.Texture -> WebGL.Texture -> Int -> (Int, Int) -> Character -> WebGL.Renderable
+renderChar model texture paletteTexture colour (x, y)  character =
+    WebGL.render
+        vertexShader
+        fragmentShader
+        (Dict.get (character.width, character.height) model.meshes |> Maybe.withDefault mesh)
+        { screenSize = model.canvasSize
+        , fontTexture = texture
+        , textureSize = model.textureSize
+        -- TODO: Remove unused matrix calculations!
+        , projectionMatrix = model.projectionMatrix
+        , translationMatrix = Math.Matrix4.makeTranslate3 (toFloat x) (toFloat y) 0.0
+        , scaleMatrix = Math.Matrix4.makeScale3 0.5 0.5 1.0
+        , characterPosition = vec2 (toFloat x) (toFloat y)
+        , charCoords = vec2 (toFloat character.x) (toFloat character.y)
+        , colour = colour
+        , paletteTexture = paletteTexture
+        , paletteTextureSize = model.paletteTextureSize
+        , theMatrix = Math.Matrix4.translate3 (toFloat x) (toFloat y) 0.0 model.projectionMatrix |> Math.Matrix4.scale3 0.5 0.5 1.0
+        }
+
+getNextPosition : Character -> (Int, Int) -> (Int, Int)
+getNextPosition character (x, y) =
+    -- Account for double width chars in font texture
+    (x + 1 + (character.width // 2), y)
+
+renderMessage : Model -> WebGL.Texture -> WebGL.Texture -> Message -> List WebGL.Renderable
+renderMessage model texture paletteTexture message =
+    let
+        characters = String.toList message.characters
+            |> List.map (\c -> Dict.get c fontMap |> Maybe.withDefault (Character 102 78 14 10))
+        positions = List.scanl getNextPosition (message.x, message.y) characters
+    in
+        List.map2 (renderChar model texture paletteTexture message.colour) positions characters
 
 render : Model -> List WebGL.Renderable
 render model =
-    case model.maybeTexture of
-        Nothing -> []
-        Just texture ->
-            [
-                WebGL.render
-                    vertexShader
-                    fragmentShader
-                    (Dict.get (6, 10) model.meshes |> Maybe.withDefault mesh)
-                    { screenSize = model.canvasSize
-                    , fontTexture = texture
-                    , textureSize = model.textureSize
-                    , projectionMatrix = model.projectionMatrix
-                    , characterPosition = vec2 10 80
-                    , charCoords = vec2 114 12
-                    , colour = vec3 0.5 1.0 1.0
-                    , fontWidth = 6
-                    , fontHeight = 10
-                    }
-            ]
+    case (model.maybeTexture, model.maybePaletteTexture) of
+        (Just texture, Just paletteTexture) ->
+            List.map (renderMessage model texture paletteTexture) model.messages
+                |> List.concat
+        (_, _) -> []
 
 
 {-| mesh for a character
@@ -105,41 +147,54 @@ meshesFromCharacters =
 
 vertexShader : WebGL.Shader
     {attr | position : Vec2 }
-    {unif | screenSize : Vec2, projectionMatrix : Mat4, characterPosition: Vec2 }
-    {texturePos : Vec2}
+    {unif | screenSize : Vec2, projectionMatrix : Mat4, scaleMatrix : Mat4, translationMatrix : Mat4, theMatrix : Mat4 , characterPosition: Vec2, colour : Int }
+    {texturePos : Vec2, colourIndex : Float}
 vertexShader = [glsl|
   precision mediump float;
   attribute vec2 position;
   uniform vec2 characterPosition;
   uniform vec2 screenSize;
   uniform mat4 projectionMatrix;
+  uniform mat4 scaleMatrix;
+  uniform mat4 translationMatrix;
+  uniform mat4 theMatrix;
+  uniform int colour;
   varying vec2 texturePos;
+  varying float colourIndex;
   void main () {
     texturePos = position;
-    gl_Position = projectionMatrix * vec4(position.x + characterPosition.x, position.y + characterPosition.y, 0.0, 1.0);
+    colourIndex = float(colour);
+    gl_Position = vec4((theMatrix * vec4(position, 0.0, 1.0)).xy, 0, 1);
   }
 |]
 
 
 fragmentShader : WebGL.Shader
     {}
-    {u | fontTexture : WebGL.Texture, textureSize : Vec2, projectionMatrix : Mat4, charCoords : Vec2, colour : Vec3 }
-    {texturePos : Vec2}
+    {u | fontTexture : WebGL.Texture, textureSize : Vec2, projectionMatrix : Mat4, charCoords : Vec2, paletteTexture : WebGL.Texture, paletteTextureSize : Vec2 }
+    {texturePos : Vec2, colourIndex : Float }
 fragmentShader = [glsl|
   precision mediump float;
   uniform mat4 projectionMatrix;
   uniform sampler2D fontTexture;
   uniform vec2 textureSize;
   uniform vec2 charCoords;
-  uniform vec3 colour;
+  uniform sampler2D paletteTexture;
+  uniform vec2 paletteTextureSize;
   varying vec2 texturePos;
+  varying float colourIndex;
   void main () {
     vec2 size = vec2(64.0, 64.0) / textureSize;
 
     vec2 textureClipSpace = (projectionMatrix * vec4((charCoords + texturePos) * size, 0, 1)).xy;
     vec4 temp = texture2D(fontTexture, textureClipSpace);
-    // TODO: need to find out what's up with the alpha, using font colour for now
-    gl_FragColor = vec4(temp.rgb, temp.a);
+
+    float index = colourIndex / paletteTextureSize.x;
+    // float remap = 0.999 - (colourRemap / paletteSize.y);
+    float remap = 0.999 - 0.0;
+    vec4 paletteColour = texture2D(paletteTexture, vec2(index, remap));
+
+    gl_FragColor = vec4(paletteColour.rgb, temp.a);
   }
 |]
 

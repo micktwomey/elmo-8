@@ -154,7 +154,7 @@ processCommand command model =
         Sprite index x y ->
             { model | display = Elmo8.Display.sprite model.display index x y }
         Print x y colour string ->
-            model
+            { model | display = Elmo8.Display.print model.display x y colour string }
         PixelPalette from to ->
             { model | display = Elmo8.Display.pixelPalette model.display from to }
         ScreenPalette from to ->
