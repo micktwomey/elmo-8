@@ -11,7 +11,6 @@ import Html.Attributes
 import WebGL
 import Window
 import Elmo8.Layers.Common exposing (CanvasSize)
--- import Elmo8.Layers.Layer exposing (Layer, renderLayer, createDefaultLayers)
 import Elmo8.Layers.Pixels
 import Elmo8.Layers.Text
 import Elmo8.Layers.Sprites

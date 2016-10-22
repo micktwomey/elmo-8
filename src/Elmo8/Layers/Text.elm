@@ -88,11 +88,7 @@ renderChar model texture paletteTexture colour (x, y)  character =
         { screenSize = model.canvasSize
         , fontTexture = texture
         , textureSize = model.textureSize
-        -- TODO: Remove unused matrix calculations!
         , projectionMatrix = model.projectionMatrix
-        , translationMatrix = Math.Matrix4.makeTranslate3 (toFloat x) (toFloat y) 0.0
-        , scaleMatrix = Math.Matrix4.makeScale3 0.5 0.5 1.0
-        , characterPosition = vec2 (toFloat x) (toFloat y)
         , charCoords = vec2 (toFloat character.x) (toFloat character.y)
         , colour = colour
         , paletteTexture = paletteTexture
@@ -147,16 +143,12 @@ meshesFromCharacters =
 
 vertexShader : WebGL.Shader
     {attr | position : Vec2 }
-    {unif | screenSize : Vec2, projectionMatrix : Mat4, scaleMatrix : Mat4, translationMatrix : Mat4, theMatrix : Mat4 , characterPosition: Vec2, colour : Int }
+    {unif | screenSize : Vec2, theMatrix : Mat4 , colour : Int }
     {texturePos : Vec2, colourIndex : Float}
 vertexShader = [glsl|
   precision mediump float;
   attribute vec2 position;
-  uniform vec2 characterPosition;
   uniform vec2 screenSize;
-  uniform mat4 projectionMatrix;
-  uniform mat4 scaleMatrix;
-  uniform mat4 translationMatrix;
   uniform mat4 theMatrix;
   uniform int colour;
   varying vec2 texturePos;

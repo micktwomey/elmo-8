@@ -22,3 +22,6 @@ $(PICO_8_FONT_ELM): Makefile $(CONVERTER) $(PICO_8_FONT_PNG)
 		image/png \
 		$(PICO_8_FONT_PNG) \
 		$(PICO_8_FONT_ELM)
+
+documentation.json:
+	elm make --docs=documentation.json --warn
