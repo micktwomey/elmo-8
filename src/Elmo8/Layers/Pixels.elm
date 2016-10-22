@@ -13,6 +13,7 @@ import Task
 import WebGL
 
 import Elmo8.Layers.Common exposing (CanvasSize, Vertex, makeProjectionMatrix)
+import Elmo8.Textures.Pico8PaletteMap exposing (pico8PaletteMapDataUri)
 
 type alias X = Int
 type alias Y = Int
@@ -83,7 +84,7 @@ init canvasSize =
     , projectionMatrix = makeProjectionMatrix
     }
     !
-    [ WebGL.loadTexture "/pico-8-palette-map.png" |> Task.perform TextureError TextureLoad
+    [ WebGL.loadTexture pico8PaletteMapDataUri |> Task.perform TextureError TextureLoad
     ]
 
 update : Msg -> Model -> (Model, Cmd Msg)

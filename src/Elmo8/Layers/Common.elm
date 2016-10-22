@@ -5,7 +5,7 @@ module Elmo8.Layers.Common exposing (..)
 -}
 
 import Math.Vector2 exposing (Vec2)
-import Math.Matrix4 exposing(Mat4, makeOrtho2D, translate3)
+import Math.Matrix4 exposing(Mat4, makeOrtho2D)
 
 {-| Canvas size is the physical size of the canvas WebGL is rendering to
 

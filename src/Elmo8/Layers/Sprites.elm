@@ -26,8 +26,8 @@ type Msg
     | TextureError WebGL.Error
 
 
-sprite : Model -> Int -> Int -> Int -> Model
-sprite model index x y =
+sprite : Model -> { x: Int, y: Int, index: Int } -> Model
+sprite model {x, y, index} =
     -- TODO replace this with something less memory leaky, Set isn't any use, probably use Lazy if possible, or a Dict
     { model | sprites = (Sprite index x y ) :: model.sprites }
 
