@@ -22,7 +22,7 @@ draw_letter t i j0 =
         col = 7 + j
         t1 = t + i*4 - j*2
         -- x = cos(t) * 5
-        -- Bug in PICO-8 example, cos(nil) * 5 -> 1 * 5
+        -- PICO-8 example: cos(nil) * 5 -> 1 * 5
         x = 5
         y = 38 + j + cos(t1/3.5) * 5
     in
