@@ -1,3 +1,6 @@
+1.0.2
+- Slightly improve examples.
+
 1.0.1
 - Attempting to fix compatibility with Elm 0.17 on package index.
 
