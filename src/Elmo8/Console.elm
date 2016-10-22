@@ -9,28 +9,37 @@ This is a PICO-8 inspired fantasy "console". This isn't really a console emulato
 To start up the console you need to do a little bit of configuration (the pattern matches Elm's normal model/view/update):
 
     import Elmo8.Console as Console
+    import Elmo8.Pico8 as Pico8
 
     type alias Model = {}
 
     draw : Model ->  List Console.Command
     draw model =
-        [ ]
+        [ Console.putPixel 0 0 Pico8.peach
+        , Console.print "Hello World" 10 50 Pico8.orange
+        , Console.sprite 0 60 90
+        ]
 
     update : Model -> Model
     update model = model
 
     main : Program Never
     main =
-    Console.boot
-        { draw = draw
-        , init = {}
-        , update = update
-        , spritesUri = "somefile.png"
-        }
+        Console.boot
+            { draw = draw
+            , init = {}
+            , update = update
+            , spritesUrl = "birdwatching.png"
+            }
 
 @docs boot, Config
 
 # Drawing
+
+- The screen size is 128x128
+- Co-ordinates go from (0,0) (top left) to (127,127) (bottom right)
+- Colours are given as ints to look up in the palette, 0 - 15. Look in `Elmo8.Pico8` for colours, or http://www.romanzolotarev.com/pico-8-color-palette/
+
 @docs putPixel, print, sprite
 
 # Actions
@@ -77,11 +86,11 @@ type Command
     | ResetPalette
     | Noop String
 
-{-| Draw a pixel at the given position
+{-| Draw a pixel at the given position (x, y)
 
 e.g. putPixel 64 64 9 -> draw a pixel in the middle and set the colour to orange (9).
 
-Equivalent to PICO-8's `pset x y c`
+Equivalent to PICO-8's `pset x y c`.
 
 -}
 putPixel : Int -> Int -> Colour -> Command
@@ -133,13 +142,15 @@ screenPalette : Colour -> Colour -> Command
 screenPalette old new =
     ScreenPalette old new
 
-{-| Rest all palette remappings
+{-| Reset all palette remappings
 
 -}
 resetPalette : Command
 resetPalette = ResetPalette
 
 {-| Render a sprite (n) at the given position (x, y)
+
+Sprite sheets are 128x128 images (usually a PNG). They are sliced into 8x8 squares, with the index used to pick a sprite. 0 is top left, 255 is bottom right.
 
 Note that sprites are rendered on top of each other in the order given, if you want to layer them make sure to issue the draw commands with the top sprite last.
 
@@ -219,13 +230,13 @@ view model =
 
 {-| Console configuration
 
-draw emits a bunch of commands to update the console (e.g. drawing).
+draw (Model -> List Command) emits a bunch of commands to update the console (e.g. drawing). It is given your model which is updated in `update`. Note that currently sprites and text are cleared between each draw command. This will change in future. Assume this is called at 30 fps.
 
-update takes the previous model (state) and returns and updated version.
+update (Model -> Model) takes the previous model (state) and returns and updated version. In future it might be given more information (e.g. time deltas between frames). Assume this is called at 30 fps.
 
-init returns an initial state for the model.
+init (Model) returns an initial state for the model.
 
-spriteUrl is a URL pointing to a 128x128 sprite sheet (16x16 8x8 sprites). You reference them by index (e.g. 0 represents a rectangle (0,0) -> (8,8) on the sprite shee).
+spriteUrl (String) is a URL pointing to a 128x128 sprite sheet (16x16 8x8 sprites). You reference them by index (e.g. 0 represents a rectangle (0,0) -> (8,8) on the sprite sheet). If this is invalid then sprite rendering won't work.
 
 -}
 type alias Config model =
