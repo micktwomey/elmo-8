@@ -1,4 +1,4 @@
-module Main exposing (..)
+module HelloWorld exposing (..)
 
 {-| PICO-8's Hello.lua redone in ELMO-8
 
