@@ -7,13 +7,19 @@ module Elmo8.Layers.Common exposing (..)
 import Math.Vector2 exposing (Vec2)
 import Math.Matrix4 exposing (Mat4, makeOrtho2D)
 
+
 -- Use the main site as a CDN for now
 -- TODO: configure this at app startup, with sensible defaults
+
+
 pico8FontUri : String
-pico8FontUri = "http://elmo-8.twomeylee.name/assets/pico-8_regular_8.png"
+pico8FontUri =
+    "http://elmo-8.twomeylee.name/assets/pico-8_regular_8.png"
+
 
 pico8PaletteMapUri : String
-pico8PaletteMapUri = "http://elmo-8.twomeylee.name/assets/pico-8-palette-map.png"
+pico8PaletteMapUri =
+    "http://elmo-8.twomeylee.name/assets/pico-8-palette-map.png"
 
 
 {-| Canvas size is the physical size of the canvas WebGL is rendering to

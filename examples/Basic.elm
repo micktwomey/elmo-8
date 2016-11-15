@@ -1,4 +1,4 @@
-module Main exposing (..)
+module Basic exposing (..)
 
 import Elmo8.Console as Console
 import Elmo8.Pico8 as Pico8

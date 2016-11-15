@@ -1,4 +1,4 @@
-module Main exposing (..)
+module HelloPico8 exposing (..)
 
 {-| PICO-8 style hello world
 
