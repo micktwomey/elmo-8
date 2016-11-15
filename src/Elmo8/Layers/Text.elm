@@ -6,9 +6,7 @@ import Math.Matrix4 exposing (Mat4, makeOrtho2D)
 import String
 import Task
 import WebGL
-import Elmo8.Layers.Common exposing (CanvasSize, Vertex, makeProjectionMatrix)
-import Elmo8.Textures.Pico8Font exposing (pico8FontDataUri)
-import Elmo8.Textures.Pico8PaletteMap exposing (pico8PaletteMapDataUri)
+import Elmo8.Layers.Common exposing (CanvasSize, Vertex, makeProjectionMatrix, pico8FontUri, pico8PaletteMapUri)
 
 
 -- TODO: represent more of the metrics for better layout.
@@ -70,7 +68,7 @@ init canvasSize =
     , maybePaletteTexture = Nothing
     , paletteTextureSize = vec2 16.0 16.0
     }
-        ! [ WebGL.loadTexture pico8FontDataUri
+        ! [ WebGL.loadTexture pico8FontUri
                 |> Task.attempt
                     (\result ->
                         case result of
@@ -80,7 +78,7 @@ init canvasSize =
                             Ok val ->
                                 TextureLoad val
                     )
-          , WebGL.loadTexture pico8PaletteMapDataUri
+          , WebGL.loadTexture pico8PaletteMapUri
                 |> Task.attempt
                     (\result ->
                         case result of
