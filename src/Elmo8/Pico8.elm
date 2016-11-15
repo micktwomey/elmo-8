@@ -1,7 +1,25 @@
-module Elmo8.Pico8 exposing
-    ( black, darkblue, darkpurple, darkgreen, brown, darkgrey, lightgrey, white, red, orange, yellow, green, blue, indigo, pink, peach
-    , pset, spr, print
-    )
+module Elmo8.Pico8
+    exposing
+        ( black
+        , darkblue
+        , darkpurple
+        , darkgreen
+        , brown
+        , darkgrey
+        , lightgrey
+        , white
+        , red
+        , orange
+        , yellow
+        , green
+        , blue
+        , indigo
+        , pink
+        , peach
+        , pset
+        , spr
+        , print
+        )
 
 {-| (Mostly) PICO-8 Compatible API
 
@@ -25,85 +43,117 @@ The PICO-8 has a fairly snazzy palette of 16 colours, identified by an int from 
 
 import Elmo8.Console exposing (Command)
 
+
 {-| Black (0)
 -}
 black : Int
-black = 0
+black =
+    0
+
 
 {-| Dark Blue (1)
 -}
 darkblue : Int
-darkblue = 1
+darkblue =
+    1
+
 
 {-| Dark Purple (2)
 -}
 darkpurple : Int
-darkpurple = 2
+darkpurple =
+    2
+
 
 {-| Dark Green (3)
 -}
 darkgreen : Int
-darkgreen = 3
+darkgreen =
+    3
+
 
 {-| Brown (4)
 -}
 brown : Int
-brown = 4
+brown =
+    4
+
 
 {-| Dark Grey (5)
 -}
 darkgrey : Int
-darkgrey = 5
+darkgrey =
+    5
+
 
 {-| Light Grey (6)
 -}
 lightgrey : Int
-lightgrey = 6
+lightgrey =
+    6
+
 
 {-| White (7)
 -}
 white : Int
-white = 7
+white =
+    7
+
 
 {-| Red (8)
 -}
 red : Int
-red = 8
+red =
+    8
+
 
 {-| Orange (9)
 -}
 orange : Int
-orange = 9
+orange =
+    9
+
 
 {-| Yellow (10)
 -}
 yellow : Int
-yellow = 10
+yellow =
+    10
+
 
 {-| Green (11)
 -}
 green : Int
-green = 11
+green =
+    11
+
 
 {-| Blue (12)
 -}
 blue : Int
-blue = 12
+blue =
+    12
+
 
 {-| Indigo (13)
 -}
 indigo : Int
-indigo = 13
+indigo =
+    13
+
 
 {-| Ping (14)
 -}
 pink : Int
-pink = 14
+pink =
+    14
+
 
 {-| Peach (15)
 -}
 peach : Int
-peach = 15
+peach =
+    15
 
 
 {-| Set the colour of a pixel at (x,y) using colour (c)
@@ -117,6 +167,7 @@ Same as PICO-8's `pset x y [c]`.
 pset : Int -> Int -> Int -> Command
 pset x y colour =
     Elmo8.Console.putPixel x y colour
+
 
 {-| Draw a sprite n at (x,y)
 
@@ -133,6 +184,7 @@ Note that `[w h] [flip_x] [flip_y]` is currently not implemented (it will be).
 spr : Int -> Int -> Int -> Int -> Int -> Bool -> Bool -> Command
 spr index x y width height flip_x flip_y =
     Elmo8.Console.sprite index x y
+
 
 {-| Print string (str) at (x,y) using colour (c)
 

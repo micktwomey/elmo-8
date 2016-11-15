@@ -6,11 +6,13 @@ import Task
 import WebGL
 import Elmo8.Layers.Common exposing (CanvasSize, makeProjectionMatrix, Vertex)
 
+
 type alias Sprite =
-    { sprite: Int
+    { sprite : Int
     , x : Int
     , y : Int
     }
+
 
 type alias Model =
     { maybeTexture : Maybe WebGL.Texture
@@ -21,22 +23,24 @@ type alias Model =
     , projectionMatrix : Mat4
     }
 
+
 type Msg
     = TextureLoad WebGL.Texture
     | TextureError WebGL.Error
 
 
-sprite : Model -> { x: Int, y: Int, index: Int } -> Model
-sprite model {x, y, index} =
+sprite : Model -> { x : Int, y : Int, index : Int } -> Model
+sprite model { x, y, index } =
     -- TODO replace this with something less memory leaky, Set isn't any use, probably use Lazy if possible, or a Dict
-    { model | sprites = (Sprite index x y ) :: model.sprites }
+    { model | sprites = (Sprite index x y) :: model.sprites }
+
 
 clear : Model -> Model
 clear model =
     { model | sprites = [] }
 
 
-init : CanvasSize -> String -> (Model, Cmd Msg)
+init : CanvasSize -> String -> ( Model, Cmd Msg )
 init canvasSize uri =
     { maybeTexture = Nothing
     , sprites = []
@@ -44,22 +48,33 @@ init canvasSize uri =
     , screenSize = vec2 canvasSize.width canvasSize.height
     , textureSize = vec2 0 0
     , projectionMatrix = makeProjectionMatrix
-    } !
-    [ WebGL.loadTexture uri |> Task.perform TextureError TextureLoad
-    ]
+    }
+        ! [ WebGL.loadTexture uri
+                |> Task.attempt
+                    (\result ->
+                        case result of
+                            Err err ->
+                                TextureError err
 
-update : Msg -> Model -> (Model, Cmd Msg)
+                            Ok val ->
+                                TextureLoad val
+                    )
+          ]
+
+
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         TextureLoad texture ->
-            {model
+            { model
                 | maybeTexture = Just texture
-                ,  textureSize = vec2 (toFloat (fst (WebGL.textureSize texture))) (toFloat (snd (WebGL.textureSize texture)))
+                , textureSize = vec2 (toFloat (Tuple.first (WebGL.textureSize texture))) (toFloat (Tuple.second (WebGL.textureSize texture)))
             }
-            !
-            []
+                ! []
+
         TextureError _ ->
             model ! []
+
 
 renderSprite : Model -> WebGL.Texture -> Sprite -> WebGL.Renderable
 renderSprite model texture sprite =
@@ -76,10 +91,13 @@ renderSprite model texture sprite =
         , spriteIndex = sprite.sprite
         }
 
+
 render : Model -> List WebGL.Renderable
 render model =
     case model.maybeTexture of
-        Nothing -> []
+        Nothing ->
+            []
+
         Just texture ->
             List.map (renderSprite model texture) model.sprites
 
@@ -88,17 +106,16 @@ render model =
 
 -}
 mesh : WebGL.Drawable Vertex
-mesh  =
+mesh =
     WebGL.Triangle
         [ ( Vertex (vec2 0 0), Vertex (vec2 8 8), Vertex (vec2 8 0) )
         , ( Vertex (vec2 0 0), Vertex (vec2 0 8), Vertex (vec2 8 8) )
         ]
 
-vertexShader : WebGL.Shader
-    {attr | position : Vec2 }
-    {unif | screenSize : Vec2, projectionMatrix : Mat4, spriteX: Int, spriteY: Int }
-    {texturePos : Vec2}
-vertexShader = [glsl|
+
+vertexShader : WebGL.Shader { attr | position : Vec2 } { unif | screenSize : Vec2, projectionMatrix : Mat4, spriteX : Int, spriteY : Int } { texturePos : Vec2 }
+vertexShader =
+    [glsl|
   precision mediump float;
   attribute vec2 position;
   uniform int spriteX;
@@ -113,11 +130,9 @@ vertexShader = [glsl|
 |]
 
 
-fragmentShader : WebGL.Shader
-    {}
-    {u | texture : WebGL.Texture, textureSize : Vec2, projectionMatrix : Mat4, spriteIndex : Int }
-    {texturePos : Vec2}
-fragmentShader = [glsl|
+fragmentShader : WebGL.Shader {} { u | texture : WebGL.Texture, textureSize : Vec2, projectionMatrix : Mat4, spriteIndex : Int } { texturePos : Vec2 }
+fragmentShader =
+    [glsl|
   precision mediump float;
   uniform mat4 projectionMatrix;
   uniform sampler2D texture;

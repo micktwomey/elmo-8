@@ -14,8 +14,11 @@ import WebGL
 
 -- From http://blog.tojicode.com/2012/07/sprite-tile-maps-on-gpu.html
 -- TODO: make this work :)
-tileMapVertextShader : WebGL.Shader { attr | position : Vec2, texture : Vec2} { uniform | viewOffset : Vec2, viewportSize : Vec2, inverseTileTextureSize : Vec2, inverseTileSize : Float} { pixelCoord : Vec2, texCoord : Vec2 }
-tileMapVertextShader = [glsl|
+
+
+tileMapVertextShader : WebGL.Shader { attr | position : Vec2, texture : Vec2 } { uniform | viewOffset : Vec2, viewportSize : Vec2, inverseTileTextureSize : Vec2, inverseTileSize : Float } { pixelCoord : Vec2, texCoord : Vec2 }
+tileMapVertextShader =
+    [glsl|
     precision mediump float;
     attribute vec2 position;
     attribute vec2 texture;

@@ -26,3 +26,11 @@ $(PICO_8_FONT_ELM): Makefile $(CONVERTER) $(PICO_8_FONT_PNG)
 
 documentation.json: $(SOURCES)
 	elm make --docs=documentation.json --warn
+
+.PHONY: format
+format:
+	elm format --upgrade --yes src/ examples/
+
+.PHONY: upgrade
+upgrade:
+	elm upgrade
