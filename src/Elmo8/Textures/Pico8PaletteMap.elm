@@ -1,0 +1,8 @@
+module Elmo8.Textures.Pico8PaletteMap exposing (..)
+
+-- Generated from pico-8-palette-map.png
+
+
+pico8PaletteMapDataUri : String
+pico8PaletteMapDataUri =
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAANNJREFUOBGlkzsKwlAQRe+MWNlapk4RSBELmyxA9yBoI0JAFFyF23ABNjYBdQsG0lnbpxOsdGSEB0HyeUkWcDh3PpcAiBuusH4Dm/kHl/SBuOdgttxi5DrAeAfsD0AYgF5D+PczouSIqD8AJgTuApM3Bbc1K6xybhPbwCrnpjPnYZVzk4X9wyqnW5KKzbaLYJWTPDOpO1UZrKcm8RZSdecqWJOTnCBlT1IHa3KSLJCiD7OBNTl3gX/J/atI/rdtzWZs7gJrsdi0qqnZtJK1km1hlX8Bnpcdm8aa7AQAAAAASUVORK5CYII="

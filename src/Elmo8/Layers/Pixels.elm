@@ -11,7 +11,9 @@ import Math.Vector2 exposing (Vec2, vec2, fromTuple)
 import Math.Matrix4 exposing (Mat4, makeOrtho2D)
 import Task
 import WebGL
-import Elmo8.Layers.Common exposing (CanvasSize, Vertex, makeProjectionMatrix, pico8PaletteMapUri)
+import Elmo8.Assets
+import Elmo8.Layers.Common exposing (CanvasSize, Vertex, makeProjectionMatrix, pico8PaletteMapUri, pico8PaletteMapRelativeUri)
+import Elmo8.Textures.Pico8PaletteMap exposing (pico8PaletteMapDataUri)
 
 
 type alias X =
@@ -97,7 +99,7 @@ init canvasSize =
     , paletteSize = vec2 16.0 16.0
     , projectionMatrix = makeProjectionMatrix
     }
-        ! [ WebGL.loadTexture pico8PaletteMapUri
+        ! [ Elmo8.Assets.loadWebglTextureWithFallbacks [ pico8PaletteMapDataUri, pico8PaletteMapRelativeUri, pico8PaletteMapUri ]
                 |> Task.attempt
                     (\result ->
                         case result of

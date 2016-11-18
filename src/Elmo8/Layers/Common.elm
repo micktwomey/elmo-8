@@ -12,9 +12,19 @@ import Math.Matrix4 exposing (Mat4, makeOrtho2D)
 -- TODO: configure this at app startup, with sensible defaults
 
 
+pico8FontRelativeUri : String
+pico8FontRelativeUri =
+    "/assets/pico-8_regular_8.png"
+
+
 pico8FontUri : String
 pico8FontUri =
     "http://elmo-8.twomeylee.name/assets/pico-8_regular_8.png"
+
+
+pico8PaletteMapRelativeUri : String
+pico8PaletteMapRelativeUri =
+    "/assets/pico-8-palette-map.png"
 
 
 pico8PaletteMapUri : String

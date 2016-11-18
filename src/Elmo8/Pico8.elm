@@ -37,6 +37,8 @@ Even if a function has the full PICO-8 function signature note all flags might b
 
 The PICO-8 has a fairly snazzy palette of 16 colours, identified by an int from 0 to 15. You can also use these handy identifiers.
 
+You can view the palette (and download appropriate palettes for your apps) here: http://www.romanzolotarev.com/pico-8-color-palette/
+
 @docs black, darkblue, darkpurple, darkgreen, brown, darkgrey, lightgrey, white, red, orange, yellow, green, blue, indigo, pink, peach
 
 -}
