@@ -7,9 +7,7 @@ import String
 import Task
 import WebGL
 import Elmo8.Assets
-import Elmo8.Layers.Common exposing (CanvasSize, Vertex, makeProjectionMatrix, pico8FontUri, pico8PaletteMapUri)
-import Elmo8.Textures.Pico8Font exposing (pico8FontDataUri)
-import Elmo8.Textures.Pico8PaletteMap exposing (pico8PaletteMapDataUri)
+import Elmo8.Layers.Common exposing (CanvasSize, Vertex, makeProjectionMatrix)
 
 
 -- TODO: represent more of the metrics for better layout.
@@ -71,7 +69,7 @@ init canvasSize =
     , maybePaletteTexture = Nothing
     , paletteTextureSize = vec2 16.0 16.0
     }
-        ! [ Elmo8.Assets.loadWebglTextureWithFallbacks [ pico8FontDataUri, "/assets/pico-8_regular_8.png", pico8FontUri ]
+        ! [ Elmo8.Assets.loadFontTexture
                 |> Task.attempt
                     (\result ->
                         case result of
@@ -81,7 +79,7 @@ init canvasSize =
                             Ok val ->
                                 TextureLoad val
                     )
-          , Elmo8.Assets.loadWebglTextureWithFallbacks [ pico8PaletteMapDataUri, "/assets/pico-8-palette-map.png", pico8PaletteMapUri ]
+          , Elmo8.Assets.loadPaletteMapTexture
                 |> Task.attempt
                     (\result ->
                         case result of

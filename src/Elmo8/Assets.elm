@@ -2,6 +2,8 @@ module Elmo8.Assets exposing (..)
 
 import WebGL
 import Task
+import Elmo8.Textures.Pico8Font exposing (pico8FontDataUri)
+import Elmo8.Textures.Pico8PaletteMap exposing (pico8PaletteMapDataUri)
 
 
 type alias URL =
@@ -26,3 +28,39 @@ loadWebglTextureWithFallbacks urls =
         url :: remainingUrls ->
             WebGL.loadTexture url
                 |> Task.onError (\_ -> loadWebglTextureWithFallbacks remainingUrls)
+
+
+pico8FontRelativeUri : String
+pico8FontRelativeUri =
+    "/assets/pico-8_regular_8.png"
+
+
+pico8FontUri : String
+pico8FontUri =
+    "http://elmo-8.twomeylee.name/assets/pico-8_regular_8.png"
+
+
+pico8PaletteMapRelativeUri : String
+pico8PaletteMapRelativeUri =
+    "/assets/pico-8-palette-map.png"
+
+
+pico8PaletteMapUri : String
+pico8PaletteMapUri =
+    "http://elmo-8.twomeylee.name/assets/pico-8-palette-map.png"
+
+
+{-| Load the Font texture
+-}
+loadFontTexture : Task.Task WebGL.Error WebGL.Texture
+loadFontTexture =
+    loadWebglTextureWithFallbacks
+        [ pico8FontDataUri, pico8FontRelativeUri, pico8FontUri ]
+
+
+{-| Load the palette map texture
+-}
+loadPaletteMapTexture : Task.Task WebGL.Error WebGL.Texture
+loadPaletteMapTexture =
+    loadWebglTextureWithFallbacks
+        [ pico8PaletteMapDataUri, pico8PaletteMapRelativeUri, pico8PaletteMapUri ]
