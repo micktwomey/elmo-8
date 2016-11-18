@@ -1,0 +1,9 @@
+---
+layout: post
+title:  "ELMO-8 2.0.0"
+date:   2016-11-15 20:51:00
+categories: release
+---
+
+ELMO-8 2.0.0 is out with Elm 0.18 compatibility. There are no API changes in this release, since the main signature in Elm appears to have changed this forced a big version bump.
+

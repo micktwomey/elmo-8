@@ -1,0 +1,22 @@
+---
+layout: default
+---
+
+<div class="home">
+  <h1>ELMO-8</h1>
+  <p>A Simple Game Library Inspired by the Excellent PICO-8</p>
+  <p><a href="https://github.com/micktwomey/elmo-8/">https://github.com/micktwomey/elmo-8/</a></p>
+
+  <h1 class="page-heading">Examples</h1>
+  <p>These examples are taken from <a href="https://github.com/micktwomey/elmo-8/tree/master/examples">here</a>.</p>
+  <ul class="post-list">
+    {% for example in site.example %}
+      <li>
+        <h2>
+          <a class="post-link" href="{{ example.url | prepend: site.baseurl }}">{{ example.title }}</a>
+        </h2>
+      </li>
+    {% endfor %}
+  </ul>
+
+</div>

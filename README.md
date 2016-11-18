@@ -1,3 +1,8 @@
+---
+layout: page
+title: README
+permalink: /README/
+---
 # ELMO-8
 
 ## A Simple Game Library Inspired by the Excellent PICO-8

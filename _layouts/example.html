@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{page.title}}</title>
+  </head>
+  <body>
+
+    <div id="main"></div>
+    <script src="examples.js"></script>
+    <script>
+      var node = document.getElementById('main');
+      var app = Elm.{{page.name}}.embed(node);
+    </script>
+
+  </body>
+</html>
