@@ -12002,7 +12002,9 @@ _elm_lang$core$Native_Platform.effectManagers['Window'] = {pkg: 'elm-lang/window
 
 var _micktwomey$elmo_8$Elmo8_Layers_Common$makeProjectionMatrix = A4(_elm_community$linear_algebra$Math_Matrix4$makeOrtho2D, 0.0, 128.0, 128.0, 0.0);
 var _micktwomey$elmo_8$Elmo8_Layers_Common$pico8PaletteMapUri = 'http://elmo-8.twomeylee.name/assets/pico-8-palette-map.png';
+var _micktwomey$elmo_8$Elmo8_Layers_Common$pico8PaletteMapRelativeUri = '/assets/pico-8-palette-map.png';
 var _micktwomey$elmo_8$Elmo8_Layers_Common$pico8FontUri = 'http://elmo-8.twomeylee.name/assets/pico-8_regular_8.png';
+var _micktwomey$elmo_8$Elmo8_Layers_Common$pico8FontRelativeUri = '/assets/pico-8_regular_8.png';
 var _micktwomey$elmo_8$Elmo8_Layers_Common$CanvasSize = F2(
 	function (a, b) {
 		return {width: a, height: b};
@@ -12010,6 +12012,22 @@ var _micktwomey$elmo_8$Elmo8_Layers_Common$CanvasSize = F2(
 var _micktwomey$elmo_8$Elmo8_Layers_Common$Vertex = function (a) {
 	return {position: a};
 };
+
+var _micktwomey$elmo_8$Elmo8_Assets$loadWebglTextureWithFallbacks = function (urls) {
+	var _p0 = urls;
+	if (_p0.ctor === '[]') {
+		return _elm_lang$core$Task$fail(_elm_community$webgl$WebGL$Error);
+	} else {
+		return A2(
+			_elm_lang$core$Task$onError,
+			function (_p1) {
+				return _micktwomey$elmo_8$Elmo8_Assets$loadWebglTextureWithFallbacks(_p0._1);
+			},
+			_elm_community$webgl$WebGL$loadTexture(_p0._0));
+	}
+};
+
+var _micktwomey$elmo_8$Elmo8_Textures_Pico8PaletteMap$pico8PaletteMapDataUri = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAANNJREFUOBGlkzsKwlAQRe+MWNlapk4RSBELmyxA9yBoI0JAFFyF23ABNjYBdQsG0lnbpxOsdGSEB0HyeUkWcDh3PpcAiBuusH4Dm/kHl/SBuOdgttxi5DrAeAfsD0AYgF5D+PczouSIqD8AJgTuApM3Bbc1K6xybhPbwCrnpjPnYZVzk4X9wyqnW5KKzbaLYJWTPDOpO1UZrKcm8RZSdecqWJOTnCBlT1IHa3KSLJCiD7OBNTl3gX/J/atI/rdtzWZs7gJrsdi0qqnZtJK1km1hlX8Bnpcdm8aa7AQAAAAASUVORK5CYII=';
 
 var _micktwomey$elmo_8$Elmo8_Layers_Pixels$pixelsFragmentShader = {'src': '\n    precision mediump float;\n    uniform sampler2D paletteTexture;\n    uniform vec2 paletteSize;\n    varying float colourIndex;\n    varying float colourRemap;\n    void main () {\n        // Texture origin bottom left\n        // Use slightly less than 1.0 to slightly nudge into correct pixel\n        float index = colourIndex / paletteSize.x;\n        float remap = 0.999 - (colourRemap / paletteSize.y);\n        gl_FragColor = texture2D(paletteTexture, vec2(index, remap));\n    }\n'};
 var _micktwomey$elmo_8$Elmo8_Layers_Pixels$pixelsVertexShader = {'src': '\n    precision mediump float;\n    attribute vec2 position;\n    uniform vec2 canvasSize;\n    uniform vec2 screenSize;\n    uniform mat4 projectionMatrix;\n    uniform int pixelX;\n    uniform int pixelY;\n    uniform int index;\n    uniform int remap;\n    varying float colourIndex;\n    varying float colourRemap;\n    void main () {\n        gl_PointSize = canvasSize.x / screenSize.x;\n\n        gl_Position = projectionMatrix * vec4(position.x + float(pixelX) + 0.5, position.y + float(pixelY) + 0.5, 0.0, 1.0);\n\n        colourIndex = float(index);\n        colourRemap = float(remap);\n    }\n'};
@@ -12227,7 +12245,20 @@ var _micktwomey$elmo_8$Elmo8_Layers_Pixels$init = function (canvasSize) {
 						return _micktwomey$elmo_8$Elmo8_Layers_Pixels$TextureLoad(_p5._0);
 					}
 				},
-				_elm_community$webgl$WebGL$loadTexture(_micktwomey$elmo_8$Elmo8_Layers_Common$pico8PaletteMapUri)),
+				_micktwomey$elmo_8$Elmo8_Assets$loadWebglTextureWithFallbacks(
+					{
+						ctor: '::',
+						_0: _micktwomey$elmo_8$Elmo8_Textures_Pico8PaletteMap$pico8PaletteMapDataUri,
+						_1: {
+							ctor: '::',
+							_0: _micktwomey$elmo_8$Elmo8_Layers_Common$pico8PaletteMapRelativeUri,
+							_1: {
+								ctor: '::',
+								_0: _micktwomey$elmo_8$Elmo8_Layers_Common$pico8PaletteMapUri,
+								_1: {ctor: '[]'}
+							}
+						}
+					})),
 			_1: {ctor: '[]'}
 		});
 };
@@ -12235,6 +12266,8 @@ var _micktwomey$elmo_8$Elmo8_Layers_Pixels$SetPixel = F3(
 	function (a, b, c) {
 		return {ctor: 'SetPixel', _0: a, _1: b, _2: c};
 	});
+
+var _micktwomey$elmo_8$Elmo8_Textures_Pico8Font$pico8FontDataUri = 'data:image/png;base64,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';
 
 var _micktwomey$elmo_8$Elmo8_Layers_Text$fragmentShader = {'src': '\n  precision mediump float;\n  uniform mat4 projectionMatrix;\n  uniform sampler2D fontTexture;\n  uniform vec2 textureSize;\n  uniform vec2 charCoords;\n  uniform sampler2D paletteTexture;\n  uniform vec2 paletteTextureSize;\n  varying vec2 texturePos;\n  varying float colourIndex;\n  void main () {\n    vec2 size = vec2(64.0, 64.0) / textureSize;\n\n    vec2 textureClipSpace = (projectionMatrix * vec4((charCoords + texturePos) * size, 0, 1)).xy;\n    vec4 temp = texture2D(fontTexture, textureClipSpace);\n\n    float index = colourIndex / paletteTextureSize.x;\n    // float remap = 0.999 - (colourRemap / paletteSize.y);\n    float remap = 0.999 - 0.0;\n    vec4 paletteColour = texture2D(paletteTexture, vec2(index, remap));\n\n    gl_FragColor = vec4(paletteColour.rgb, temp.a);\n  }\n'};
 var _micktwomey$elmo_8$Elmo8_Layers_Text$vertexShader = {'src': '\n  precision mediump float;\n  attribute vec2 position;\n  uniform vec2 screenSize;\n  uniform mat4 theMatrix;\n  uniform int colour;\n  varying vec2 texturePos;\n  varying float colourIndex;\n  void main () {\n    texturePos = position;\n    colourIndex = float(colour);\n    gl_Position = vec4((theMatrix * vec4(position, 0.0, 1.0)).xy, 0, 1);\n  }\n'};
@@ -13459,7 +13492,20 @@ var _micktwomey$elmo_8$Elmo8_Layers_Text$init = function (canvasSize) {
 						return _micktwomey$elmo_8$Elmo8_Layers_Text$TextureLoad(_p9._0);
 					}
 				},
-				_elm_community$webgl$WebGL$loadTexture(_micktwomey$elmo_8$Elmo8_Layers_Common$pico8FontUri)),
+				_micktwomey$elmo_8$Elmo8_Assets$loadWebglTextureWithFallbacks(
+					{
+						ctor: '::',
+						_0: _micktwomey$elmo_8$Elmo8_Textures_Pico8Font$pico8FontDataUri,
+						_1: {
+							ctor: '::',
+							_0: '/assets/pico-8_regular_8.png',
+							_1: {
+								ctor: '::',
+								_0: _micktwomey$elmo_8$Elmo8_Layers_Common$pico8FontUri,
+								_1: {ctor: '[]'}
+							}
+						}
+					})),
 			_1: {
 				ctor: '::',
 				_0: A2(
@@ -13472,7 +13518,20 @@ var _micktwomey$elmo_8$Elmo8_Layers_Text$init = function (canvasSize) {
 							return _micktwomey$elmo_8$Elmo8_Layers_Text$PaletteTextureLoad(_p10._0);
 						}
 					},
-					_elm_community$webgl$WebGL$loadTexture(_micktwomey$elmo_8$Elmo8_Layers_Common$pico8PaletteMapUri)),
+					_micktwomey$elmo_8$Elmo8_Assets$loadWebglTextureWithFallbacks(
+						{
+							ctor: '::',
+							_0: _micktwomey$elmo_8$Elmo8_Textures_Pico8PaletteMap$pico8PaletteMapDataUri,
+							_1: {
+								ctor: '::',
+								_0: '/assets/pico-8-palette-map.png',
+								_1: {
+									ctor: '::',
+									_0: _micktwomey$elmo_8$Elmo8_Layers_Common$pico8PaletteMapUri,
+									_1: {ctor: '[]'}
+								}
+							}
+						})),
 				_1: {ctor: '[]'}
 			}
 		});
