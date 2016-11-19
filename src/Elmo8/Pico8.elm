@@ -45,6 +45,8 @@ You can view the palette (and download appropriate palettes for your apps) here:
 
 import Elmo8.Console exposing (Command)
 
+type alias Model = {}
+
 
 {-| Black (0)
 -}

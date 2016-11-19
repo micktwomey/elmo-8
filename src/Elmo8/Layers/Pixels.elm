@@ -12,6 +12,7 @@ import Math.Matrix4 exposing (Mat4, makeOrtho2D)
 import Task
 import WebGL
 import Elmo8.Assets
+import Elmo8.GL.Renderers
 import Elmo8.Layers.Common exposing (CanvasSize, Vertex, makeProjectionMatrix)
 
 
@@ -140,65 +141,13 @@ render model =
 
 renderPixel : Model -> WebGL.Texture -> ( ( X, Y ), PixelColour ) -> WebGL.Renderable
 renderPixel model texture ( ( x, y ), colour ) =
-    WebGL.render
-        pixelsVertexShader
-        pixelsFragmentShader
-        mesh
-        { canvasSize = model.canvasSize
-        , screenSize = model.screenSize
+    Elmo8.GL.Renderers.renderPixel
+        { screenSize = model.screenSize
+        , palette = { texture = texture, textureSize = model.paletteSize}
         , projectionMatrix = model.projectionMatrix
-        , paletteTexture = texture
-        , paletteSize = model.paletteSize
-        , pixelX = x
-        , pixelY = y
-        , index = Dict.get colour model.pixelPalette |> Maybe.withDefault colour
-        , remap = Dict.get colour model.screenPalette |> Maybe.withDefault 0
+        , resolution = model.canvasSize
         }
-
-
-mesh : WebGL.Drawable Vertex
-mesh =
-    WebGL.Points [ Vertex (vec2 0 0) ]
-
-
-pixelsVertexShader : WebGL.Shader { attr | position : Vec2 } { unif | canvasSize : Vec2, screenSize : Vec2, projectionMatrix : Mat4, pixelX : Int, pixelY : Int, index : Int, remap : Int } { colourIndex : Float, colourRemap : Float }
-pixelsVertexShader =
-    [glsl|
-    precision mediump float;
-    attribute vec2 position;
-    uniform vec2 canvasSize;
-    uniform vec2 screenSize;
-    uniform mat4 projectionMatrix;
-    uniform int pixelX;
-    uniform int pixelY;
-    uniform int index;
-    uniform int remap;
-    varying float colourIndex;
-    varying float colourRemap;
-    void main () {
-        gl_PointSize = canvasSize.x / screenSize.x;
-
-        gl_Position = projectionMatrix * vec4(position.x + float(pixelX) + 0.5, position.y + float(pixelY) + 0.5, 0.0, 1.0);
-
-        colourIndex = float(index);
-        colourRemap = float(remap);
-    }
-|]
-
-
-pixelsFragmentShader : WebGL.Shader {} { uniform | paletteTexture : WebGL.Texture, paletteSize : Vec2 } { colourIndex : Float, colourRemap : Float }
-pixelsFragmentShader =
-    [glsl|
-    precision mediump float;
-    uniform sampler2D paletteTexture;
-    uniform vec2 paletteSize;
-    varying float colourIndex;
-    varying float colourRemap;
-    void main () {
-        // Texture origin bottom left
-        // Use slightly less than 1.0 to slightly nudge into correct pixel
-        float index = colourIndex / paletteSize.x;
-        float remap = 0.999 - (colourRemap / paletteSize.y);
-        gl_FragColor = texture2D(paletteTexture, vec2(index, remap));
-    }
-|]
+        { x = x
+        , y = y
+        , colour = colour
+        }

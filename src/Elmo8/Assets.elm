@@ -1,6 +1,12 @@
 module Elmo8.Assets exposing (..)
 
+{-| Assets and Asset management
+
+-}
+
+import Dict
 import WebGL
+import Math.Vector2 exposing (Vec2, vec2)
 import Task
 import Elmo8.Textures.Pico8Font exposing (pico8FontDataUri)
 import Elmo8.Textures.Pico8PaletteMap exposing (pico8PaletteMapDataUri)
@@ -8,6 +14,92 @@ import Elmo8.Textures.Pico8PaletteMap exposing (pico8PaletteMapDataUri)
 
 type alias URL =
     String
+
+
+fontKey : String
+fontKey =
+    "elmo8.font"
+
+
+paletteKey : String
+paletteKey =
+    "elmo8.palette"
+
+
+type alias Model =
+    { textures : Dict.Dict String Texture
+    }
+
+
+type alias Texture =
+    { texture : WebGL.Texture
+    , textureSize : Vec2
+    }
+
+type alias Character =
+    { width: Int
+    , height: Int
+    , x: Int
+    , y: Int
+    }
+
+type Msg
+    = TextureLoadError String WebGL.Error
+    | TextureLoaded String WebGL.Texture
+
+
+init : ( Model, Cmd Msg )
+init =
+    let
+        emptyModel =
+            Model Dict.empty
+
+        ( fontModel, fontMsg ) =
+            loadTexture emptyModel fontKey [ pico8FontDataUri, pico8FontRelativeUri, pico8FontUri ]
+
+        ( model, paletteMsg ) =
+            loadTexture fontModel paletteKey [ pico8PaletteMapDataUri, pico8PaletteMapRelativeUri, pico8PaletteMapUri ]
+    in
+        model
+            ! [ fontMsg
+              , paletteMsg
+              ]
+
+
+loadTexture : Model -> String -> List URL -> ( Model, Cmd Msg )
+loadTexture model key urls =
+    model
+        ! [ loadWebglTextureWithFallbacks urls
+                |> Task.attempt
+                    (\result ->
+                        case result of
+                            Err err ->
+                                TextureLoadError key err
+
+                            Ok val ->
+                                TextureLoaded key val
+                    )
+          ]
+
+
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
+    case msg of
+        TextureLoadError key error ->
+            model ! []
+
+        TextureLoaded key texture ->
+            let
+                ( width, height ) =
+                    WebGL.textureSize texture
+
+                textureSize =
+                    vec2 (toFloat width) (toFloat height)
+
+                loadedTexture =
+                    { texture = texture, textureSize = textureSize }
+            in
+                { model | textures = Dict.insert key loadedTexture model.textures } ! []
 
 
 {-| Try multiple sources to load texture
@@ -26,7 +118,7 @@ loadWebglTextureWithFallbacks urls =
             Task.fail WebGL.Error
 
         url :: remainingUrls ->
-            WebGL.loadTexture url
+            WebGL.loadTextureWithFilter WebGL.Nearest url
                 |> Task.onError (\_ -> loadWebglTextureWithFallbacks remainingUrls)
 
 
