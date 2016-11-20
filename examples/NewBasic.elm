@@ -7,12 +7,14 @@ import Keyboard.Extra
 import Elmo8.Assets
 import Elmo8.GL.Display
 import Elmo8.Scene
+import Elmo8.Pico8 as Pico8
 
 type alias Model =
     { assets : Elmo8.Assets.Model
     , display : Elmo8.GL.Display.Model
     , scene : Elmo8.Scene.Model
     , player : Player
+    , bird : Bird
     , keyboardModel : Keyboard.Extra.Model
     }
 
@@ -30,6 +32,15 @@ type alias Player =
     , health : Int
     }
 
+type alias Bird =
+    { x : Int
+    , y : Int
+    , sprite : Int
+    , textureKey : String
+    , id : Int
+    , layer : Int
+    }
+
 birdWatching : String
 birdWatching = "birdwatching"
 
@@ -39,13 +50,15 @@ init =
         (assetModel, assetMsg) = Elmo8.Assets.init
         (updatedAssetModel, spriteMsg) = Elmo8.Assets.loadTexture assetModel birdWatching ["birdwatching.png"]
         (displayModel, displayMsg) = Elmo8.GL.Display.init
-        (scene, player) = Elmo8.Scene.addPixel Elmo8.Scene.init { x=10, y=10, colour=7, id=0, health=100, layer=0}
+        (scene, player) = Elmo8.Scene.addPixel Elmo8.Scene.init { x=10, y=10, colour=Pico8.peach, id=0, health=100, layer=0}
+        (updatedScene, bird) = Elmo8.Scene.addSprite scene {x=60, y=90, sprite=0, id=0, layer=1, textureKey = birdWatching}
         (keyboardModel, keyboardMsg) = Keyboard.Extra.init
     in
         { assets = updatedAssetModel
         , player = player
+        , bird = bird
         , display = displayModel
-        , scene = scene
+        , scene = updatedScene
         , keyboardModel = keyboardModel
         }
         !
@@ -72,11 +85,15 @@ update msg model =
             let
                 ( keyboardModel, keyboardCmd ) = Keyboard.Extra.update keyMsg model.keyboardModel
                 arrows = Keyboard.Extra.arrows keyboardModel
+                wasd = Keyboard.Extra.wasd keyboardModel
                 player = model.player
                 updatedPlayer = { player | x = player.x + arrows.x, y = player.y - arrows.y}
                 scene = Elmo8.Scene.updatePixel model.scene updatedPlayer
+                bird = model.bird
+                updatedBird = { bird | x = bird.x + wasd.x, y = bird.y - wasd.y}
+                updatedScene = Elmo8.Scene.updateSprite scene updatedBird
             in
-                { model | player = updatedPlayer, scene = scene, keyboardModel = keyboardModel}
+                { model | player = updatedPlayer, scene = updatedScene, keyboardModel = keyboardModel, bird = updatedBird}
                 !
                 [ Cmd.map KeyboardMsg keyboardCmd ]
 

@@ -37,7 +37,7 @@ These are mapped to different renderers in the backend.
 -}
 type Renderable
     = Pixel Int
-    | Sprite Int
+    | Sprite String Int
     | Text String Int
 
 
@@ -91,43 +91,56 @@ addPixel model pixel =
         , { pixel | id = id}
         )
 
+addSprite : Model -> { a | x : Int, y : Int, id: Int, layer : Int, sprite: Int, textureKey: String} -> (Model, { a | x : Int, y : Int, id : Int, layer : Int, sprite: Int, textureKey: String})
+addSprite model sprite =
+    let
+        (updatedModel, id) = getNextId model
+        updatedSprite = {sprite | id = id}
+    in
+        ( updateSprite updatedModel updatedSprite
+        , updatedSprite
+        )
+
 updateRenderable : Model -> { a | x : Int, y : Int, id : Int, layer : Int, renderable : Renderable } -> Model
 updateRenderable model { x, y, id, layer, renderable } =
-    case IntDict.get id model.idToRenderable of
-        Just renderableKey ->
-            case renderableKey == ( layer, x, y ) of
-                True ->
-                    model
+    let
+        key = ( 0 - layer, x, y ) -- negate the layer to get them to sort the way we want (0 on the bottom)
+    in
+        case IntDict.get id model.idToRenderable of
+            Just renderableKey ->
+                case renderableKey == key of
+                    True ->
+                        model
 
-                False ->
-                    { model
-                        | renderables =
-                            Dict.insert ( layer, x, y ) renderable model.renderables
-                                |> Dict.remove renderableKey
-                        , idToRenderable =
-                            IntDict.Safe.safeInsert id ( layer, x, y ) model.idToRenderable
-                                |> Result.withDefault model.idToRenderable
-                    }
+                    False ->
+                        { model
+                            | renderables =
+                                Dict.insert key renderable model.renderables
+                                    |> Dict.remove renderableKey
+                            , idToRenderable =
+                                IntDict.Safe.safeInsert id key model.idToRenderable
+                                    |> Result.withDefault model.idToRenderable
+                        }
 
-        Nothing ->
-            { model
-                | renderables =
-                    Dict.insert ( layer, x, y ) renderable model.renderables
-                , idToRenderable =
-                    IntDict.Safe.safeInsert id ( layer, x, y ) model.idToRenderable
-                        |> Result.withDefault model.idToRenderable
-            }
+            Nothing ->
+                { model
+                    | renderables =
+                        Dict.insert key renderable model.renderables
+                    , idToRenderable =
+                        IntDict.Safe.safeInsert id key model.idToRenderable
+                            |> Result.withDefault model.idToRenderable
+                }
 
 
-updateSprite : Model -> { a | x : Int, y : Int, sprite : Int, layer : Int, id : Int } -> Model
-updateSprite model { x, y, sprite, layer, id } =
+updateSprite : Model -> { a | x : Int, y : Int, sprite : Int, layer : Int, id : Int, textureKey: String } -> Model
+updateSprite model { x, y, textureKey, sprite, layer, id } =
     updateRenderable
         model
         { x = x
         , y = y
         , layer = layer
         , id = id
-        , renderable = Sprite sprite
+        , renderable = Sprite textureKey sprite
         }
 
 
@@ -167,6 +180,15 @@ renderItem display assets ( ( layer, x, y ), renderable ) =
                 , colour = colour
                 }
 
+        Sprite textureKey sprite ->
+            Elmo8.GL.Renderers.renderSprite
+                display
+                assets
+                { x = x
+                , y = y
+                , textureKey = textureKey
+                , sprite = sprite
+                }
         _ ->
             Nothing
 
@@ -176,6 +198,4 @@ renderItem display assets ( ( layer, x, y ), renderable ) =
 render : Elmo8.GL.Display.Model -> Elmo8.Assets.Model -> Model -> List WebGL.Renderable
 render display assets model =
     Dict.toList model.renderables
-        |> Debug.log "Renderables pre-filter"
         |> List.filterMap (renderItem display assets)
-        |> Debug.log "Renderables post-filter"

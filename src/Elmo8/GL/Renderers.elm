@@ -55,20 +55,24 @@ pixelMesh =
     WebGL.Points [ Vertex (vec2 0 0) ]
 
 
-renderSprite : { a | screenSize : Vec2, resolution : Resolution, projectionMatrix : Mat4 } -> Elmo8.Assets.Texture -> { a | x : Int, y : Int, sprite : Int } -> WebGL.Renderable
-renderSprite { resolution, screenSize, projectionMatrix } texture { x, y, sprite } =
-    WebGL.render
-        Shaders.spriteVertexShader
-        Shaders.spriteFragmentShader
-        spriteMesh
-        { screenSize = screenSize
-        , texture = texture.texture
-        , textureSize = texture.textureSize
-        , projectionMatrix = projectionMatrix
-        , spriteX = x
-        , spriteY = y
-        , spriteIndex = sprite
-        }
+renderSprite : { a | screenSize : Vec2, resolution : Resolution, projectionMatrix : Mat4 } -> { a | textures : Dict.Dict String Elmo8.Assets.Texture} -> { a | x : Int, y : Int, sprite : Int, textureKey : String } -> Maybe WebGL.Renderable
+renderSprite { resolution, screenSize, projectionMatrix } assets { x, y, sprite, textureKey } =
+    case Elmo8.Assets.getTexture assets textureKey of
+        Just texture ->
+            WebGL.render
+                Shaders.spriteVertexShader
+                Shaders.spriteFragmentShader
+                spriteMesh
+                { screenSize = screenSize
+                , texture = texture.texture
+                , textureSize = texture.textureSize
+                , projectionMatrix = projectionMatrix
+                , spriteX = x
+                , spriteY = y
+                , spriteIndex = sprite
+                }
+            |> Just
+        Nothing -> Nothing
 
 
 spriteMesh : WebGL.Drawable Vertex

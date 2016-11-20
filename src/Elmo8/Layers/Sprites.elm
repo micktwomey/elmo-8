@@ -1,5 +1,6 @@
 module Elmo8.Layers.Sprites exposing (..)
 
+import Dict
 import Math.Vector2 exposing (Vec2, vec2, fromTuple)
 import Math.Matrix4 exposing (Mat4, makeOrtho2D)
 import Task
@@ -77,19 +78,21 @@ update msg model =
             model ! []
 
 
-renderSprite : Model -> WebGL.Texture -> Sprite -> WebGL.Renderable
+renderSprite : Model -> WebGL.Texture -> Sprite -> Maybe WebGL.Renderable
 renderSprite model texture sprite =
     Elmo8.GL.Renderers.renderSprite
         { screenSize = model.screenSize
         , projectionMatrix = model.projectionMatrix
         , resolution = vec2 128.0 128.0
         }
-        { texture = texture
-        , textureSize = model.textureSize
+        {
+            textures = Dict.fromList [
+                ("sprite", { texture = texture, textureSize = model.textureSize}) ]
         }
         { x = sprite.x
         , y = sprite.y
         , sprite = sprite.sprite
+        , textureKey = "sprite"
         }
 
 
@@ -100,4 +103,4 @@ render model =
             []
 
         Just texture ->
-            List.map (renderSprite model texture) model.sprites
+            List.filterMap (renderSprite model texture) model.sprites
