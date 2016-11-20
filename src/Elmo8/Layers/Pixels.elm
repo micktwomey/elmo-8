@@ -136,16 +136,19 @@ render model =
 
         Just texture ->
             Dict.toList model.pixels
-                |> List.map (renderPixel model texture)
+                |> List.filterMap (renderPixel model texture)
 
 
-renderPixel : Model -> WebGL.Texture -> ( ( X, Y ), PixelColour ) -> WebGL.Renderable
+renderPixel : Model -> WebGL.Texture -> ( ( X, Y ), PixelColour ) -> Maybe WebGL.Renderable
 renderPixel model texture ( ( x, y ), colour ) =
     Elmo8.GL.Renderers.renderPixel
-        { screenSize = model.screenSize
-        , palette = { texture = texture, textureSize = model.paletteSize}
+        { resolution = model.screenSize
+        -- , palette = { texture = texture, textureSize = model.paletteSize}
         , projectionMatrix = model.projectionMatrix
-        , resolution = model.canvasSize
+        , screenSize = model.canvasSize
+        }
+        {
+            textures = Dict.fromList [ (Elmo8.Assets.paletteKey, { texture = texture, textureSize = model.paletteSize}) ]
         }
         { x = x
         , y = y

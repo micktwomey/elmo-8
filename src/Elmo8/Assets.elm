@@ -81,6 +81,17 @@ loadTexture model key urls =
                     )
           ]
 
+getTexture : {a | textures : Dict.Dict String Texture } -> String -> Maybe Texture
+getTexture {textures} key =
+    Dict.get key textures
+
+getPalette : {a | textures : Dict.Dict String Texture } -> Maybe Texture
+getPalette model =
+    getTexture model paletteKey
+
+getFont : {a | textures : Dict.Dict String Texture } -> Maybe Texture
+getFont model =
+    getTexture model fontKey
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =

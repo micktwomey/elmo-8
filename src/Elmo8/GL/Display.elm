@@ -28,19 +28,32 @@ init =
     !
     []
 
+update : Msg -> Model -> (Model, Cmd Msg)
+update msg model =
+    model ! []
+
 view : Model -> List WebGL.Renderable -> Html.Html Msg
 view model renderables =
-    WebGL.toHtmlWith
-        [ WebGL.Enable WebGL.Blend
-        , WebGL.BlendFunc ( WebGL.SrcAlpha, WebGL.OneMinusSrcAlpha )
+    Html.div
+        [ Html.Attributes.style
+            [ ( "background-color", "#000" )
+            , ( "display", "flex" )
+            , ( "align-items", "center" )
+            , ( "justify-content", "center" )
+            ]
         ]
-        [ Html.Attributes.width (getX model.screenSize |> round)
-        , Html.Attributes.height (getY model.screenSize |> round)
-        -- , Html.Attributes.style
-        --     [ ( "display", "block" )
-        --       -- , ("margin-left", "auto")
-        --       -- , ("margin-right", "auto")
-        --       -- , ("border", "1px solid red")
-        --     ]
+        [ WebGL.toHtmlWith
+            [ WebGL.Enable WebGL.Blend
+            , WebGL.BlendFunc ( WebGL.SrcAlpha, WebGL.OneMinusSrcAlpha )
+            ]
+            [ Html.Attributes.width (getX model.screenSize |> round)
+            , Html.Attributes.height (getY model.screenSize |> round)
+            , Html.Attributes.style
+                [ ( "display", "block" )
+                -- , ("margin-left", "auto")
+                -- , ("margin-right", "auto")
+                -- , ("border", "1px solid red")
+                ]
+            ]
+            renderables
         ]
-        renderables
