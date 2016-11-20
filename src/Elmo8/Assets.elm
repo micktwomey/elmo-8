@@ -8,6 +8,7 @@ import Dict
 import WebGL
 import Math.Vector2 exposing (Vec2, vec2)
 import Task
+import Elmo8.GL.Font
 import Elmo8.Textures.Pico8Font exposing (pico8FontDataUri)
 import Elmo8.Textures.Pico8PaletteMap exposing (pico8PaletteMapDataUri)
 
@@ -28,6 +29,7 @@ paletteKey =
 
 type alias Model =
     { textures : Dict.Dict String Texture
+    , characterMeshes : Elmo8.GL.Font.CharacterMeshes
     }
 
 
@@ -52,7 +54,7 @@ init : ( Model, Cmd Msg )
 init =
     let
         emptyModel =
-            Model Dict.empty
+            Model Dict.empty Elmo8.GL.Font.meshesFromCharacters
 
         ( fontModel, fontMsg ) =
             loadTexture emptyModel fontKey [ pico8FontDataUri, pico8FontRelativeUri, pico8FontUri ]

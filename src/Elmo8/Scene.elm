@@ -35,10 +35,26 @@ import Elmo8.GL.Display
 These are mapped to different renderers in the backend.
 
 -}
-type Renderable
-    = Pixel Int
-    | Sprite String Int
-    | Text String Int
+type RenderableType
+    = PixelRenderable Int
+    | SpriteRenderable String Int
+    | TextRenderable String Int
+
+
+type alias Pixel a =
+    { a | x : Int, y : Int, id : Int, layer : Int, colour : Int }
+
+
+type alias Sprite a =
+    { a | x : Int, y : Int, id : Int, layer : Int, sprite : Int, textureKey : String }
+
+
+type alias Text a =
+    { a | x : Int, y : Int, text : String, colour : Int, layer : Int, id : Int }
+
+
+type alias Renderable a =
+    { a | x : Int, y : Int, id : Int, layer : Int, renderable : RenderableType }
 
 
 type alias Layer =
@@ -56,7 +72,7 @@ type alias Y =
 type alias Model =
     { idCounter : Int
     , idToRenderable : IntDict.IntDict ( Layer, X, Y )
-    , renderables : Dict.Dict ( Layer, X, Y ) Renderable
+    , renderables : Dict.Dict ( Layer, X, Y ) RenderableType
     }
 
 
@@ -82,29 +98,55 @@ getNextId model =
         ( { model | idCounter = nextId }, nextId )
 
 
-addPixel : Model -> { a | x : Int, y : Int, id: Int, layer : Int, colour: Int} -> (Model, { a | x : Int, y : Int, id : Int, layer : Int, colour: Int})
+addPixel : Model -> Pixel a -> ( Model, Pixel a )
 addPixel model pixel =
     let
-        (updatedModel, id) = getNextId model
+        ( updatedModel, id ) =
+            getNextId model
+
+        updatedPixel =
+            { pixel | id = id }
     in
-        ( updatePixel updatedModel { x = pixel.x, y = pixel.y, colour = pixel.colour, layer=pixel.layer, id=id}
-        , { pixel | id = id}
+        ( updatePixel updatedModel updatedPixel
+        , updatedPixel
         )
 
-addSprite : Model -> { a | x : Int, y : Int, id: Int, layer : Int, sprite: Int, textureKey: String} -> (Model, { a | x : Int, y : Int, id : Int, layer : Int, sprite: Int, textureKey: String})
+
+addSprite : Model -> Sprite a -> ( Model, Sprite a )
 addSprite model sprite =
     let
-        (updatedModel, id) = getNextId model
-        updatedSprite = {sprite | id = id}
+        ( updatedModel, id ) =
+            getNextId model
+
+        updatedSprite =
+            { sprite | id = id }
     in
         ( updateSprite updatedModel updatedSprite
         , updatedSprite
         )
 
-updateRenderable : Model -> { a | x : Int, y : Int, id : Int, layer : Int, renderable : Renderable } -> Model
+
+addText : Model -> Text a -> ( Model, Text a )
+addText model text =
+    let
+        ( updatedModel, id ) =
+            getNextId model
+
+        updatedText =
+            { text | id = id }
+    in
+        ( updateText updatedModel updatedText
+        , updatedText
+        )
+
+
+updateRenderable : Model -> Renderable a -> Model
 updateRenderable model { x, y, id, layer, renderable } =
     let
-        key = ( 0 - layer, x, y ) -- negate the layer to get them to sort the way we want (0 on the bottom)
+        key =
+            ( 0 - layer, x, y )
+
+        -- negate the layer to get them to sort the way we want (0 on the bottom)
     in
         case IntDict.get id model.idToRenderable of
             Just renderableKey ->
@@ -132,7 +174,7 @@ updateRenderable model { x, y, id, layer, renderable } =
                 }
 
 
-updateSprite : Model -> { a | x : Int, y : Int, sprite : Int, layer : Int, id : Int, textureKey: String } -> Model
+updateSprite : Model -> Sprite a -> Model
 updateSprite model { x, y, textureKey, sprite, layer, id } =
     updateRenderable
         model
@@ -140,11 +182,11 @@ updateSprite model { x, y, textureKey, sprite, layer, id } =
         , y = y
         , layer = layer
         , id = id
-        , renderable = Sprite textureKey sprite
+        , renderable = SpriteRenderable textureKey sprite
         }
 
 
-updatePixel : Model -> { a | x : Int, y : Int, colour : Int, layer : Int, id : Int } -> Model
+updatePixel : Model -> Pixel a -> Model
 updatePixel model { x, y, colour, layer, id } =
     updateRenderable
         model
@@ -152,11 +194,11 @@ updatePixel model { x, y, colour, layer, id } =
         , y = y
         , layer = layer
         , id = id
-        , renderable = Pixel colour
+        , renderable = PixelRenderable colour
         }
 
 
-updateText : Model -> { a | x : Int, y : Int, text : String, colour : Int, layer : Int, id : Int } -> Model
+updateText : Model -> Text a -> Model
 updateText model { x, y, text, colour, layer, id } =
     updateRenderable
         model
@@ -164,14 +206,14 @@ updateText model { x, y, text, colour, layer, id } =
         , y = y
         , layer = layer
         , id = id
-        , renderable = Text text colour
+        , renderable = TextRenderable text colour
         }
 
 
-renderItem : Elmo8.GL.Display.Model -> Elmo8.Assets.Model -> ( ( Layer, X, Y ), Renderable ) -> Maybe WebGL.Renderable
+renderItem : Elmo8.GL.Display.Model -> Elmo8.Assets.Model -> ( ( Layer, X, Y ), RenderableType ) -> Maybe WebGL.Renderable
 renderItem display assets ( ( layer, x, y ), renderable ) =
     case renderable of
-        Pixel colour ->
+        PixelRenderable colour ->
             Elmo8.GL.Renderers.renderPixel
                 display
                 assets
@@ -180,7 +222,8 @@ renderItem display assets ( ( layer, x, y ), renderable ) =
                 , colour = colour
                 }
 
-        Sprite textureKey sprite ->
+
+        SpriteRenderable textureKey sprite ->
             Elmo8.GL.Renderers.renderSprite
                 display
                 assets
@@ -189,8 +232,17 @@ renderItem display assets ( ( layer, x, y ), renderable ) =
                 , textureKey = textureKey
                 , sprite = sprite
                 }
-        _ ->
-            Nothing
+
+        _ -> Nothing
+        -- TextRenderable text colour ->
+        --     Elmo8.GL.Renderers.renderText
+        --         display
+        --         assets
+        --         { x = x
+        --         , y = y
+        --         , colour = colour
+        --         , text = text
+        --         }
 
 
 {-| Render the scene to WebGL renderables

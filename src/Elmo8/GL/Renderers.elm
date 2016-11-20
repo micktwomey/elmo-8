@@ -9,12 +9,19 @@ import Math.Vector2 exposing (Vec2, vec2)
 import Math.Matrix4 exposing (Mat4, makeOrtho2D)
 import WebGL
 import Elmo8.Assets
+import Elmo8.GL.Font
 import Elmo8.GL.Shaders as Shaders
 
 
 type alias Vertex =
     { position : Vec2 }
 
+type alias Display a = { a | screenSize : Vec2, resolution : Resolution, projectionMatrix : Mat4 }
+type alias Assets a =
+    { a
+    | textures : Dict.Dict String Elmo8.Assets.Texture
+    -- , characterMeshes : Elmo8.GL.Font.CharacterMeshes
+    }
 
 {-| Resolution of the virtual device
 
@@ -25,7 +32,7 @@ type alias Resolution =
     Vec2
 
 
-renderPixel : { a | screenSize : Vec2, resolution : Resolution, projectionMatrix : Mat4 } -> { a | textures : Dict.Dict String Elmo8.Assets.Texture} -> { a | x : Int, y : Int, colour : Int } -> Maybe WebGL.Renderable
+renderPixel : Display display -> Assets assets -> { a | x : Int, y : Int, colour : Int } -> Maybe WebGL.Renderable
 renderPixel { resolution, screenSize, projectionMatrix } assets { x, y, colour } =
     case Elmo8.Assets.getPalette assets of
         Just palette ->
@@ -55,7 +62,7 @@ pixelMesh =
     WebGL.Points [ Vertex (vec2 0 0) ]
 
 
-renderSprite : { a | screenSize : Vec2, resolution : Resolution, projectionMatrix : Mat4 } -> { a | textures : Dict.Dict String Elmo8.Assets.Texture} -> { a | x : Int, y : Int, sprite : Int, textureKey : String } -> Maybe WebGL.Renderable
+renderSprite : Display display -> Assets assets -> { a | x : Int, y : Int, sprite : Int, textureKey : String } -> Maybe WebGL.Renderable
 renderSprite { resolution, screenSize, projectionMatrix } assets { x, y, sprite, textureKey } =
     case Elmo8.Assets.getTexture assets textureKey of
         Just texture ->
