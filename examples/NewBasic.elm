@@ -1,9 +1,8 @@
 module NewBasic exposing (..)
 
-import AnimationFrame
 import Html
 import Time
-import Clock
+import Keyboard.Extra
 
 import Elmo8.Assets
 import Elmo8.GL.Display
@@ -14,13 +13,13 @@ type alias Model =
     , display : Elmo8.GL.Display.Model
     , scene : Elmo8.Scene.Model
     , player : Player
-    , clock: Clock.Clock
+    , keyboardModel : Keyboard.Extra.Model
     }
 
 type Msg
     = AssetMsg Elmo8.Assets.Msg
     | DisplayMsg Elmo8.GL.Display.Msg
-    | Tick Time.Time
+    | KeyboardMsg Keyboard.Extra.Msg
 
 type alias Player =
     { x : Int
@@ -41,17 +40,19 @@ init =
         (updatedAssetModel, spriteMsg) = Elmo8.Assets.loadTexture assetModel birdWatching ["birdwatching.png"]
         (displayModel, displayMsg) = Elmo8.GL.Display.init
         (scene, player) = Elmo8.Scene.addPixel Elmo8.Scene.init { x=10, y=10, colour=7, id=0, health=100, layer=0}
+        (keyboardModel, keyboardMsg) = Keyboard.Extra.init
     in
         { assets = updatedAssetModel
         , player = player
         , display = displayModel
         , scene = scene
-        , clock = Clock.withPeriod (1 * Time.second)
+        , keyboardModel = keyboardModel
         }
         !
         [ Cmd.map AssetMsg assetMsg
         , Cmd.map AssetMsg spriteMsg
         , Cmd.map DisplayMsg displayMsg
+        , Cmd.map KeyboardMsg keyboardMsg
         ]
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -67,11 +68,17 @@ update msg model =
                 (updatedDisplay, newMsg) = Elmo8.GL.Display.update displayMsg model.display
             in
                 { model | display = updatedDisplay} ! [ Cmd.map DisplayMsg newMsg]
-        Tick time ->
+        KeyboardMsg keyMsg ->
             let
-                (clock, _) = Clock.update (\_ m -> m) time model.clock model
+                ( keyboardModel, keyboardCmd ) = Keyboard.Extra.update keyMsg model.keyboardModel
+                arrows = Keyboard.Extra.arrows keyboardModel
+                player = model.player
+                updatedPlayer = { player | x = player.x + arrows.x, y = player.y - arrows.y}
+                scene = Elmo8.Scene.updatePixel model.scene updatedPlayer
             in
-                { model | clock = clock} ! []
+                { model | player = updatedPlayer, scene = scene, keyboardModel = keyboardModel}
+                !
+                [ Cmd.map KeyboardMsg keyboardCmd ]
 
 view : Model -> Html.Html Msg
 view model =
@@ -85,8 +92,10 @@ view model =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    -- AnimationFrame.diffs (Tick << Time.inSeconds)
-    Sub.none
+    Sub.batch
+        [ Sub.map KeyboardMsg Keyboard.Extra.subscriptions
+        -- , AnimationFrame.diffs (Tick << Time.inSeconds)
+        ]
 
 main : Program Never Model Msg
 main =
