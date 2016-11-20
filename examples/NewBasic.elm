@@ -15,6 +15,7 @@ type alias Model =
     , scene : Elmo8.Scene.Model
     , player : Player
     , bird : Bird
+    , hello : Hello
     , keyboardModel : Keyboard.Extra.Model
     }
 
@@ -41,6 +42,15 @@ type alias Bird =
     , layer : Int
     }
 
+type alias Hello =
+    { x : Int
+    , y : Int
+    , colour : Int
+    , text : String
+    , id : Int
+    , layer : Int
+    }
+
 birdWatching : String
 birdWatching = "birdwatching"
 
@@ -52,13 +62,16 @@ init =
         (displayModel, displayMsg) = Elmo8.GL.Display.init
         (scene, player) = Elmo8.Scene.addPixel Elmo8.Scene.init { x=10, y=10, colour=Pico8.peach, id=0, health=100, layer=0}
         (updatedScene, bird) = Elmo8.Scene.addSprite scene {x=60, y=90, sprite=0, id=0, layer=1, textureKey = birdWatching}
+        (updatedScene_, hello) = Elmo8.Scene.addText updatedScene {x=10, y=50, colour=Pico8.orange, text="Hello World", layer=2, id=0}
+
         (keyboardModel, keyboardMsg) = Keyboard.Extra.init
     in
         { assets = updatedAssetModel
         , player = player
         , bird = bird
+        , hello = hello
         , display = displayModel
-        , scene = updatedScene
+        , scene = updatedScene_
         , keyboardModel = keyboardModel
         }
         !
