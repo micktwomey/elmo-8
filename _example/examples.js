@@ -135,6 +135,3964 @@ function A9(fun, a, b, c, d, e, f, g, h, i)
     : fun(a)(b)(c)(d)(e)(f)(g)(h)(i);
 }
 
+var _elm_lang$core$Native_Bitwise = function() {
+
+return {
+	and: F2(function and(a, b) { return a & b; }),
+	or: F2(function or(a, b) { return a | b; }),
+	xor: F2(function xor(a, b) { return a ^ b; }),
+	complement: function complement(a) { return ~a; },
+	shiftLeftBy: F2(function(offset, a) { return a << offset; }),
+	shiftRightBy: F2(function(offset, a) { return a >> offset; }),
+	shiftRightZfBy: F2(function(offset, a) { return a >>> offset; })
+};
+
+}();
+
+var _elm_lang$core$Bitwise$shiftRightZfBy = _elm_lang$core$Native_Bitwise.shiftRightZfBy;
+var _elm_lang$core$Bitwise$shiftRightBy = _elm_lang$core$Native_Bitwise.shiftRightBy;
+var _elm_lang$core$Bitwise$shiftLeftBy = _elm_lang$core$Native_Bitwise.shiftLeftBy;
+var _elm_lang$core$Bitwise$complement = _elm_lang$core$Native_Bitwise.complement;
+var _elm_lang$core$Bitwise$xor = _elm_lang$core$Native_Bitwise.xor;
+var _elm_lang$core$Bitwise$or = _elm_lang$core$Native_Bitwise.or;
+var _elm_lang$core$Bitwise$and = _elm_lang$core$Native_Bitwise.and;
+
+var _elm_lang$core$Maybe$withDefault = F2(
+	function ($default, maybe) {
+		var _p0 = maybe;
+		if (_p0.ctor === 'Just') {
+			return _p0._0;
+		} else {
+			return $default;
+		}
+	});
+var _elm_lang$core$Maybe$Nothing = {ctor: 'Nothing'};
+var _elm_lang$core$Maybe$andThen = F2(
+	function (callback, maybeValue) {
+		var _p1 = maybeValue;
+		if (_p1.ctor === 'Just') {
+			return callback(_p1._0);
+		} else {
+			return _elm_lang$core$Maybe$Nothing;
+		}
+	});
+var _elm_lang$core$Maybe$Just = function (a) {
+	return {ctor: 'Just', _0: a};
+};
+var _elm_lang$core$Maybe$map = F2(
+	function (f, maybe) {
+		var _p2 = maybe;
+		if (_p2.ctor === 'Just') {
+			return _elm_lang$core$Maybe$Just(
+				f(_p2._0));
+		} else {
+			return _elm_lang$core$Maybe$Nothing;
+		}
+	});
+var _elm_lang$core$Maybe$map2 = F3(
+	function (func, ma, mb) {
+		var _p3 = {ctor: '_Tuple2', _0: ma, _1: mb};
+		if (((_p3.ctor === '_Tuple2') && (_p3._0.ctor === 'Just')) && (_p3._1.ctor === 'Just')) {
+			return _elm_lang$core$Maybe$Just(
+				A2(func, _p3._0._0, _p3._1._0));
+		} else {
+			return _elm_lang$core$Maybe$Nothing;
+		}
+	});
+var _elm_lang$core$Maybe$map3 = F4(
+	function (func, ma, mb, mc) {
+		var _p4 = {ctor: '_Tuple3', _0: ma, _1: mb, _2: mc};
+		if ((((_p4.ctor === '_Tuple3') && (_p4._0.ctor === 'Just')) && (_p4._1.ctor === 'Just')) && (_p4._2.ctor === 'Just')) {
+			return _elm_lang$core$Maybe$Just(
+				A3(func, _p4._0._0, _p4._1._0, _p4._2._0));
+		} else {
+			return _elm_lang$core$Maybe$Nothing;
+		}
+	});
+var _elm_lang$core$Maybe$map4 = F5(
+	function (func, ma, mb, mc, md) {
+		var _p5 = {ctor: '_Tuple4', _0: ma, _1: mb, _2: mc, _3: md};
+		if (((((_p5.ctor === '_Tuple4') && (_p5._0.ctor === 'Just')) && (_p5._1.ctor === 'Just')) && (_p5._2.ctor === 'Just')) && (_p5._3.ctor === 'Just')) {
+			return _elm_lang$core$Maybe$Just(
+				A4(func, _p5._0._0, _p5._1._0, _p5._2._0, _p5._3._0));
+		} else {
+			return _elm_lang$core$Maybe$Nothing;
+		}
+	});
+var _elm_lang$core$Maybe$map5 = F6(
+	function (func, ma, mb, mc, md, me) {
+		var _p6 = {ctor: '_Tuple5', _0: ma, _1: mb, _2: mc, _3: md, _4: me};
+		if ((((((_p6.ctor === '_Tuple5') && (_p6._0.ctor === 'Just')) && (_p6._1.ctor === 'Just')) && (_p6._2.ctor === 'Just')) && (_p6._3.ctor === 'Just')) && (_p6._4.ctor === 'Just')) {
+			return _elm_lang$core$Maybe$Just(
+				A5(func, _p6._0._0, _p6._1._0, _p6._2._0, _p6._3._0, _p6._4._0));
+		} else {
+			return _elm_lang$core$Maybe$Nothing;
+		}
+	});
+
+//import Native.Utils //
+
+var _elm_lang$core$Native_Basics = function() {
+
+function div(a, b)
+{
+	return (a / b) | 0;
+}
+function rem(a, b)
+{
+	return a % b;
+}
+function mod(a, b)
+{
+	if (b === 0)
+	{
+		throw new Error('Cannot perform mod 0. Division by zero error.');
+	}
+	var r = a % b;
+	var m = a === 0 ? 0 : (b > 0 ? (a >= 0 ? r : r + b) : -mod(-a, -b));
+
+	return m === b ? 0 : m;
+}
+function logBase(base, n)
+{
+	return Math.log(n) / Math.log(base);
+}
+function negate(n)
+{
+	return -n;
+}
+function abs(n)
+{
+	return n < 0 ? -n : n;
+}
+
+function min(a, b)
+{
+	return _elm_lang$core$Native_Utils.cmp(a, b) < 0 ? a : b;
+}
+function max(a, b)
+{
+	return _elm_lang$core$Native_Utils.cmp(a, b) > 0 ? a : b;
+}
+function clamp(lo, hi, n)
+{
+	return _elm_lang$core$Native_Utils.cmp(n, lo) < 0
+		? lo
+		: _elm_lang$core$Native_Utils.cmp(n, hi) > 0
+			? hi
+			: n;
+}
+
+var ord = ['LT', 'EQ', 'GT'];
+
+function compare(x, y)
+{
+	return { ctor: ord[_elm_lang$core$Native_Utils.cmp(x, y) + 1] };
+}
+
+function xor(a, b)
+{
+	return a !== b;
+}
+function not(b)
+{
+	return !b;
+}
+function isInfinite(n)
+{
+	return n === Infinity || n === -Infinity;
+}
+
+function truncate(n)
+{
+	return n | 0;
+}
+
+function degrees(d)
+{
+	return d * Math.PI / 180;
+}
+function turns(t)
+{
+	return 2 * Math.PI * t;
+}
+function fromPolar(point)
+{
+	var r = point._0;
+	var t = point._1;
+	return _elm_lang$core$Native_Utils.Tuple2(r * Math.cos(t), r * Math.sin(t));
+}
+function toPolar(point)
+{
+	var x = point._0;
+	var y = point._1;
+	return _elm_lang$core$Native_Utils.Tuple2(Math.sqrt(x * x + y * y), Math.atan2(y, x));
+}
+
+return {
+	div: F2(div),
+	rem: F2(rem),
+	mod: F2(mod),
+
+	pi: Math.PI,
+	e: Math.E,
+	cos: Math.cos,
+	sin: Math.sin,
+	tan: Math.tan,
+	acos: Math.acos,
+	asin: Math.asin,
+	atan: Math.atan,
+	atan2: F2(Math.atan2),
+
+	degrees: degrees,
+	turns: turns,
+	fromPolar: fromPolar,
+	toPolar: toPolar,
+
+	sqrt: Math.sqrt,
+	logBase: F2(logBase),
+	negate: negate,
+	abs: abs,
+	min: F2(min),
+	max: F2(max),
+	clamp: F3(clamp),
+	compare: F2(compare),
+
+	xor: F2(xor),
+	not: not,
+
+	truncate: truncate,
+	ceiling: Math.ceil,
+	floor: Math.floor,
+	round: Math.round,
+	toFloat: function(x) { return x; },
+	isNaN: isNaN,
+	isInfinite: isInfinite
+};
+
+}();
+//import //
+
+var _elm_lang$core$Native_Utils = function() {
+
+// COMPARISONS
+
+function eq(x, y)
+{
+	var stack = [];
+	var isEqual = eqHelp(x, y, 0, stack);
+	var pair;
+	while (isEqual && (pair = stack.pop()))
+	{
+		isEqual = eqHelp(pair.x, pair.y, 0, stack);
+	}
+	return isEqual;
+}
+
+
+function eqHelp(x, y, depth, stack)
+{
+	if (depth > 100)
+	{
+		stack.push({ x: x, y: y });
+		return true;
+	}
+
+	if (x === y)
+	{
+		return true;
+	}
+
+	if (typeof x !== 'object')
+	{
+		if (typeof x === 'function')
+		{
+			throw new Error(
+				'Trying to use `(==)` on functions. There is no way to know if functions are "the same" in the Elm sense.'
+				+ ' Read more about this at http://package.elm-lang.org/packages/elm-lang/core/latest/Basics#=='
+				+ ' which describes why it is this way and what the better version will look like.'
+			);
+		}
+		return false;
+	}
+
+	if (x === null || y === null)
+	{
+		return false
+	}
+
+	if (x instanceof Date)
+	{
+		return x.getTime() === y.getTime();
+	}
+
+	if (!('ctor' in x))
+	{
+		for (var key in x)
+		{
+			if (!eqHelp(x[key], y[key], depth + 1, stack))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	// convert Dicts and Sets to lists
+	if (x.ctor === 'RBNode_elm_builtin' || x.ctor === 'RBEmpty_elm_builtin')
+	{
+		x = _elm_lang$core$Dict$toList(x);
+		y = _elm_lang$core$Dict$toList(y);
+	}
+	if (x.ctor === 'Set_elm_builtin')
+	{
+		x = _elm_lang$core$Set$toList(x);
+		y = _elm_lang$core$Set$toList(y);
+	}
+
+	// check if lists are equal without recursion
+	if (x.ctor === '::')
+	{
+		var a = x;
+		var b = y;
+		while (a.ctor === '::' && b.ctor === '::')
+		{
+			if (!eqHelp(a._0, b._0, depth + 1, stack))
+			{
+				return false;
+			}
+			a = a._1;
+			b = b._1;
+		}
+		return a.ctor === b.ctor;
+	}
+
+	// check if Arrays are equal
+	if (x.ctor === '_Array')
+	{
+		var xs = _elm_lang$core$Native_Array.toJSArray(x);
+		var ys = _elm_lang$core$Native_Array.toJSArray(y);
+		if (xs.length !== ys.length)
+		{
+			return false;
+		}
+		for (var i = 0; i < xs.length; i++)
+		{
+			if (!eqHelp(xs[i], ys[i], depth + 1, stack))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	if (!eqHelp(x.ctor, y.ctor, depth + 1, stack))
+	{
+		return false;
+	}
+
+	for (var key in x)
+	{
+		if (!eqHelp(x[key], y[key], depth + 1, stack))
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+// Code in Generate/JavaScript.hs, Basics.js, and List.js depends on
+// the particular integer values assigned to LT, EQ, and GT.
+
+var LT = -1, EQ = 0, GT = 1;
+
+function cmp(x, y)
+{
+	if (typeof x !== 'object')
+	{
+		return x === y ? EQ : x < y ? LT : GT;
+	}
+
+	if (x instanceof String)
+	{
+		var a = x.valueOf();
+		var b = y.valueOf();
+		return a === b ? EQ : a < b ? LT : GT;
+	}
+
+	if (x.ctor === '::' || x.ctor === '[]')
+	{
+		while (x.ctor === '::' && y.ctor === '::')
+		{
+			var ord = cmp(x._0, y._0);
+			if (ord !== EQ)
+			{
+				return ord;
+			}
+			x = x._1;
+			y = y._1;
+		}
+		return x.ctor === y.ctor ? EQ : x.ctor === '[]' ? LT : GT;
+	}
+
+	if (x.ctor.slice(0, 6) === '_Tuple')
+	{
+		var ord;
+		var n = x.ctor.slice(6) - 0;
+		var err = 'cannot compare tuples with more than 6 elements.';
+		if (n === 0) return EQ;
+		if (n >= 1) { ord = cmp(x._0, y._0); if (ord !== EQ) return ord;
+		if (n >= 2) { ord = cmp(x._1, y._1); if (ord !== EQ) return ord;
+		if (n >= 3) { ord = cmp(x._2, y._2); if (ord !== EQ) return ord;
+		if (n >= 4) { ord = cmp(x._3, y._3); if (ord !== EQ) return ord;
+		if (n >= 5) { ord = cmp(x._4, y._4); if (ord !== EQ) return ord;
+		if (n >= 6) { ord = cmp(x._5, y._5); if (ord !== EQ) return ord;
+		if (n >= 7) throw new Error('Comparison error: ' + err); } } } } } }
+		return EQ;
+	}
+
+	throw new Error(
+		'Comparison error: comparison is only defined on ints, '
+		+ 'floats, times, chars, strings, lists of comparable values, '
+		+ 'and tuples of comparable values.'
+	);
+}
+
+
+// COMMON VALUES
+
+var Tuple0 = {
+	ctor: '_Tuple0'
+};
+
+function Tuple2(x, y)
+{
+	return {
+		ctor: '_Tuple2',
+		_0: x,
+		_1: y
+	};
+}
+
+function chr(c)
+{
+	return new String(c);
+}
+
+
+// GUID
+
+var count = 0;
+function guid(_)
+{
+	return count++;
+}
+
+
+// RECORDS
+
+function update(oldRecord, updatedFields)
+{
+	var newRecord = {};
+
+	for (var key in oldRecord)
+	{
+		newRecord[key] = oldRecord[key];
+	}
+
+	for (var key in updatedFields)
+	{
+		newRecord[key] = updatedFields[key];
+	}
+
+	return newRecord;
+}
+
+
+//// LIST STUFF ////
+
+var Nil = { ctor: '[]' };
+
+function Cons(hd, tl)
+{
+	return {
+		ctor: '::',
+		_0: hd,
+		_1: tl
+	};
+}
+
+function append(xs, ys)
+{
+	// append Strings
+	if (typeof xs === 'string')
+	{
+		return xs + ys;
+	}
+
+	// append Lists
+	if (xs.ctor === '[]')
+	{
+		return ys;
+	}
+	var root = Cons(xs._0, Nil);
+	var curr = root;
+	xs = xs._1;
+	while (xs.ctor !== '[]')
+	{
+		curr._1 = Cons(xs._0, Nil);
+		xs = xs._1;
+		curr = curr._1;
+	}
+	curr._1 = ys;
+	return root;
+}
+
+
+// CRASHES
+
+function crash(moduleName, region)
+{
+	return function(message) {
+		throw new Error(
+			'Ran into a `Debug.crash` in module `' + moduleName + '` ' + regionToString(region) + '\n'
+			+ 'The message provided by the code author is:\n\n    '
+			+ message
+		);
+	};
+}
+
+function crashCase(moduleName, region, value)
+{
+	return function(message) {
+		throw new Error(
+			'Ran into a `Debug.crash` in module `' + moduleName + '`\n\n'
+			+ 'This was caused by the `case` expression ' + regionToString(region) + '.\n'
+			+ 'One of the branches ended with a crash and the following value got through:\n\n    ' + toString(value) + '\n\n'
+			+ 'The message provided by the code author is:\n\n    '
+			+ message
+		);
+	};
+}
+
+function regionToString(region)
+{
+	if (region.start.line == region.end.line)
+	{
+		return 'on line ' + region.start.line;
+	}
+	return 'between lines ' + region.start.line + ' and ' + region.end.line;
+}
+
+
+// TO STRING
+
+function toString(v)
+{
+	var type = typeof v;
+	if (type === 'function')
+	{
+		var name = v.func ? v.func.name : v.name;
+		return '<function' + (name === '' ? '' : ':') + name + '>';
+	}
+
+	if (type === 'boolean')
+	{
+		return v ? 'True' : 'False';
+	}
+
+	if (type === 'number')
+	{
+		return v + '';
+	}
+
+	if (v instanceof String)
+	{
+		return '\'' + addSlashes(v, true) + '\'';
+	}
+
+	if (type === 'string')
+	{
+		return '"' + addSlashes(v, false) + '"';
+	}
+
+	if (v === null)
+	{
+		return 'null';
+	}
+
+	if (type === 'object' && 'ctor' in v)
+	{
+		var ctorStarter = v.ctor.substring(0, 5);
+
+		if (ctorStarter === '_Tupl')
+		{
+			var output = [];
+			for (var k in v)
+			{
+				if (k === 'ctor') continue;
+				output.push(toString(v[k]));
+			}
+			return '(' + output.join(',') + ')';
+		}
+
+		if (ctorStarter === '_Task')
+		{
+			return '<task>'
+		}
+
+		if (v.ctor === '_Array')
+		{
+			var list = _elm_lang$core$Array$toList(v);
+			return 'Array.fromList ' + toString(list);
+		}
+
+		if (v.ctor === '<decoder>')
+		{
+			return '<decoder>';
+		}
+
+		if (v.ctor === '_Process')
+		{
+			return '<process:' + v.id + '>';
+		}
+
+		if (v.ctor === '::')
+		{
+			var output = '[' + toString(v._0);
+			v = v._1;
+			while (v.ctor === '::')
+			{
+				output += ',' + toString(v._0);
+				v = v._1;
+			}
+			return output + ']';
+		}
+
+		if (v.ctor === '[]')
+		{
+			return '[]';
+		}
+
+		if (v.ctor === 'Set_elm_builtin')
+		{
+			return 'Set.fromList ' + toString(_elm_lang$core$Set$toList(v));
+		}
+
+		if (v.ctor === 'RBNode_elm_builtin' || v.ctor === 'RBEmpty_elm_builtin')
+		{
+			return 'Dict.fromList ' + toString(_elm_lang$core$Dict$toList(v));
+		}
+
+		var output = '';
+		for (var i in v)
+		{
+			if (i === 'ctor') continue;
+			var str = toString(v[i]);
+			var c0 = str[0];
+			var parenless = c0 === '{' || c0 === '(' || c0 === '<' || c0 === '"' || str.indexOf(' ') < 0;
+			output += ' ' + (parenless ? str : '(' + str + ')');
+		}
+		return v.ctor + output;
+	}
+
+	if (type === 'object')
+	{
+		if (v instanceof Date)
+		{
+			return '<' + v.toString() + '>';
+		}
+
+		if (v.elm_web_socket)
+		{
+			return '<websocket>';
+		}
+
+		var output = [];
+		for (var k in v)
+		{
+			output.push(k + ' = ' + toString(v[k]));
+		}
+		if (output.length === 0)
+		{
+			return '{}';
+		}
+		return '{ ' + output.join(', ') + ' }';
+	}
+
+	return '<internal structure>';
+}
+
+function addSlashes(str, isChar)
+{
+	var s = str.replace(/\\/g, '\\\\')
+			  .replace(/\n/g, '\\n')
+			  .replace(/\t/g, '\\t')
+			  .replace(/\r/g, '\\r')
+			  .replace(/\v/g, '\\v')
+			  .replace(/\0/g, '\\0');
+	if (isChar)
+	{
+		return s.replace(/\'/g, '\\\'');
+	}
+	else
+	{
+		return s.replace(/\"/g, '\\"');
+	}
+}
+
+
+return {
+	eq: eq,
+	cmp: cmp,
+	Tuple0: Tuple0,
+	Tuple2: Tuple2,
+	chr: chr,
+	update: update,
+	guid: guid,
+
+	append: F2(append),
+
+	crash: crash,
+	crashCase: crashCase,
+
+	toString: toString
+};
+
+}();
+var _elm_lang$core$Basics$never = function (_p0) {
+	never:
+	while (true) {
+		var _p1 = _p0;
+		var _v1 = _p1._0;
+		_p0 = _v1;
+		continue never;
+	}
+};
+var _elm_lang$core$Basics$uncurry = F2(
+	function (f, _p2) {
+		var _p3 = _p2;
+		return A2(f, _p3._0, _p3._1);
+	});
+var _elm_lang$core$Basics$curry = F3(
+	function (f, a, b) {
+		return f(
+			{ctor: '_Tuple2', _0: a, _1: b});
+	});
+var _elm_lang$core$Basics$flip = F3(
+	function (f, b, a) {
+		return A2(f, a, b);
+	});
+var _elm_lang$core$Basics$always = F2(
+	function (a, _p4) {
+		return a;
+	});
+var _elm_lang$core$Basics$identity = function (x) {
+	return x;
+};
+var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
+_elm_lang$core$Basics_ops['<|'] = F2(
+	function (f, x) {
+		return f(x);
+	});
+var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
+_elm_lang$core$Basics_ops['|>'] = F2(
+	function (x, f) {
+		return f(x);
+	});
+var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
+_elm_lang$core$Basics_ops['>>'] = F3(
+	function (f, g, x) {
+		return g(
+			f(x));
+	});
+var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
+_elm_lang$core$Basics_ops['<<'] = F3(
+	function (g, f, x) {
+		return g(
+			f(x));
+	});
+var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
+_elm_lang$core$Basics_ops['++'] = _elm_lang$core$Native_Utils.append;
+var _elm_lang$core$Basics$toString = _elm_lang$core$Native_Utils.toString;
+var _elm_lang$core$Basics$isInfinite = _elm_lang$core$Native_Basics.isInfinite;
+var _elm_lang$core$Basics$isNaN = _elm_lang$core$Native_Basics.isNaN;
+var _elm_lang$core$Basics$toFloat = _elm_lang$core$Native_Basics.toFloat;
+var _elm_lang$core$Basics$ceiling = _elm_lang$core$Native_Basics.ceiling;
+var _elm_lang$core$Basics$floor = _elm_lang$core$Native_Basics.floor;
+var _elm_lang$core$Basics$truncate = _elm_lang$core$Native_Basics.truncate;
+var _elm_lang$core$Basics$round = _elm_lang$core$Native_Basics.round;
+var _elm_lang$core$Basics$not = _elm_lang$core$Native_Basics.not;
+var _elm_lang$core$Basics$xor = _elm_lang$core$Native_Basics.xor;
+var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
+_elm_lang$core$Basics_ops['||'] = _elm_lang$core$Native_Basics.or;
+var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
+_elm_lang$core$Basics_ops['&&'] = _elm_lang$core$Native_Basics.and;
+var _elm_lang$core$Basics$max = _elm_lang$core$Native_Basics.max;
+var _elm_lang$core$Basics$min = _elm_lang$core$Native_Basics.min;
+var _elm_lang$core$Basics$compare = _elm_lang$core$Native_Basics.compare;
+var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
+_elm_lang$core$Basics_ops['>='] = _elm_lang$core$Native_Basics.ge;
+var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
+_elm_lang$core$Basics_ops['<='] = _elm_lang$core$Native_Basics.le;
+var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
+_elm_lang$core$Basics_ops['>'] = _elm_lang$core$Native_Basics.gt;
+var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
+_elm_lang$core$Basics_ops['<'] = _elm_lang$core$Native_Basics.lt;
+var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
+_elm_lang$core$Basics_ops['/='] = _elm_lang$core$Native_Basics.neq;
+var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
+_elm_lang$core$Basics_ops['=='] = _elm_lang$core$Native_Basics.eq;
+var _elm_lang$core$Basics$e = _elm_lang$core$Native_Basics.e;
+var _elm_lang$core$Basics$pi = _elm_lang$core$Native_Basics.pi;
+var _elm_lang$core$Basics$clamp = _elm_lang$core$Native_Basics.clamp;
+var _elm_lang$core$Basics$logBase = _elm_lang$core$Native_Basics.logBase;
+var _elm_lang$core$Basics$abs = _elm_lang$core$Native_Basics.abs;
+var _elm_lang$core$Basics$negate = _elm_lang$core$Native_Basics.negate;
+var _elm_lang$core$Basics$sqrt = _elm_lang$core$Native_Basics.sqrt;
+var _elm_lang$core$Basics$atan2 = _elm_lang$core$Native_Basics.atan2;
+var _elm_lang$core$Basics$atan = _elm_lang$core$Native_Basics.atan;
+var _elm_lang$core$Basics$asin = _elm_lang$core$Native_Basics.asin;
+var _elm_lang$core$Basics$acos = _elm_lang$core$Native_Basics.acos;
+var _elm_lang$core$Basics$tan = _elm_lang$core$Native_Basics.tan;
+var _elm_lang$core$Basics$sin = _elm_lang$core$Native_Basics.sin;
+var _elm_lang$core$Basics$cos = _elm_lang$core$Native_Basics.cos;
+var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
+_elm_lang$core$Basics_ops['^'] = _elm_lang$core$Native_Basics.exp;
+var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
+_elm_lang$core$Basics_ops['%'] = _elm_lang$core$Native_Basics.mod;
+var _elm_lang$core$Basics$rem = _elm_lang$core$Native_Basics.rem;
+var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
+_elm_lang$core$Basics_ops['//'] = _elm_lang$core$Native_Basics.div;
+var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
+_elm_lang$core$Basics_ops['/'] = _elm_lang$core$Native_Basics.floatDiv;
+var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
+_elm_lang$core$Basics_ops['*'] = _elm_lang$core$Native_Basics.mul;
+var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
+_elm_lang$core$Basics_ops['-'] = _elm_lang$core$Native_Basics.sub;
+var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
+_elm_lang$core$Basics_ops['+'] = _elm_lang$core$Native_Basics.add;
+var _elm_lang$core$Basics$toPolar = _elm_lang$core$Native_Basics.toPolar;
+var _elm_lang$core$Basics$fromPolar = _elm_lang$core$Native_Basics.fromPolar;
+var _elm_lang$core$Basics$turns = _elm_lang$core$Native_Basics.turns;
+var _elm_lang$core$Basics$degrees = _elm_lang$core$Native_Basics.degrees;
+var _elm_lang$core$Basics$radians = function (t) {
+	return t;
+};
+var _elm_lang$core$Basics$GT = {ctor: 'GT'};
+var _elm_lang$core$Basics$EQ = {ctor: 'EQ'};
+var _elm_lang$core$Basics$LT = {ctor: 'LT'};
+var _elm_lang$core$Basics$JustOneMore = function (a) {
+	return {ctor: 'JustOneMore', _0: a};
+};
+
+//import Native.Utils //
+
+var _elm_lang$core$Native_List = function() {
+
+var Nil = { ctor: '[]' };
+
+function Cons(hd, tl)
+{
+	return { ctor: '::', _0: hd, _1: tl };
+}
+
+function fromArray(arr)
+{
+	var out = Nil;
+	for (var i = arr.length; i--; )
+	{
+		out = Cons(arr[i], out);
+	}
+	return out;
+}
+
+function toArray(xs)
+{
+	var out = [];
+	while (xs.ctor !== '[]')
+	{
+		out.push(xs._0);
+		xs = xs._1;
+	}
+	return out;
+}
+
+function foldr(f, b, xs)
+{
+	var arr = toArray(xs);
+	var acc = b;
+	for (var i = arr.length; i--; )
+	{
+		acc = A2(f, arr[i], acc);
+	}
+	return acc;
+}
+
+function map2(f, xs, ys)
+{
+	var arr = [];
+	while (xs.ctor !== '[]' && ys.ctor !== '[]')
+	{
+		arr.push(A2(f, xs._0, ys._0));
+		xs = xs._1;
+		ys = ys._1;
+	}
+	return fromArray(arr);
+}
+
+function map3(f, xs, ys, zs)
+{
+	var arr = [];
+	while (xs.ctor !== '[]' && ys.ctor !== '[]' && zs.ctor !== '[]')
+	{
+		arr.push(A3(f, xs._0, ys._0, zs._0));
+		xs = xs._1;
+		ys = ys._1;
+		zs = zs._1;
+	}
+	return fromArray(arr);
+}
+
+function map4(f, ws, xs, ys, zs)
+{
+	var arr = [];
+	while (   ws.ctor !== '[]'
+		   && xs.ctor !== '[]'
+		   && ys.ctor !== '[]'
+		   && zs.ctor !== '[]')
+	{
+		arr.push(A4(f, ws._0, xs._0, ys._0, zs._0));
+		ws = ws._1;
+		xs = xs._1;
+		ys = ys._1;
+		zs = zs._1;
+	}
+	return fromArray(arr);
+}
+
+function map5(f, vs, ws, xs, ys, zs)
+{
+	var arr = [];
+	while (   vs.ctor !== '[]'
+		   && ws.ctor !== '[]'
+		   && xs.ctor !== '[]'
+		   && ys.ctor !== '[]'
+		   && zs.ctor !== '[]')
+	{
+		arr.push(A5(f, vs._0, ws._0, xs._0, ys._0, zs._0));
+		vs = vs._1;
+		ws = ws._1;
+		xs = xs._1;
+		ys = ys._1;
+		zs = zs._1;
+	}
+	return fromArray(arr);
+}
+
+function sortBy(f, xs)
+{
+	return fromArray(toArray(xs).sort(function(a, b) {
+		return _elm_lang$core$Native_Utils.cmp(f(a), f(b));
+	}));
+}
+
+function sortWith(f, xs)
+{
+	return fromArray(toArray(xs).sort(function(a, b) {
+		var ord = f(a)(b).ctor;
+		return ord === 'EQ' ? 0 : ord === 'LT' ? -1 : 1;
+	}));
+}
+
+return {
+	Nil: Nil,
+	Cons: Cons,
+	cons: F2(Cons),
+	toArray: toArray,
+	fromArray: fromArray,
+
+	foldr: F3(foldr),
+
+	map2: F3(map2),
+	map3: F4(map3),
+	map4: F5(map4),
+	map5: F6(map5),
+	sortBy: F2(sortBy),
+	sortWith: F2(sortWith)
+};
+
+}();
+var _elm_lang$core$List$sortWith = _elm_lang$core$Native_List.sortWith;
+var _elm_lang$core$List$sortBy = _elm_lang$core$Native_List.sortBy;
+var _elm_lang$core$List$sort = function (xs) {
+	return A2(_elm_lang$core$List$sortBy, _elm_lang$core$Basics$identity, xs);
+};
+var _elm_lang$core$List$drop = F2(
+	function (n, list) {
+		drop:
+		while (true) {
+			if (_elm_lang$core$Native_Utils.cmp(n, 0) < 1) {
+				return list;
+			} else {
+				var _p0 = list;
+				if (_p0.ctor === '[]') {
+					return list;
+				} else {
+					var _v1 = n - 1,
+						_v2 = _p0._1;
+					n = _v1;
+					list = _v2;
+					continue drop;
+				}
+			}
+		}
+	});
+var _elm_lang$core$List$map5 = _elm_lang$core$Native_List.map5;
+var _elm_lang$core$List$map4 = _elm_lang$core$Native_List.map4;
+var _elm_lang$core$List$map3 = _elm_lang$core$Native_List.map3;
+var _elm_lang$core$List$map2 = _elm_lang$core$Native_List.map2;
+var _elm_lang$core$List$any = F2(
+	function (isOkay, list) {
+		any:
+		while (true) {
+			var _p1 = list;
+			if (_p1.ctor === '[]') {
+				return false;
+			} else {
+				if (isOkay(_p1._0)) {
+					return true;
+				} else {
+					var _v4 = isOkay,
+						_v5 = _p1._1;
+					isOkay = _v4;
+					list = _v5;
+					continue any;
+				}
+			}
+		}
+	});
+var _elm_lang$core$List$all = F2(
+	function (isOkay, list) {
+		return !A2(
+			_elm_lang$core$List$any,
+			function (_p2) {
+				return !isOkay(_p2);
+			},
+			list);
+	});
+var _elm_lang$core$List$foldr = _elm_lang$core$Native_List.foldr;
+var _elm_lang$core$List$foldl = F3(
+	function (func, acc, list) {
+		foldl:
+		while (true) {
+			var _p3 = list;
+			if (_p3.ctor === '[]') {
+				return acc;
+			} else {
+				var _v7 = func,
+					_v8 = A2(func, _p3._0, acc),
+					_v9 = _p3._1;
+				func = _v7;
+				acc = _v8;
+				list = _v9;
+				continue foldl;
+			}
+		}
+	});
+var _elm_lang$core$List$length = function (xs) {
+	return A3(
+		_elm_lang$core$List$foldl,
+		F2(
+			function (_p4, i) {
+				return i + 1;
+			}),
+		0,
+		xs);
+};
+var _elm_lang$core$List$sum = function (numbers) {
+	return A3(
+		_elm_lang$core$List$foldl,
+		F2(
+			function (x, y) {
+				return x + y;
+			}),
+		0,
+		numbers);
+};
+var _elm_lang$core$List$product = function (numbers) {
+	return A3(
+		_elm_lang$core$List$foldl,
+		F2(
+			function (x, y) {
+				return x * y;
+			}),
+		1,
+		numbers);
+};
+var _elm_lang$core$List$maximum = function (list) {
+	var _p5 = list;
+	if (_p5.ctor === '::') {
+		return _elm_lang$core$Maybe$Just(
+			A3(_elm_lang$core$List$foldl, _elm_lang$core$Basics$max, _p5._0, _p5._1));
+	} else {
+		return _elm_lang$core$Maybe$Nothing;
+	}
+};
+var _elm_lang$core$List$minimum = function (list) {
+	var _p6 = list;
+	if (_p6.ctor === '::') {
+		return _elm_lang$core$Maybe$Just(
+			A3(_elm_lang$core$List$foldl, _elm_lang$core$Basics$min, _p6._0, _p6._1));
+	} else {
+		return _elm_lang$core$Maybe$Nothing;
+	}
+};
+var _elm_lang$core$List$member = F2(
+	function (x, xs) {
+		return A2(
+			_elm_lang$core$List$any,
+			function (a) {
+				return _elm_lang$core$Native_Utils.eq(a, x);
+			},
+			xs);
+	});
+var _elm_lang$core$List$isEmpty = function (xs) {
+	var _p7 = xs;
+	if (_p7.ctor === '[]') {
+		return true;
+	} else {
+		return false;
+	}
+};
+var _elm_lang$core$List$tail = function (list) {
+	var _p8 = list;
+	if (_p8.ctor === '::') {
+		return _elm_lang$core$Maybe$Just(_p8._1);
+	} else {
+		return _elm_lang$core$Maybe$Nothing;
+	}
+};
+var _elm_lang$core$List$head = function (list) {
+	var _p9 = list;
+	if (_p9.ctor === '::') {
+		return _elm_lang$core$Maybe$Just(_p9._0);
+	} else {
+		return _elm_lang$core$Maybe$Nothing;
+	}
+};
+var _elm_lang$core$List_ops = _elm_lang$core$List_ops || {};
+_elm_lang$core$List_ops['::'] = _elm_lang$core$Native_List.cons;
+var _elm_lang$core$List$map = F2(
+	function (f, xs) {
+		return A3(
+			_elm_lang$core$List$foldr,
+			F2(
+				function (x, acc) {
+					return {
+						ctor: '::',
+						_0: f(x),
+						_1: acc
+					};
+				}),
+			{ctor: '[]'},
+			xs);
+	});
+var _elm_lang$core$List$filter = F2(
+	function (pred, xs) {
+		var conditionalCons = F2(
+			function (front, back) {
+				return pred(front) ? {ctor: '::', _0: front, _1: back} : back;
+			});
+		return A3(
+			_elm_lang$core$List$foldr,
+			conditionalCons,
+			{ctor: '[]'},
+			xs);
+	});
+var _elm_lang$core$List$maybeCons = F3(
+	function (f, mx, xs) {
+		var _p10 = f(mx);
+		if (_p10.ctor === 'Just') {
+			return {ctor: '::', _0: _p10._0, _1: xs};
+		} else {
+			return xs;
+		}
+	});
+var _elm_lang$core$List$filterMap = F2(
+	function (f, xs) {
+		return A3(
+			_elm_lang$core$List$foldr,
+			_elm_lang$core$List$maybeCons(f),
+			{ctor: '[]'},
+			xs);
+	});
+var _elm_lang$core$List$reverse = function (list) {
+	return A3(
+		_elm_lang$core$List$foldl,
+		F2(
+			function (x, y) {
+				return {ctor: '::', _0: x, _1: y};
+			}),
+		{ctor: '[]'},
+		list);
+};
+var _elm_lang$core$List$scanl = F3(
+	function (f, b, xs) {
+		var scan1 = F2(
+			function (x, accAcc) {
+				var _p11 = accAcc;
+				if (_p11.ctor === '::') {
+					return {
+						ctor: '::',
+						_0: A2(f, x, _p11._0),
+						_1: accAcc
+					};
+				} else {
+					return {ctor: '[]'};
+				}
+			});
+		return _elm_lang$core$List$reverse(
+			A3(
+				_elm_lang$core$List$foldl,
+				scan1,
+				{
+					ctor: '::',
+					_0: b,
+					_1: {ctor: '[]'}
+				},
+				xs));
+	});
+var _elm_lang$core$List$append = F2(
+	function (xs, ys) {
+		var _p12 = ys;
+		if (_p12.ctor === '[]') {
+			return xs;
+		} else {
+			return A3(
+				_elm_lang$core$List$foldr,
+				F2(
+					function (x, y) {
+						return {ctor: '::', _0: x, _1: y};
+					}),
+				ys,
+				xs);
+		}
+	});
+var _elm_lang$core$List$concat = function (lists) {
+	return A3(
+		_elm_lang$core$List$foldr,
+		_elm_lang$core$List$append,
+		{ctor: '[]'},
+		lists);
+};
+var _elm_lang$core$List$concatMap = F2(
+	function (f, list) {
+		return _elm_lang$core$List$concat(
+			A2(_elm_lang$core$List$map, f, list));
+	});
+var _elm_lang$core$List$partition = F2(
+	function (pred, list) {
+		var step = F2(
+			function (x, _p13) {
+				var _p14 = _p13;
+				var _p16 = _p14._0;
+				var _p15 = _p14._1;
+				return pred(x) ? {
+					ctor: '_Tuple2',
+					_0: {ctor: '::', _0: x, _1: _p16},
+					_1: _p15
+				} : {
+					ctor: '_Tuple2',
+					_0: _p16,
+					_1: {ctor: '::', _0: x, _1: _p15}
+				};
+			});
+		return A3(
+			_elm_lang$core$List$foldr,
+			step,
+			{
+				ctor: '_Tuple2',
+				_0: {ctor: '[]'},
+				_1: {ctor: '[]'}
+			},
+			list);
+	});
+var _elm_lang$core$List$unzip = function (pairs) {
+	var step = F2(
+		function (_p18, _p17) {
+			var _p19 = _p18;
+			var _p20 = _p17;
+			return {
+				ctor: '_Tuple2',
+				_0: {ctor: '::', _0: _p19._0, _1: _p20._0},
+				_1: {ctor: '::', _0: _p19._1, _1: _p20._1}
+			};
+		});
+	return A3(
+		_elm_lang$core$List$foldr,
+		step,
+		{
+			ctor: '_Tuple2',
+			_0: {ctor: '[]'},
+			_1: {ctor: '[]'}
+		},
+		pairs);
+};
+var _elm_lang$core$List$intersperse = F2(
+	function (sep, xs) {
+		var _p21 = xs;
+		if (_p21.ctor === '[]') {
+			return {ctor: '[]'};
+		} else {
+			var step = F2(
+				function (x, rest) {
+					return {
+						ctor: '::',
+						_0: sep,
+						_1: {ctor: '::', _0: x, _1: rest}
+					};
+				});
+			var spersed = A3(
+				_elm_lang$core$List$foldr,
+				step,
+				{ctor: '[]'},
+				_p21._1);
+			return {ctor: '::', _0: _p21._0, _1: spersed};
+		}
+	});
+var _elm_lang$core$List$takeReverse = F3(
+	function (n, list, taken) {
+		takeReverse:
+		while (true) {
+			if (_elm_lang$core$Native_Utils.cmp(n, 0) < 1) {
+				return taken;
+			} else {
+				var _p22 = list;
+				if (_p22.ctor === '[]') {
+					return taken;
+				} else {
+					var _v23 = n - 1,
+						_v24 = _p22._1,
+						_v25 = {ctor: '::', _0: _p22._0, _1: taken};
+					n = _v23;
+					list = _v24;
+					taken = _v25;
+					continue takeReverse;
+				}
+			}
+		}
+	});
+var _elm_lang$core$List$takeTailRec = F2(
+	function (n, list) {
+		return _elm_lang$core$List$reverse(
+			A3(
+				_elm_lang$core$List$takeReverse,
+				n,
+				list,
+				{ctor: '[]'}));
+	});
+var _elm_lang$core$List$takeFast = F3(
+	function (ctr, n, list) {
+		if (_elm_lang$core$Native_Utils.cmp(n, 0) < 1) {
+			return {ctor: '[]'};
+		} else {
+			var _p23 = {ctor: '_Tuple2', _0: n, _1: list};
+			_v26_5:
+			do {
+				_v26_1:
+				do {
+					if (_p23.ctor === '_Tuple2') {
+						if (_p23._1.ctor === '[]') {
+							return list;
+						} else {
+							if (_p23._1._1.ctor === '::') {
+								switch (_p23._0) {
+									case 1:
+										break _v26_1;
+									case 2:
+										return {
+											ctor: '::',
+											_0: _p23._1._0,
+											_1: {
+												ctor: '::',
+												_0: _p23._1._1._0,
+												_1: {ctor: '[]'}
+											}
+										};
+									case 3:
+										if (_p23._1._1._1.ctor === '::') {
+											return {
+												ctor: '::',
+												_0: _p23._1._0,
+												_1: {
+													ctor: '::',
+													_0: _p23._1._1._0,
+													_1: {
+														ctor: '::',
+														_0: _p23._1._1._1._0,
+														_1: {ctor: '[]'}
+													}
+												}
+											};
+										} else {
+											break _v26_5;
+										}
+									default:
+										if ((_p23._1._1._1.ctor === '::') && (_p23._1._1._1._1.ctor === '::')) {
+											var _p28 = _p23._1._1._1._0;
+											var _p27 = _p23._1._1._0;
+											var _p26 = _p23._1._0;
+											var _p25 = _p23._1._1._1._1._0;
+											var _p24 = _p23._1._1._1._1._1;
+											return (_elm_lang$core$Native_Utils.cmp(ctr, 1000) > 0) ? {
+												ctor: '::',
+												_0: _p26,
+												_1: {
+													ctor: '::',
+													_0: _p27,
+													_1: {
+														ctor: '::',
+														_0: _p28,
+														_1: {
+															ctor: '::',
+															_0: _p25,
+															_1: A2(_elm_lang$core$List$takeTailRec, n - 4, _p24)
+														}
+													}
+												}
+											} : {
+												ctor: '::',
+												_0: _p26,
+												_1: {
+													ctor: '::',
+													_0: _p27,
+													_1: {
+														ctor: '::',
+														_0: _p28,
+														_1: {
+															ctor: '::',
+															_0: _p25,
+															_1: A3(_elm_lang$core$List$takeFast, ctr + 1, n - 4, _p24)
+														}
+													}
+												}
+											};
+										} else {
+											break _v26_5;
+										}
+								}
+							} else {
+								if (_p23._0 === 1) {
+									break _v26_1;
+								} else {
+									break _v26_5;
+								}
+							}
+						}
+					} else {
+						break _v26_5;
+					}
+				} while(false);
+				return {
+					ctor: '::',
+					_0: _p23._1._0,
+					_1: {ctor: '[]'}
+				};
+			} while(false);
+			return list;
+		}
+	});
+var _elm_lang$core$List$take = F2(
+	function (n, list) {
+		return A3(_elm_lang$core$List$takeFast, 0, n, list);
+	});
+var _elm_lang$core$List$repeatHelp = F3(
+	function (result, n, value) {
+		repeatHelp:
+		while (true) {
+			if (_elm_lang$core$Native_Utils.cmp(n, 0) < 1) {
+				return result;
+			} else {
+				var _v27 = {ctor: '::', _0: value, _1: result},
+					_v28 = n - 1,
+					_v29 = value;
+				result = _v27;
+				n = _v28;
+				value = _v29;
+				continue repeatHelp;
+			}
+		}
+	});
+var _elm_lang$core$List$repeat = F2(
+	function (n, value) {
+		return A3(
+			_elm_lang$core$List$repeatHelp,
+			{ctor: '[]'},
+			n,
+			value);
+	});
+var _elm_lang$core$List$rangeHelp = F3(
+	function (lo, hi, list) {
+		rangeHelp:
+		while (true) {
+			if (_elm_lang$core$Native_Utils.cmp(lo, hi) < 1) {
+				var _v30 = lo,
+					_v31 = hi - 1,
+					_v32 = {ctor: '::', _0: hi, _1: list};
+				lo = _v30;
+				hi = _v31;
+				list = _v32;
+				continue rangeHelp;
+			} else {
+				return list;
+			}
+		}
+	});
+var _elm_lang$core$List$range = F2(
+	function (lo, hi) {
+		return A3(
+			_elm_lang$core$List$rangeHelp,
+			lo,
+			hi,
+			{ctor: '[]'});
+	});
+var _elm_lang$core$List$indexedMap = F2(
+	function (f, xs) {
+		return A3(
+			_elm_lang$core$List$map2,
+			f,
+			A2(
+				_elm_lang$core$List$range,
+				0,
+				_elm_lang$core$List$length(xs) - 1),
+			xs);
+	});
+
+//import Native.Utils //
+
+var _elm_lang$core$Native_Debug = function() {
+
+function log(tag, value)
+{
+	var msg = tag + ': ' + _elm_lang$core$Native_Utils.toString(value);
+	var process = process || {};
+	if (process.stdout)
+	{
+		process.stdout.write(msg);
+	}
+	else
+	{
+		console.log(msg);
+	}
+	return value;
+}
+
+function crash(message)
+{
+	throw new Error(message);
+}
+
+return {
+	crash: crash,
+	log: F2(log)
+};
+
+}();
+var _elm_lang$core$Debug$crash = _elm_lang$core$Native_Debug.crash;
+var _elm_lang$core$Debug$log = _elm_lang$core$Native_Debug.log;
+
+var _elm_lang$core$Result$toMaybe = function (result) {
+	var _p0 = result;
+	if (_p0.ctor === 'Ok') {
+		return _elm_lang$core$Maybe$Just(_p0._0);
+	} else {
+		return _elm_lang$core$Maybe$Nothing;
+	}
+};
+var _elm_lang$core$Result$withDefault = F2(
+	function (def, result) {
+		var _p1 = result;
+		if (_p1.ctor === 'Ok') {
+			return _p1._0;
+		} else {
+			return def;
+		}
+	});
+var _elm_lang$core$Result$Err = function (a) {
+	return {ctor: 'Err', _0: a};
+};
+var _elm_lang$core$Result$andThen = F2(
+	function (callback, result) {
+		var _p2 = result;
+		if (_p2.ctor === 'Ok') {
+			return callback(_p2._0);
+		} else {
+			return _elm_lang$core$Result$Err(_p2._0);
+		}
+	});
+var _elm_lang$core$Result$Ok = function (a) {
+	return {ctor: 'Ok', _0: a};
+};
+var _elm_lang$core$Result$map = F2(
+	function (func, ra) {
+		var _p3 = ra;
+		if (_p3.ctor === 'Ok') {
+			return _elm_lang$core$Result$Ok(
+				func(_p3._0));
+		} else {
+			return _elm_lang$core$Result$Err(_p3._0);
+		}
+	});
+var _elm_lang$core$Result$map2 = F3(
+	function (func, ra, rb) {
+		var _p4 = {ctor: '_Tuple2', _0: ra, _1: rb};
+		if (_p4._0.ctor === 'Ok') {
+			if (_p4._1.ctor === 'Ok') {
+				return _elm_lang$core$Result$Ok(
+					A2(func, _p4._0._0, _p4._1._0));
+			} else {
+				return _elm_lang$core$Result$Err(_p4._1._0);
+			}
+		} else {
+			return _elm_lang$core$Result$Err(_p4._0._0);
+		}
+	});
+var _elm_lang$core$Result$map3 = F4(
+	function (func, ra, rb, rc) {
+		var _p5 = {ctor: '_Tuple3', _0: ra, _1: rb, _2: rc};
+		if (_p5._0.ctor === 'Ok') {
+			if (_p5._1.ctor === 'Ok') {
+				if (_p5._2.ctor === 'Ok') {
+					return _elm_lang$core$Result$Ok(
+						A3(func, _p5._0._0, _p5._1._0, _p5._2._0));
+				} else {
+					return _elm_lang$core$Result$Err(_p5._2._0);
+				}
+			} else {
+				return _elm_lang$core$Result$Err(_p5._1._0);
+			}
+		} else {
+			return _elm_lang$core$Result$Err(_p5._0._0);
+		}
+	});
+var _elm_lang$core$Result$map4 = F5(
+	function (func, ra, rb, rc, rd) {
+		var _p6 = {ctor: '_Tuple4', _0: ra, _1: rb, _2: rc, _3: rd};
+		if (_p6._0.ctor === 'Ok') {
+			if (_p6._1.ctor === 'Ok') {
+				if (_p6._2.ctor === 'Ok') {
+					if (_p6._3.ctor === 'Ok') {
+						return _elm_lang$core$Result$Ok(
+							A4(func, _p6._0._0, _p6._1._0, _p6._2._0, _p6._3._0));
+					} else {
+						return _elm_lang$core$Result$Err(_p6._3._0);
+					}
+				} else {
+					return _elm_lang$core$Result$Err(_p6._2._0);
+				}
+			} else {
+				return _elm_lang$core$Result$Err(_p6._1._0);
+			}
+		} else {
+			return _elm_lang$core$Result$Err(_p6._0._0);
+		}
+	});
+var _elm_lang$core$Result$map5 = F6(
+	function (func, ra, rb, rc, rd, re) {
+		var _p7 = {ctor: '_Tuple5', _0: ra, _1: rb, _2: rc, _3: rd, _4: re};
+		if (_p7._0.ctor === 'Ok') {
+			if (_p7._1.ctor === 'Ok') {
+				if (_p7._2.ctor === 'Ok') {
+					if (_p7._3.ctor === 'Ok') {
+						if (_p7._4.ctor === 'Ok') {
+							return _elm_lang$core$Result$Ok(
+								A5(func, _p7._0._0, _p7._1._0, _p7._2._0, _p7._3._0, _p7._4._0));
+						} else {
+							return _elm_lang$core$Result$Err(_p7._4._0);
+						}
+					} else {
+						return _elm_lang$core$Result$Err(_p7._3._0);
+					}
+				} else {
+					return _elm_lang$core$Result$Err(_p7._2._0);
+				}
+			} else {
+				return _elm_lang$core$Result$Err(_p7._1._0);
+			}
+		} else {
+			return _elm_lang$core$Result$Err(_p7._0._0);
+		}
+	});
+var _elm_lang$core$Result$mapError = F2(
+	function (f, result) {
+		var _p8 = result;
+		if (_p8.ctor === 'Ok') {
+			return _elm_lang$core$Result$Ok(_p8._0);
+		} else {
+			return _elm_lang$core$Result$Err(
+				f(_p8._0));
+		}
+	});
+var _elm_lang$core$Result$fromMaybe = F2(
+	function (err, maybe) {
+		var _p9 = maybe;
+		if (_p9.ctor === 'Just') {
+			return _elm_lang$core$Result$Ok(_p9._0);
+		} else {
+			return _elm_lang$core$Result$Err(err);
+		}
+	});
+
+//import Maybe, Native.List, Native.Utils, Result //
+
+var _elm_lang$core$Native_String = function() {
+
+function isEmpty(str)
+{
+	return str.length === 0;
+}
+function cons(chr, str)
+{
+	return chr + str;
+}
+function uncons(str)
+{
+	var hd = str[0];
+	if (hd)
+	{
+		return _elm_lang$core$Maybe$Just(_elm_lang$core$Native_Utils.Tuple2(_elm_lang$core$Native_Utils.chr(hd), str.slice(1)));
+	}
+	return _elm_lang$core$Maybe$Nothing;
+}
+function append(a, b)
+{
+	return a + b;
+}
+function concat(strs)
+{
+	return _elm_lang$core$Native_List.toArray(strs).join('');
+}
+function length(str)
+{
+	return str.length;
+}
+function map(f, str)
+{
+	var out = str.split('');
+	for (var i = out.length; i--; )
+	{
+		out[i] = f(_elm_lang$core$Native_Utils.chr(out[i]));
+	}
+	return out.join('');
+}
+function filter(pred, str)
+{
+	return str.split('').map(_elm_lang$core$Native_Utils.chr).filter(pred).join('');
+}
+function reverse(str)
+{
+	return str.split('').reverse().join('');
+}
+function foldl(f, b, str)
+{
+	var len = str.length;
+	for (var i = 0; i < len; ++i)
+	{
+		b = A2(f, _elm_lang$core$Native_Utils.chr(str[i]), b);
+	}
+	return b;
+}
+function foldr(f, b, str)
+{
+	for (var i = str.length; i--; )
+	{
+		b = A2(f, _elm_lang$core$Native_Utils.chr(str[i]), b);
+	}
+	return b;
+}
+function split(sep, str)
+{
+	return _elm_lang$core$Native_List.fromArray(str.split(sep));
+}
+function join(sep, strs)
+{
+	return _elm_lang$core$Native_List.toArray(strs).join(sep);
+}
+function repeat(n, str)
+{
+	var result = '';
+	while (n > 0)
+	{
+		if (n & 1)
+		{
+			result += str;
+		}
+		n >>= 1, str += str;
+	}
+	return result;
+}
+function slice(start, end, str)
+{
+	return str.slice(start, end);
+}
+function left(n, str)
+{
+	return n < 1 ? '' : str.slice(0, n);
+}
+function right(n, str)
+{
+	return n < 1 ? '' : str.slice(-n);
+}
+function dropLeft(n, str)
+{
+	return n < 1 ? str : str.slice(n);
+}
+function dropRight(n, str)
+{
+	return n < 1 ? str : str.slice(0, -n);
+}
+function pad(n, chr, str)
+{
+	var half = (n - str.length) / 2;
+	return repeat(Math.ceil(half), chr) + str + repeat(half | 0, chr);
+}
+function padRight(n, chr, str)
+{
+	return str + repeat(n - str.length, chr);
+}
+function padLeft(n, chr, str)
+{
+	return repeat(n - str.length, chr) + str;
+}
+
+function trim(str)
+{
+	return str.trim();
+}
+function trimLeft(str)
+{
+	return str.replace(/^\s+/, '');
+}
+function trimRight(str)
+{
+	return str.replace(/\s+$/, '');
+}
+
+function words(str)
+{
+	return _elm_lang$core$Native_List.fromArray(str.trim().split(/\s+/g));
+}
+function lines(str)
+{
+	return _elm_lang$core$Native_List.fromArray(str.split(/\r\n|\r|\n/g));
+}
+
+function toUpper(str)
+{
+	return str.toUpperCase();
+}
+function toLower(str)
+{
+	return str.toLowerCase();
+}
+
+function any(pred, str)
+{
+	for (var i = str.length; i--; )
+	{
+		if (pred(_elm_lang$core$Native_Utils.chr(str[i])))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+function all(pred, str)
+{
+	for (var i = str.length; i--; )
+	{
+		if (!pred(_elm_lang$core$Native_Utils.chr(str[i])))
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+function contains(sub, str)
+{
+	return str.indexOf(sub) > -1;
+}
+function startsWith(sub, str)
+{
+	return str.indexOf(sub) === 0;
+}
+function endsWith(sub, str)
+{
+	return str.length >= sub.length &&
+		str.lastIndexOf(sub) === str.length - sub.length;
+}
+function indexes(sub, str)
+{
+	var subLen = sub.length;
+	
+	if (subLen < 1)
+	{
+		return _elm_lang$core$Native_List.Nil;
+	}
+
+	var i = 0;
+	var is = [];
+
+	while ((i = str.indexOf(sub, i)) > -1)
+	{
+		is.push(i);
+		i = i + subLen;
+	}	
+	
+	return _elm_lang$core$Native_List.fromArray(is);
+}
+
+function toInt(s)
+{
+	var len = s.length;
+	if (len === 0)
+	{
+		return _elm_lang$core$Result$Err("could not convert string '" + s + "' to an Int" );
+	}
+	var start = 0;
+	if (s[0] === '-')
+	{
+		if (len === 1)
+		{
+			return _elm_lang$core$Result$Err("could not convert string '" + s + "' to an Int" );
+		}
+		start = 1;
+	}
+	for (var i = start; i < len; ++i)
+	{
+		var c = s[i];
+		if (c < '0' || '9' < c)
+		{
+			return _elm_lang$core$Result$Err("could not convert string '" + s + "' to an Int" );
+		}
+	}
+	return _elm_lang$core$Result$Ok(parseInt(s, 10));
+}
+
+function toFloat(s)
+{
+	var len = s.length;
+	if (len === 0)
+	{
+		return _elm_lang$core$Result$Err("could not convert string '" + s + "' to a Float" );
+	}
+	var start = 0;
+	if (s[0] === '-')
+	{
+		if (len === 1)
+		{
+			return _elm_lang$core$Result$Err("could not convert string '" + s + "' to a Float" );
+		}
+		start = 1;
+	}
+	var dotCount = 0;
+	for (var i = start; i < len; ++i)
+	{
+		var c = s[i];
+		if ('0' <= c && c <= '9')
+		{
+			continue;
+		}
+		if (c === '.')
+		{
+			dotCount += 1;
+			if (dotCount <= 1)
+			{
+				continue;
+			}
+		}
+		return _elm_lang$core$Result$Err("could not convert string '" + s + "' to a Float" );
+	}
+	return _elm_lang$core$Result$Ok(parseFloat(s));
+}
+
+function toList(str)
+{
+	return _elm_lang$core$Native_List.fromArray(str.split('').map(_elm_lang$core$Native_Utils.chr));
+}
+function fromList(chars)
+{
+	return _elm_lang$core$Native_List.toArray(chars).join('');
+}
+
+return {
+	isEmpty: isEmpty,
+	cons: F2(cons),
+	uncons: uncons,
+	append: F2(append),
+	concat: concat,
+	length: length,
+	map: F2(map),
+	filter: F2(filter),
+	reverse: reverse,
+	foldl: F3(foldl),
+	foldr: F3(foldr),
+
+	split: F2(split),
+	join: F2(join),
+	repeat: F2(repeat),
+
+	slice: F3(slice),
+	left: F2(left),
+	right: F2(right),
+	dropLeft: F2(dropLeft),
+	dropRight: F2(dropRight),
+
+	pad: F3(pad),
+	padLeft: F3(padLeft),
+	padRight: F3(padRight),
+
+	trim: trim,
+	trimLeft: trimLeft,
+	trimRight: trimRight,
+
+	words: words,
+	lines: lines,
+
+	toUpper: toUpper,
+	toLower: toLower,
+
+	any: F2(any),
+	all: F2(all),
+
+	contains: F2(contains),
+	startsWith: F2(startsWith),
+	endsWith: F2(endsWith),
+	indexes: F2(indexes),
+
+	toInt: toInt,
+	toFloat: toFloat,
+	toList: toList,
+	fromList: fromList
+};
+
+}();
+
+//import Native.Utils //
+
+var _elm_lang$core$Native_Char = function() {
+
+return {
+	fromCode: function(c) { return _elm_lang$core$Native_Utils.chr(String.fromCharCode(c)); },
+	toCode: function(c) { return c.charCodeAt(0); },
+	toUpper: function(c) { return _elm_lang$core$Native_Utils.chr(c.toUpperCase()); },
+	toLower: function(c) { return _elm_lang$core$Native_Utils.chr(c.toLowerCase()); },
+	toLocaleUpper: function(c) { return _elm_lang$core$Native_Utils.chr(c.toLocaleUpperCase()); },
+	toLocaleLower: function(c) { return _elm_lang$core$Native_Utils.chr(c.toLocaleLowerCase()); }
+};
+
+}();
+var _elm_lang$core$Char$fromCode = _elm_lang$core$Native_Char.fromCode;
+var _elm_lang$core$Char$toCode = _elm_lang$core$Native_Char.toCode;
+var _elm_lang$core$Char$toLocaleLower = _elm_lang$core$Native_Char.toLocaleLower;
+var _elm_lang$core$Char$toLocaleUpper = _elm_lang$core$Native_Char.toLocaleUpper;
+var _elm_lang$core$Char$toLower = _elm_lang$core$Native_Char.toLower;
+var _elm_lang$core$Char$toUpper = _elm_lang$core$Native_Char.toUpper;
+var _elm_lang$core$Char$isBetween = F3(
+	function (low, high, $char) {
+		var code = _elm_lang$core$Char$toCode($char);
+		return (_elm_lang$core$Native_Utils.cmp(
+			code,
+			_elm_lang$core$Char$toCode(low)) > -1) && (_elm_lang$core$Native_Utils.cmp(
+			code,
+			_elm_lang$core$Char$toCode(high)) < 1);
+	});
+var _elm_lang$core$Char$isUpper = A2(
+	_elm_lang$core$Char$isBetween,
+	_elm_lang$core$Native_Utils.chr('A'),
+	_elm_lang$core$Native_Utils.chr('Z'));
+var _elm_lang$core$Char$isLower = A2(
+	_elm_lang$core$Char$isBetween,
+	_elm_lang$core$Native_Utils.chr('a'),
+	_elm_lang$core$Native_Utils.chr('z'));
+var _elm_lang$core$Char$isDigit = A2(
+	_elm_lang$core$Char$isBetween,
+	_elm_lang$core$Native_Utils.chr('0'),
+	_elm_lang$core$Native_Utils.chr('9'));
+var _elm_lang$core$Char$isOctDigit = A2(
+	_elm_lang$core$Char$isBetween,
+	_elm_lang$core$Native_Utils.chr('0'),
+	_elm_lang$core$Native_Utils.chr('7'));
+var _elm_lang$core$Char$isHexDigit = function ($char) {
+	return _elm_lang$core$Char$isDigit($char) || (A3(
+		_elm_lang$core$Char$isBetween,
+		_elm_lang$core$Native_Utils.chr('a'),
+		_elm_lang$core$Native_Utils.chr('f'),
+		$char) || A3(
+		_elm_lang$core$Char$isBetween,
+		_elm_lang$core$Native_Utils.chr('A'),
+		_elm_lang$core$Native_Utils.chr('F'),
+		$char));
+};
+
+var _elm_lang$core$String$fromList = _elm_lang$core$Native_String.fromList;
+var _elm_lang$core$String$toList = _elm_lang$core$Native_String.toList;
+var _elm_lang$core$String$toFloat = _elm_lang$core$Native_String.toFloat;
+var _elm_lang$core$String$toInt = _elm_lang$core$Native_String.toInt;
+var _elm_lang$core$String$indices = _elm_lang$core$Native_String.indexes;
+var _elm_lang$core$String$indexes = _elm_lang$core$Native_String.indexes;
+var _elm_lang$core$String$endsWith = _elm_lang$core$Native_String.endsWith;
+var _elm_lang$core$String$startsWith = _elm_lang$core$Native_String.startsWith;
+var _elm_lang$core$String$contains = _elm_lang$core$Native_String.contains;
+var _elm_lang$core$String$all = _elm_lang$core$Native_String.all;
+var _elm_lang$core$String$any = _elm_lang$core$Native_String.any;
+var _elm_lang$core$String$toLower = _elm_lang$core$Native_String.toLower;
+var _elm_lang$core$String$toUpper = _elm_lang$core$Native_String.toUpper;
+var _elm_lang$core$String$lines = _elm_lang$core$Native_String.lines;
+var _elm_lang$core$String$words = _elm_lang$core$Native_String.words;
+var _elm_lang$core$String$trimRight = _elm_lang$core$Native_String.trimRight;
+var _elm_lang$core$String$trimLeft = _elm_lang$core$Native_String.trimLeft;
+var _elm_lang$core$String$trim = _elm_lang$core$Native_String.trim;
+var _elm_lang$core$String$padRight = _elm_lang$core$Native_String.padRight;
+var _elm_lang$core$String$padLeft = _elm_lang$core$Native_String.padLeft;
+var _elm_lang$core$String$pad = _elm_lang$core$Native_String.pad;
+var _elm_lang$core$String$dropRight = _elm_lang$core$Native_String.dropRight;
+var _elm_lang$core$String$dropLeft = _elm_lang$core$Native_String.dropLeft;
+var _elm_lang$core$String$right = _elm_lang$core$Native_String.right;
+var _elm_lang$core$String$left = _elm_lang$core$Native_String.left;
+var _elm_lang$core$String$slice = _elm_lang$core$Native_String.slice;
+var _elm_lang$core$String$repeat = _elm_lang$core$Native_String.repeat;
+var _elm_lang$core$String$join = _elm_lang$core$Native_String.join;
+var _elm_lang$core$String$split = _elm_lang$core$Native_String.split;
+var _elm_lang$core$String$foldr = _elm_lang$core$Native_String.foldr;
+var _elm_lang$core$String$foldl = _elm_lang$core$Native_String.foldl;
+var _elm_lang$core$String$reverse = _elm_lang$core$Native_String.reverse;
+var _elm_lang$core$String$filter = _elm_lang$core$Native_String.filter;
+var _elm_lang$core$String$map = _elm_lang$core$Native_String.map;
+var _elm_lang$core$String$length = _elm_lang$core$Native_String.length;
+var _elm_lang$core$String$concat = _elm_lang$core$Native_String.concat;
+var _elm_lang$core$String$append = _elm_lang$core$Native_String.append;
+var _elm_lang$core$String$uncons = _elm_lang$core$Native_String.uncons;
+var _elm_lang$core$String$cons = _elm_lang$core$Native_String.cons;
+var _elm_lang$core$String$fromChar = function ($char) {
+	return A2(_elm_lang$core$String$cons, $char, '');
+};
+var _elm_lang$core$String$isEmpty = _elm_lang$core$Native_String.isEmpty;
+
+var _elm_lang$core$Tuple$mapSecond = F2(
+	function (func, _p0) {
+		var _p1 = _p0;
+		return {
+			ctor: '_Tuple2',
+			_0: _p1._0,
+			_1: func(_p1._1)
+		};
+	});
+var _elm_lang$core$Tuple$mapFirst = F2(
+	function (func, _p2) {
+		var _p3 = _p2;
+		return {
+			ctor: '_Tuple2',
+			_0: func(_p3._0),
+			_1: _p3._1
+		};
+	});
+var _elm_lang$core$Tuple$second = function (_p4) {
+	var _p5 = _p4;
+	return _p5._1;
+};
+var _elm_lang$core$Tuple$first = function (_p6) {
+	var _p7 = _p6;
+	return _p7._0;
+};
+
+//import //
+
+var _elm_lang$core$Native_Platform = function() {
+
+
+// PROGRAMS
+
+function program(impl)
+{
+	return function(flagDecoder)
+	{
+		return function(object, moduleName)
+		{
+			object['worker'] = function worker(flags)
+			{
+				if (typeof flags !== 'undefined')
+				{
+					throw new Error(
+						'The `' + moduleName + '` module does not need flags.\n'
+						+ 'Call ' + moduleName + '.worker() with no arguments and you should be all set!'
+					);
+				}
+
+				return initialize(
+					impl.init,
+					impl.update,
+					impl.subscriptions,
+					renderer
+				);
+			};
+		};
+	};
+}
+
+function programWithFlags(impl)
+{
+	return function(flagDecoder)
+	{
+		return function(object, moduleName)
+		{
+			object['worker'] = function worker(flags)
+			{
+				if (typeof flagDecoder === 'undefined')
+				{
+					throw new Error(
+						'Are you trying to sneak a Never value into Elm? Trickster!\n'
+						+ 'It looks like ' + moduleName + '.main is defined with `programWithFlags` but has type `Program Never`.\n'
+						+ 'Use `program` instead if you do not want flags.'
+					);
+				}
+
+				var result = A2(_elm_lang$core$Native_Json.run, flagDecoder, flags);
+				if (result.ctor === 'Err')
+				{
+					throw new Error(
+						moduleName + '.worker(...) was called with an unexpected argument.\n'
+						+ 'I tried to convert it to an Elm value, but ran into this problem:\n\n'
+						+ result._0
+					);
+				}
+
+				return initialize(
+					impl.init(result._0),
+					impl.update,
+					impl.subscriptions,
+					renderer
+				);
+			};
+		};
+	};
+}
+
+function renderer(enqueue, _)
+{
+	return function(_) {};
+}
+
+
+// HTML TO PROGRAM
+
+function htmlToProgram(vnode)
+{
+	var emptyBag = batch(_elm_lang$core$Native_List.Nil);
+	var noChange = _elm_lang$core$Native_Utils.Tuple2(
+		_elm_lang$core$Native_Utils.Tuple0,
+		emptyBag
+	);
+
+	return _elm_lang$virtual_dom$VirtualDom$program({
+		init: noChange,
+		view: function(model) { return main; },
+		update: F2(function(msg, model) { return noChange; }),
+		subscriptions: function (model) { return emptyBag; }
+	});
+}
+
+
+// INITIALIZE A PROGRAM
+
+function initialize(init, update, subscriptions, renderer)
+{
+	// ambient state
+	var managers = {};
+	var updateView;
+
+	// init and update state in main process
+	var initApp = _elm_lang$core$Native_Scheduler.nativeBinding(function(callback) {
+		var model = init._0;
+		updateView = renderer(enqueue, model);
+		var cmds = init._1;
+		var subs = subscriptions(model);
+		dispatchEffects(managers, cmds, subs);
+		callback(_elm_lang$core$Native_Scheduler.succeed(model));
+	});
+
+	function onMessage(msg, model)
+	{
+		return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback) {
+			var results = A2(update, msg, model);
+			model = results._0;
+			updateView(model);
+			var cmds = results._1;
+			var subs = subscriptions(model);
+			dispatchEffects(managers, cmds, subs);
+			callback(_elm_lang$core$Native_Scheduler.succeed(model));
+		});
+	}
+
+	var mainProcess = spawnLoop(initApp, onMessage);
+
+	function enqueue(msg)
+	{
+		_elm_lang$core$Native_Scheduler.rawSend(mainProcess, msg);
+	}
+
+	var ports = setupEffects(managers, enqueue);
+
+	return ports ? { ports: ports } : {};
+}
+
+
+// EFFECT MANAGERS
+
+var effectManagers = {};
+
+function setupEffects(managers, callback)
+{
+	var ports;
+
+	// setup all necessary effect managers
+	for (var key in effectManagers)
+	{
+		var manager = effectManagers[key];
+
+		if (manager.isForeign)
+		{
+			ports = ports || {};
+			ports[key] = manager.tag === 'cmd'
+				? setupOutgoingPort(key)
+				: setupIncomingPort(key, callback);
+		}
+
+		managers[key] = makeManager(manager, callback);
+	}
+
+	return ports;
+}
+
+function makeManager(info, callback)
+{
+	var router = {
+		main: callback,
+		self: undefined
+	};
+
+	var tag = info.tag;
+	var onEffects = info.onEffects;
+	var onSelfMsg = info.onSelfMsg;
+
+	function onMessage(msg, state)
+	{
+		if (msg.ctor === 'self')
+		{
+			return A3(onSelfMsg, router, msg._0, state);
+		}
+
+		var fx = msg._0;
+		switch (tag)
+		{
+			case 'cmd':
+				return A3(onEffects, router, fx.cmds, state);
+
+			case 'sub':
+				return A3(onEffects, router, fx.subs, state);
+
+			case 'fx':
+				return A4(onEffects, router, fx.cmds, fx.subs, state);
+		}
+	}
+
+	var process = spawnLoop(info.init, onMessage);
+	router.self = process;
+	return process;
+}
+
+function sendToApp(router, msg)
+{
+	return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
+	{
+		router.main(msg);
+		callback(_elm_lang$core$Native_Scheduler.succeed(_elm_lang$core$Native_Utils.Tuple0));
+	});
+}
+
+function sendToSelf(router, msg)
+{
+	return A2(_elm_lang$core$Native_Scheduler.send, router.self, {
+		ctor: 'self',
+		_0: msg
+	});
+}
+
+
+// HELPER for STATEFUL LOOPS
+
+function spawnLoop(init, onMessage)
+{
+	var andThen = _elm_lang$core$Native_Scheduler.andThen;
+
+	function loop(state)
+	{
+		var handleMsg = _elm_lang$core$Native_Scheduler.receive(function(msg) {
+			return onMessage(msg, state);
+		});
+		return A2(andThen, loop, handleMsg);
+	}
+
+	var task = A2(andThen, loop, init);
+
+	return _elm_lang$core$Native_Scheduler.rawSpawn(task);
+}
+
+
+// BAGS
+
+function leaf(home)
+{
+	return function(value)
+	{
+		return {
+			type: 'leaf',
+			home: home,
+			value: value
+		};
+	};
+}
+
+function batch(list)
+{
+	return {
+		type: 'node',
+		branches: list
+	};
+}
+
+function map(tagger, bag)
+{
+	return {
+		type: 'map',
+		tagger: tagger,
+		tree: bag
+	}
+}
+
+
+// PIPE BAGS INTO EFFECT MANAGERS
+
+function dispatchEffects(managers, cmdBag, subBag)
+{
+	var effectsDict = {};
+	gatherEffects(true, cmdBag, effectsDict, null);
+	gatherEffects(false, subBag, effectsDict, null);
+
+	for (var home in managers)
+	{
+		var fx = home in effectsDict
+			? effectsDict[home]
+			: {
+				cmds: _elm_lang$core$Native_List.Nil,
+				subs: _elm_lang$core$Native_List.Nil
+			};
+
+		_elm_lang$core$Native_Scheduler.rawSend(managers[home], { ctor: 'fx', _0: fx });
+	}
+}
+
+function gatherEffects(isCmd, bag, effectsDict, taggers)
+{
+	switch (bag.type)
+	{
+		case 'leaf':
+			var home = bag.home;
+			var effect = toEffect(isCmd, home, taggers, bag.value);
+			effectsDict[home] = insert(isCmd, effect, effectsDict[home]);
+			return;
+
+		case 'node':
+			var list = bag.branches;
+			while (list.ctor !== '[]')
+			{
+				gatherEffects(isCmd, list._0, effectsDict, taggers);
+				list = list._1;
+			}
+			return;
+
+		case 'map':
+			gatherEffects(isCmd, bag.tree, effectsDict, {
+				tagger: bag.tagger,
+				rest: taggers
+			});
+			return;
+	}
+}
+
+function toEffect(isCmd, home, taggers, value)
+{
+	function applyTaggers(x)
+	{
+		var temp = taggers;
+		while (temp)
+		{
+			x = temp.tagger(x);
+			temp = temp.rest;
+		}
+		return x;
+	}
+
+	var map = isCmd
+		? effectManagers[home].cmdMap
+		: effectManagers[home].subMap;
+
+	return A2(map, applyTaggers, value)
+}
+
+function insert(isCmd, newEffect, effects)
+{
+	effects = effects || {
+		cmds: _elm_lang$core$Native_List.Nil,
+		subs: _elm_lang$core$Native_List.Nil
+	};
+	if (isCmd)
+	{
+		effects.cmds = _elm_lang$core$Native_List.Cons(newEffect, effects.cmds);
+		return effects;
+	}
+	effects.subs = _elm_lang$core$Native_List.Cons(newEffect, effects.subs);
+	return effects;
+}
+
+
+// PORTS
+
+function checkPortName(name)
+{
+	if (name in effectManagers)
+	{
+		throw new Error('There can only be one port named `' + name + '`, but your program has multiple.');
+	}
+}
+
+
+// OUTGOING PORTS
+
+function outgoingPort(name, converter)
+{
+	checkPortName(name);
+	effectManagers[name] = {
+		tag: 'cmd',
+		cmdMap: outgoingPortMap,
+		converter: converter,
+		isForeign: true
+	};
+	return leaf(name);
+}
+
+var outgoingPortMap = F2(function cmdMap(tagger, value) {
+	return value;
+});
+
+function setupOutgoingPort(name)
+{
+	var subs = [];
+	var converter = effectManagers[name].converter;
+
+	// CREATE MANAGER
+
+	var init = _elm_lang$core$Native_Scheduler.succeed(null);
+
+	function onEffects(router, cmdList, state)
+	{
+		while (cmdList.ctor !== '[]')
+		{
+			// grab a separate reference to subs in case unsubscribe is called
+			var currentSubs = subs;
+			var value = converter(cmdList._0);
+			for (var i = 0; i < currentSubs.length; i++)
+			{
+				currentSubs[i](value);
+			}
+			cmdList = cmdList._1;
+		}
+		return init;
+	}
+
+	effectManagers[name].init = init;
+	effectManagers[name].onEffects = F3(onEffects);
+
+	// PUBLIC API
+
+	function subscribe(callback)
+	{
+		subs.push(callback);
+	}
+
+	function unsubscribe(callback)
+	{
+		// copy subs into a new array in case unsubscribe is called within a
+		// subscribed callback
+		subs = subs.slice();
+		var index = subs.indexOf(callback);
+		if (index >= 0)
+		{
+			subs.splice(index, 1);
+		}
+	}
+
+	return {
+		subscribe: subscribe,
+		unsubscribe: unsubscribe
+	};
+}
+
+
+// INCOMING PORTS
+
+function incomingPort(name, converter)
+{
+	checkPortName(name);
+	effectManagers[name] = {
+		tag: 'sub',
+		subMap: incomingPortMap,
+		converter: converter,
+		isForeign: true
+	};
+	return leaf(name);
+}
+
+var incomingPortMap = F2(function subMap(tagger, finalTagger)
+{
+	return function(value)
+	{
+		return tagger(finalTagger(value));
+	};
+});
+
+function setupIncomingPort(name, callback)
+{
+	var sentBeforeInit = [];
+	var subs = _elm_lang$core$Native_List.Nil;
+	var converter = effectManagers[name].converter;
+	var currentOnEffects = preInitOnEffects;
+	var currentSend = preInitSend;
+
+	// CREATE MANAGER
+
+	var init = _elm_lang$core$Native_Scheduler.succeed(null);
+
+	function preInitOnEffects(router, subList, state)
+	{
+		var postInitResult = postInitOnEffects(router, subList, state);
+
+		for(var i = 0; i < sentBeforeInit.length; i++)
+		{
+			postInitSend(sentBeforeInit[i]);
+		}
+
+		sentBeforeInit = null; // to release objects held in queue
+		currentSend = postInitSend;
+		currentOnEffects = postInitOnEffects;
+		return postInitResult;
+	}
+
+	function postInitOnEffects(router, subList, state)
+	{
+		subs = subList;
+		return init;
+	}
+
+	function onEffects(router, subList, state)
+	{
+		return currentOnEffects(router, subList, state);
+	}
+
+	effectManagers[name].init = init;
+	effectManagers[name].onEffects = F3(onEffects);
+
+	// PUBLIC API
+
+	function preInitSend(value)
+	{
+		sentBeforeInit.push(value);
+	}
+
+	function postInitSend(incomingValue)
+	{
+		var result = A2(_elm_lang$core$Json_Decode$decodeValue, converter, incomingValue);
+		if (result.ctor === 'Err')
+		{
+			throw new Error('Trying to send an unexpected type of value through port `' + name + '`:\n' + result._0);
+		}
+
+		var value = result._0;
+		var temp = subs;
+		while (temp.ctor !== '[]')
+		{
+			callback(temp._0(value));
+			temp = temp._1;
+		}
+	}
+
+	function send(incomingValue)
+	{
+		currentSend(incomingValue);
+	}
+
+	return { send: send };
+}
+
+return {
+	// routers
+	sendToApp: F2(sendToApp),
+	sendToSelf: F2(sendToSelf),
+
+	// global setup
+	effectManagers: effectManagers,
+	outgoingPort: outgoingPort,
+	incomingPort: incomingPort,
+
+	htmlToProgram: htmlToProgram,
+	program: program,
+	programWithFlags: programWithFlags,
+	initialize: initialize,
+
+	// effect bags
+	leaf: leaf,
+	batch: batch,
+	map: F2(map)
+};
+
+}();
+
+//import Native.Utils //
+
+var _elm_lang$core$Native_Scheduler = function() {
+
+var MAX_STEPS = 10000;
+
+
+// TASKS
+
+function succeed(value)
+{
+	return {
+		ctor: '_Task_succeed',
+		value: value
+	};
+}
+
+function fail(error)
+{
+	return {
+		ctor: '_Task_fail',
+		value: error
+	};
+}
+
+function nativeBinding(callback)
+{
+	return {
+		ctor: '_Task_nativeBinding',
+		callback: callback,
+		cancel: null
+	};
+}
+
+function andThen(callback, task)
+{
+	return {
+		ctor: '_Task_andThen',
+		callback: callback,
+		task: task
+	};
+}
+
+function onError(callback, task)
+{
+	return {
+		ctor: '_Task_onError',
+		callback: callback,
+		task: task
+	};
+}
+
+function receive(callback)
+{
+	return {
+		ctor: '_Task_receive',
+		callback: callback
+	};
+}
+
+
+// PROCESSES
+
+function rawSpawn(task)
+{
+	var process = {
+		ctor: '_Process',
+		id: _elm_lang$core$Native_Utils.guid(),
+		root: task,
+		stack: null,
+		mailbox: []
+	};
+
+	enqueue(process);
+
+	return process;
+}
+
+function spawn(task)
+{
+	return nativeBinding(function(callback) {
+		var process = rawSpawn(task);
+		callback(succeed(process));
+	});
+}
+
+function rawSend(process, msg)
+{
+	process.mailbox.push(msg);
+	enqueue(process);
+}
+
+function send(process, msg)
+{
+	return nativeBinding(function(callback) {
+		rawSend(process, msg);
+		callback(succeed(_elm_lang$core$Native_Utils.Tuple0));
+	});
+}
+
+function kill(process)
+{
+	return nativeBinding(function(callback) {
+		var root = process.root;
+		if (root.ctor === '_Task_nativeBinding' && root.cancel)
+		{
+			root.cancel();
+		}
+
+		process.root = null;
+
+		callback(succeed(_elm_lang$core$Native_Utils.Tuple0));
+	});
+}
+
+function sleep(time)
+{
+	return nativeBinding(function(callback) {
+		var id = setTimeout(function() {
+			callback(succeed(_elm_lang$core$Native_Utils.Tuple0));
+		}, time);
+
+		return function() { clearTimeout(id); };
+	});
+}
+
+
+// STEP PROCESSES
+
+function step(numSteps, process)
+{
+	while (numSteps < MAX_STEPS)
+	{
+		var ctor = process.root.ctor;
+
+		if (ctor === '_Task_succeed')
+		{
+			while (process.stack && process.stack.ctor === '_Task_onError')
+			{
+				process.stack = process.stack.rest;
+			}
+			if (process.stack === null)
+			{
+				break;
+			}
+			process.root = process.stack.callback(process.root.value);
+			process.stack = process.stack.rest;
+			++numSteps;
+			continue;
+		}
+
+		if (ctor === '_Task_fail')
+		{
+			while (process.stack && process.stack.ctor === '_Task_andThen')
+			{
+				process.stack = process.stack.rest;
+			}
+			if (process.stack === null)
+			{
+				break;
+			}
+			process.root = process.stack.callback(process.root.value);
+			process.stack = process.stack.rest;
+			++numSteps;
+			continue;
+		}
+
+		if (ctor === '_Task_andThen')
+		{
+			process.stack = {
+				ctor: '_Task_andThen',
+				callback: process.root.callback,
+				rest: process.stack
+			};
+			process.root = process.root.task;
+			++numSteps;
+			continue;
+		}
+
+		if (ctor === '_Task_onError')
+		{
+			process.stack = {
+				ctor: '_Task_onError',
+				callback: process.root.callback,
+				rest: process.stack
+			};
+			process.root = process.root.task;
+			++numSteps;
+			continue;
+		}
+
+		if (ctor === '_Task_nativeBinding')
+		{
+			process.root.cancel = process.root.callback(function(newRoot) {
+				process.root = newRoot;
+				enqueue(process);
+			});
+
+			break;
+		}
+
+		if (ctor === '_Task_receive')
+		{
+			var mailbox = process.mailbox;
+			if (mailbox.length === 0)
+			{
+				break;
+			}
+
+			process.root = process.root.callback(mailbox.shift());
+			++numSteps;
+			continue;
+		}
+
+		throw new Error(ctor);
+	}
+
+	if (numSteps < MAX_STEPS)
+	{
+		return numSteps + 1;
+	}
+	enqueue(process);
+
+	return numSteps;
+}
+
+
+// WORK QUEUE
+
+var working = false;
+var workQueue = [];
+
+function enqueue(process)
+{
+	workQueue.push(process);
+
+	if (!working)
+	{
+		setTimeout(work, 0);
+		working = true;
+	}
+}
+
+function work()
+{
+	var numSteps = 0;
+	var process;
+	while (numSteps < MAX_STEPS && (process = workQueue.shift()))
+	{
+		if (process.root)
+		{
+			numSteps = step(numSteps, process);
+		}
+	}
+	if (!process)
+	{
+		working = false;
+		return;
+	}
+	setTimeout(work, 0);
+}
+
+
+return {
+	succeed: succeed,
+	fail: fail,
+	nativeBinding: nativeBinding,
+	andThen: F2(andThen),
+	onError: F2(onError),
+	receive: receive,
+
+	spawn: spawn,
+	kill: kill,
+	sleep: sleep,
+	send: F2(send),
+
+	rawSpawn: rawSpawn,
+	rawSend: rawSend
+};
+
+}();
+var _elm_lang$core$Platform_Cmd$batch = _elm_lang$core$Native_Platform.batch;
+var _elm_lang$core$Platform_Cmd$none = _elm_lang$core$Platform_Cmd$batch(
+	{ctor: '[]'});
+var _elm_lang$core$Platform_Cmd_ops = _elm_lang$core$Platform_Cmd_ops || {};
+_elm_lang$core$Platform_Cmd_ops['!'] = F2(
+	function (model, commands) {
+		return {
+			ctor: '_Tuple2',
+			_0: model,
+			_1: _elm_lang$core$Platform_Cmd$batch(commands)
+		};
+	});
+var _elm_lang$core$Platform_Cmd$map = _elm_lang$core$Native_Platform.map;
+var _elm_lang$core$Platform_Cmd$Cmd = {ctor: 'Cmd'};
+
+var _elm_lang$core$Platform_Sub$batch = _elm_lang$core$Native_Platform.batch;
+var _elm_lang$core$Platform_Sub$none = _elm_lang$core$Platform_Sub$batch(
+	{ctor: '[]'});
+var _elm_lang$core$Platform_Sub$map = _elm_lang$core$Native_Platform.map;
+var _elm_lang$core$Platform_Sub$Sub = {ctor: 'Sub'};
+
+var _elm_lang$core$Platform$hack = _elm_lang$core$Native_Scheduler.succeed;
+var _elm_lang$core$Platform$sendToSelf = _elm_lang$core$Native_Platform.sendToSelf;
+var _elm_lang$core$Platform$sendToApp = _elm_lang$core$Native_Platform.sendToApp;
+var _elm_lang$core$Platform$programWithFlags = _elm_lang$core$Native_Platform.programWithFlags;
+var _elm_lang$core$Platform$program = _elm_lang$core$Native_Platform.program;
+var _elm_lang$core$Platform$Program = {ctor: 'Program'};
+var _elm_lang$core$Platform$Task = {ctor: 'Task'};
+var _elm_lang$core$Platform$ProcessId = {ctor: 'ProcessId'};
+var _elm_lang$core$Platform$Router = {ctor: 'Router'};
+
+var _elm_community$intdict$IntDict$combineBits = F3(
+	function (a, b, mask) {
+		return (a & (~mask)) | (b & mask);
+	});
+var _elm_community$intdict$IntDict$foldr = F3(
+	function (f, acc, dict) {
+		foldr:
+		while (true) {
+			var _p0 = dict;
+			switch (_p0.ctor) {
+				case 'Empty':
+					return acc;
+				case 'Leaf':
+					var _p1 = _p0._0;
+					return A3(f, _p1.key, _p1.value, acc);
+				default:
+					var _p2 = _p0._0;
+					var _v1 = f,
+						_v2 = A3(_elm_community$intdict$IntDict$foldr, f, acc, _p2.right),
+						_v3 = _p2.left;
+					f = _v1;
+					acc = _v2;
+					dict = _v3;
+					continue foldr;
+			}
+		}
+	});
+var _elm_community$intdict$IntDict$keys = function (dict) {
+	return A3(
+		_elm_community$intdict$IntDict$foldr,
+		F3(
+			function (key, value, keyList) {
+				return {ctor: '::', _0: key, _1: keyList};
+			}),
+		{ctor: '[]'},
+		dict);
+};
+var _elm_community$intdict$IntDict$values = function (dict) {
+	return A3(
+		_elm_community$intdict$IntDict$foldr,
+		F3(
+			function (key, value, valueList) {
+				return {ctor: '::', _0: value, _1: valueList};
+			}),
+		{ctor: '[]'},
+		dict);
+};
+var _elm_community$intdict$IntDict$toList = function (dict) {
+	return A3(
+		_elm_community$intdict$IntDict$foldr,
+		F3(
+			function (key, value, list) {
+				return {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: key, _1: value},
+					_1: list
+				};
+			}),
+		{ctor: '[]'},
+		dict);
+};
+var _elm_community$intdict$IntDict$toString = function (dict) {
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		'IntDict.fromList ',
+		_elm_lang$core$Basics$toString(
+			_elm_community$intdict$IntDict$toList(dict)));
+};
+var _elm_community$intdict$IntDict$foldl = F3(
+	function (f, acc, dict) {
+		foldl:
+		while (true) {
+			var _p3 = dict;
+			switch (_p3.ctor) {
+				case 'Empty':
+					return acc;
+				case 'Leaf':
+					var _p4 = _p3._0;
+					return A3(f, _p4.key, _p4.value, acc);
+				default:
+					var _p5 = _p3._0;
+					var _v5 = f,
+						_v6 = A3(_elm_community$intdict$IntDict$foldl, f, acc, _p5.left),
+						_v7 = _p5.right;
+					f = _v5;
+					acc = _v6;
+					dict = _v7;
+					continue foldl;
+			}
+		}
+	});
+var _elm_community$intdict$IntDict$findMax = function (dict) {
+	findMax:
+	while (true) {
+		var _p6 = dict;
+		switch (_p6.ctor) {
+			case 'Empty':
+				return _elm_lang$core$Maybe$Nothing;
+			case 'Leaf':
+				var _p7 = _p6._0;
+				return _elm_lang$core$Maybe$Just(
+					{ctor: '_Tuple2', _0: _p7.key, _1: _p7.value});
+			default:
+				var _v9 = _p6._0.right;
+				dict = _v9;
+				continue findMax;
+		}
+	}
+};
+var _elm_community$intdict$IntDict$findMin = function (dict) {
+	findMin:
+	while (true) {
+		var _p8 = dict;
+		switch (_p8.ctor) {
+			case 'Empty':
+				return _elm_lang$core$Maybe$Nothing;
+			case 'Leaf':
+				var _p9 = _p8._0;
+				return _elm_lang$core$Maybe$Just(
+					{ctor: '_Tuple2', _0: _p9.key, _1: _p9.value});
+			default:
+				var _v11 = _p8._0.left;
+				dict = _v11;
+				continue findMin;
+		}
+	}
+};
+var _elm_community$intdict$IntDict$size = function (dict) {
+	var _p10 = dict;
+	switch (_p10.ctor) {
+		case 'Empty':
+			return 0;
+		case 'Leaf':
+			return 1;
+		default:
+			return _p10._0.size;
+	}
+};
+var _elm_community$intdict$IntDict$isEmpty = function (dict) {
+	var _p11 = dict;
+	if (_p11.ctor === 'Empty') {
+		return true;
+	} else {
+		return false;
+	}
+};
+var _elm_community$intdict$IntDict$highestBitSet = function (n) {
+	var shiftOr = F2(
+		function (i, shift) {
+			return i | (i >>> shift);
+		});
+	var n1 = A2(shiftOr, n, 1);
+	var n2 = A2(shiftOr, n1, 2);
+	var n3 = A2(shiftOr, n2, 4);
+	var n4 = A2(shiftOr, n3, 8);
+	var n5 = A2(shiftOr, n4, 16);
+	return n5 & (~(n5 >>> 1));
+};
+var _elm_community$intdict$IntDict$signBit = _elm_community$intdict$IntDict$highestBitSet(-1);
+var _elm_community$intdict$IntDict$isBranchingBitSet = function (p) {
+	return function (_p12) {
+		return A2(
+			F2(
+				function (x, y) {
+					return !_elm_lang$core$Native_Utils.eq(x, y);
+				}),
+			0,
+			p.branchingBit & (_elm_community$intdict$IntDict$signBit ^ _p12));
+	};
+};
+var _elm_community$intdict$IntDict$higherBitMask = function (branchingBit) {
+	return ~((branchingBit * 2) - 1);
+};
+var _elm_community$intdict$IntDict$prefixMatches = F2(
+	function (p, n) {
+		return _elm_lang$core$Native_Utils.eq(
+			n & _elm_community$intdict$IntDict$higherBitMask(p.branchingBit),
+			p.prefixBits);
+	});
+var _elm_community$intdict$IntDict$get = F2(
+	function (key, dict) {
+		get:
+		while (true) {
+			var _p13 = dict;
+			switch (_p13.ctor) {
+				case 'Empty':
+					return _elm_lang$core$Maybe$Nothing;
+				case 'Leaf':
+					var _p14 = _p13._0;
+					return _elm_lang$core$Native_Utils.eq(_p14.key, key) ? _elm_lang$core$Maybe$Just(_p14.value) : _elm_lang$core$Maybe$Nothing;
+				default:
+					var _p15 = _p13._0;
+					if (!A2(_elm_community$intdict$IntDict$prefixMatches, _p15.prefix, key)) {
+						return _elm_lang$core$Maybe$Nothing;
+					} else {
+						if (A2(_elm_community$intdict$IntDict$isBranchingBitSet, _p15.prefix, key)) {
+							var _v15 = key,
+								_v16 = _p15.right;
+							key = _v15;
+							dict = _v16;
+							continue get;
+						} else {
+							var _v17 = key,
+								_v18 = _p15.left;
+							key = _v17;
+							dict = _v18;
+							continue get;
+						}
+					}
+			}
+		}
+	});
+var _elm_community$intdict$IntDict$member = F2(
+	function (key, dict) {
+		var _p16 = A2(_elm_community$intdict$IntDict$get, key, dict);
+		if (_p16.ctor === 'Just') {
+			return true;
+		} else {
+			return false;
+		}
+	});
+var _elm_community$intdict$IntDict$lcp = F2(
+	function (x, y) {
+		var diff = x ^ y;
+		var branchingBit = _elm_community$intdict$IntDict$highestBitSet(diff);
+		var mask = _elm_community$intdict$IntDict$higherBitMask(branchingBit);
+		var prefixBits = x & mask;
+		return {prefixBits: prefixBits, branchingBit: branchingBit};
+	});
+var _elm_community$intdict$IntDict$isValidKey = function (k) {
+	return _elm_lang$core$Native_Utils.eq(k | 0, k);
+};
+var _elm_community$intdict$IntDict$KeyPrefix = F2(
+	function (a, b) {
+		return {prefixBits: a, branchingBit: b};
+	});
+var _elm_community$intdict$IntDict$InnerType = F4(
+	function (a, b, c, d) {
+		return {prefix: a, left: b, right: c, size: d};
+	});
+var _elm_community$intdict$IntDict$Inner = function (a) {
+	return {ctor: 'Inner', _0: a};
+};
+var _elm_community$intdict$IntDict$inner = F3(
+	function (p, l, r) {
+		var _p17 = {ctor: '_Tuple2', _0: l, _1: r};
+		if (_p17._0.ctor === 'Empty') {
+			return r;
+		} else {
+			if (_p17._1.ctor === 'Empty') {
+				return l;
+			} else {
+				return _elm_community$intdict$IntDict$Inner(
+					{
+						prefix: p,
+						left: l,
+						right: r,
+						size: _elm_community$intdict$IntDict$size(l) + _elm_community$intdict$IntDict$size(r)
+					});
+			}
+		}
+	});
+var _elm_community$intdict$IntDict$Leaf = function (a) {
+	return {ctor: 'Leaf', _0: a};
+};
+var _elm_community$intdict$IntDict$leaf = F2(
+	function (k, v) {
+		return _elm_community$intdict$IntDict$Leaf(
+			{key: k, value: v});
+	});
+var _elm_community$intdict$IntDict$singleton = F2(
+	function (key, value) {
+		return A2(_elm_community$intdict$IntDict$leaf, key, value);
+	});
+var _elm_community$intdict$IntDict$Empty = {ctor: 'Empty'};
+var _elm_community$intdict$IntDict$empty = _elm_community$intdict$IntDict$Empty;
+var _elm_community$intdict$IntDict$update = F3(
+	function (key, alter, dict) {
+		var join = F2(
+			function (_p19, _p18) {
+				var _p20 = _p19;
+				var _p24 = _p20._1;
+				var _p21 = _p18;
+				var _p23 = _p21._1;
+				var _p22 = _p21._0;
+				var prefix = A2(_elm_community$intdict$IntDict$lcp, _p20._0, _p22);
+				return A2(_elm_community$intdict$IntDict$isBranchingBitSet, prefix, _p22) ? A3(_elm_community$intdict$IntDict$inner, prefix, _p24, _p23) : A3(_elm_community$intdict$IntDict$inner, prefix, _p23, _p24);
+			});
+		var alteredNode = function (mv) {
+			var _p25 = alter(mv);
+			if (_p25.ctor === 'Just') {
+				return A2(_elm_community$intdict$IntDict$leaf, key, _p25._0);
+			} else {
+				return _elm_community$intdict$IntDict$empty;
+			}
+		};
+		var _p26 = dict;
+		switch (_p26.ctor) {
+			case 'Empty':
+				return alteredNode(_elm_lang$core$Maybe$Nothing);
+			case 'Leaf':
+				var _p27 = _p26._0;
+				return _elm_lang$core$Native_Utils.eq(_p27.key, key) ? alteredNode(
+					_elm_lang$core$Maybe$Just(_p27.value)) : A2(
+					join,
+					{
+						ctor: '_Tuple2',
+						_0: key,
+						_1: alteredNode(_elm_lang$core$Maybe$Nothing)
+					},
+					{ctor: '_Tuple2', _0: _p27.key, _1: dict});
+			default:
+				var _p28 = _p26._0;
+				return A2(_elm_community$intdict$IntDict$prefixMatches, _p28.prefix, key) ? (A2(_elm_community$intdict$IntDict$isBranchingBitSet, _p28.prefix, key) ? A3(
+					_elm_community$intdict$IntDict$inner,
+					_p28.prefix,
+					_p28.left,
+					A3(_elm_community$intdict$IntDict$update, key, alter, _p28.right)) : A3(
+					_elm_community$intdict$IntDict$inner,
+					_p28.prefix,
+					A3(_elm_community$intdict$IntDict$update, key, alter, _p28.left),
+					_p28.right)) : A2(
+					join,
+					{
+						ctor: '_Tuple2',
+						_0: key,
+						_1: alteredNode(_elm_lang$core$Maybe$Nothing)
+					},
+					{ctor: '_Tuple2', _0: _p28.prefix.prefixBits, _1: dict});
+		}
+	});
+var _elm_community$intdict$IntDict$insert = F3(
+	function (key, value, dict) {
+		return A3(
+			_elm_community$intdict$IntDict$update,
+			key,
+			_elm_lang$core$Basics$always(
+				_elm_lang$core$Maybe$Just(value)),
+			dict);
+	});
+var _elm_community$intdict$IntDict$remove = F2(
+	function (key, dict) {
+		return A3(
+			_elm_community$intdict$IntDict$update,
+			key,
+			_elm_lang$core$Basics$always(_elm_lang$core$Maybe$Nothing),
+			dict);
+	});
+var _elm_community$intdict$IntDict$filter = F2(
+	function (predicate, dict) {
+		var add = F3(
+			function (k, v, d) {
+				return A2(predicate, k, v) ? A3(_elm_community$intdict$IntDict$insert, k, v, d) : d;
+			});
+		return A3(_elm_community$intdict$IntDict$foldl, add, _elm_community$intdict$IntDict$empty, dict);
+	});
+var _elm_community$intdict$IntDict$map = F2(
+	function (f, dict) {
+		var _p29 = dict;
+		switch (_p29.ctor) {
+			case 'Empty':
+				return _elm_community$intdict$IntDict$empty;
+			case 'Leaf':
+				var _p30 = _p29._0;
+				return A2(
+					_elm_community$intdict$IntDict$leaf,
+					_p30.key,
+					A2(f, _p30.key, _p30.value));
+			default:
+				var _p31 = _p29._0;
+				return A3(
+					_elm_community$intdict$IntDict$inner,
+					_p31.prefix,
+					A2(_elm_community$intdict$IntDict$map, f, _p31.left),
+					A2(_elm_community$intdict$IntDict$map, f, _p31.right));
+		}
+	});
+var _elm_community$intdict$IntDict$partition = F2(
+	function (predicate, dict) {
+		var add = F3(
+			function (key, value, _p32) {
+				var _p33 = _p32;
+				var _p35 = _p33._1;
+				var _p34 = _p33._0;
+				return A2(predicate, key, value) ? {
+					ctor: '_Tuple2',
+					_0: A3(_elm_community$intdict$IntDict$insert, key, value, _p34),
+					_1: _p35
+				} : {
+					ctor: '_Tuple2',
+					_0: _p34,
+					_1: A3(_elm_community$intdict$IntDict$insert, key, value, _p35)
+				};
+			});
+		return A3(
+			_elm_community$intdict$IntDict$foldl,
+			add,
+			{ctor: '_Tuple2', _0: _elm_community$intdict$IntDict$empty, _1: _elm_community$intdict$IntDict$empty},
+			dict);
+	});
+var _elm_community$intdict$IntDict$fromList = function (pairs) {
+	return A3(
+		_elm_lang$core$List$foldl,
+		_elm_lang$core$Basics$uncurry(_elm_community$intdict$IntDict$insert),
+		_elm_community$intdict$IntDict$empty,
+		pairs);
+};
+var _elm_community$intdict$IntDict$Right = {ctor: 'Right'};
+var _elm_community$intdict$IntDict$Left = {ctor: 'Left'};
+var _elm_community$intdict$IntDict$Disjunct = F2(
+	function (a, b) {
+		return {ctor: 'Disjunct', _0: a, _1: b};
+	});
+var _elm_community$intdict$IntDict$Parent = F2(
+	function (a, b) {
+		return {ctor: 'Parent', _0: a, _1: b};
+	});
+var _elm_community$intdict$IntDict$SamePrefix = {ctor: 'SamePrefix'};
+var _elm_community$intdict$IntDict$determineBranchRelation = F2(
+	function (l, r) {
+		var childEdge = F2(
+			function (prefix, c) {
+				return A2(_elm_community$intdict$IntDict$isBranchingBitSet, prefix, c.prefix.prefixBits) ? _elm_community$intdict$IntDict$Right : _elm_community$intdict$IntDict$Left;
+			});
+		var rp = r.prefix;
+		var lp = l.prefix;
+		var mask = _elm_community$intdict$IntDict$highestBitSet(
+			A2(_elm_lang$core$Basics$max, lp.branchingBit, rp.branchingBit));
+		var modifiedRightPrefix = A3(_elm_community$intdict$IntDict$combineBits, rp.prefixBits, ~lp.prefixBits, mask);
+		var prefix = A2(_elm_community$intdict$IntDict$lcp, lp.prefixBits, modifiedRightPrefix);
+		return _elm_lang$core$Native_Utils.eq(lp, rp) ? _elm_community$intdict$IntDict$SamePrefix : (_elm_lang$core$Native_Utils.eq(prefix, lp) ? A2(
+			_elm_community$intdict$IntDict$Parent,
+			_elm_community$intdict$IntDict$Left,
+			A2(childEdge, l.prefix, r)) : (_elm_lang$core$Native_Utils.eq(prefix, rp) ? A2(
+			_elm_community$intdict$IntDict$Parent,
+			_elm_community$intdict$IntDict$Right,
+			A2(childEdge, r.prefix, l)) : A2(
+			_elm_community$intdict$IntDict$Disjunct,
+			prefix,
+			A2(childEdge, prefix, l))));
+	});
+var _elm_community$intdict$IntDict$uniteWith = F3(
+	function (merger, l, r) {
+		var mergeWith = F3(
+			function (key, left, right) {
+				var _p36 = {ctor: '_Tuple2', _0: left, _1: right};
+				if (_p36._0.ctor === 'Just') {
+					if (_p36._1.ctor === 'Just') {
+						return _elm_lang$core$Maybe$Just(
+							A3(merger, key, _p36._0._0, _p36._1._0));
+					} else {
+						return left;
+					}
+				} else {
+					if (_p36._1.ctor === 'Just') {
+						return right;
+					} else {
+						return _elm_lang$core$Native_Utils.crashCase(
+							'IntDict',
+							{
+								start: {line: 427, column: 7},
+								end: {line: 432, column: 144}
+							},
+							_p36)('IntDict.uniteWith: mergeWith was called with 2 Nothings. This is a bug in the implementation, please file a bug report!');
+					}
+				}
+			});
+		var _p38 = {ctor: '_Tuple2', _0: l, _1: r};
+		_v28_2:
+		do {
+			_v28_1:
+			do {
+				switch (_p38._0.ctor) {
+					case 'Empty':
+						return r;
+					case 'Leaf':
+						switch (_p38._1.ctor) {
+							case 'Empty':
+								break _v28_1;
+							case 'Leaf':
+								break _v28_2;
+							default:
+								break _v28_2;
+						}
+					default:
+						switch (_p38._1.ctor) {
+							case 'Empty':
+								break _v28_1;
+							case 'Leaf':
+								var _p40 = _p38._1._0;
+								return A3(
+									_elm_community$intdict$IntDict$update,
+									_p40.key,
+									function (l_) {
+										return A3(
+											mergeWith,
+											_p40.key,
+											l_,
+											_elm_lang$core$Maybe$Just(_p40.value));
+									},
+									l);
+							default:
+								var _p43 = _p38._1._0;
+								var _p42 = _p38._0._0;
+								var _p41 = A2(_elm_community$intdict$IntDict$determineBranchRelation, _p42, _p43);
+								switch (_p41.ctor) {
+									case 'SamePrefix':
+										return A3(
+											_elm_community$intdict$IntDict$inner,
+											_p42.prefix,
+											A3(_elm_community$intdict$IntDict$uniteWith, merger, _p42.left, _p43.left),
+											A3(_elm_community$intdict$IntDict$uniteWith, merger, _p42.right, _p43.right));
+									case 'Parent':
+										if (_p41._0.ctor === 'Left') {
+											if (_p41._1.ctor === 'Right') {
+												return A3(
+													_elm_community$intdict$IntDict$inner,
+													_p42.prefix,
+													_p42.left,
+													A3(_elm_community$intdict$IntDict$uniteWith, merger, _p42.right, r));
+											} else {
+												return A3(
+													_elm_community$intdict$IntDict$inner,
+													_p42.prefix,
+													A3(_elm_community$intdict$IntDict$uniteWith, merger, _p42.left, r),
+													_p42.right);
+											}
+										} else {
+											if (_p41._1.ctor === 'Right') {
+												return A3(
+													_elm_community$intdict$IntDict$inner,
+													_p43.prefix,
+													_p43.left,
+													A3(_elm_community$intdict$IntDict$uniteWith, merger, l, _p43.right));
+											} else {
+												return A3(
+													_elm_community$intdict$IntDict$inner,
+													_p43.prefix,
+													A3(_elm_community$intdict$IntDict$uniteWith, merger, l, _p43.left),
+													_p43.right);
+											}
+										}
+									default:
+										if (_p41._1.ctor === 'Left') {
+											return A3(_elm_community$intdict$IntDict$inner, _p41._0, l, r);
+										} else {
+											return A3(_elm_community$intdict$IntDict$inner, _p41._0, r, l);
+										}
+								}
+						}
+				}
+			} while(false);
+			return l;
+		} while(false);
+		var _p39 = _p38._0._0;
+		return A3(
+			_elm_community$intdict$IntDict$update,
+			_p39.key,
+			function (r_) {
+				return A3(
+					mergeWith,
+					_p39.key,
+					_elm_lang$core$Maybe$Just(_p39.value),
+					r_);
+			},
+			r);
+	});
+var _elm_community$intdict$IntDict$union = _elm_community$intdict$IntDict$uniteWith(
+	F3(
+		function (key, old, $new) {
+			return old;
+		}));
+var _elm_community$intdict$IntDict$intersect = F2(
+	function (l, r) {
+		intersect:
+		while (true) {
+			var _p44 = {ctor: '_Tuple2', _0: l, _1: r};
+			_v30_2:
+			do {
+				_v30_1:
+				do {
+					switch (_p44._0.ctor) {
+						case 'Empty':
+							return _elm_community$intdict$IntDict$Empty;
+						case 'Leaf':
+							switch (_p44._1.ctor) {
+								case 'Empty':
+									break _v30_1;
+								case 'Leaf':
+									break _v30_2;
+								default:
+									break _v30_2;
+							}
+						default:
+							switch (_p44._1.ctor) {
+								case 'Empty':
+									break _v30_1;
+								case 'Leaf':
+									var _p46 = _p44._1._0;
+									var _p45 = A2(_elm_community$intdict$IntDict$get, _p46.key, l);
+									if (_p45.ctor === 'Just') {
+										return A2(_elm_community$intdict$IntDict$leaf, _p46.key, _p45._0);
+									} else {
+										return _elm_community$intdict$IntDict$Empty;
+									}
+								default:
+									var _p49 = _p44._1._0;
+									var _p48 = _p44._0._0;
+									var _p47 = A2(_elm_community$intdict$IntDict$determineBranchRelation, _p48, _p49);
+									switch (_p47.ctor) {
+										case 'SamePrefix':
+											return A3(
+												_elm_community$intdict$IntDict$inner,
+												_p48.prefix,
+												A2(_elm_community$intdict$IntDict$intersect, _p48.left, _p49.left),
+												A2(_elm_community$intdict$IntDict$intersect, _p48.right, _p49.right));
+										case 'Parent':
+											if (_p47._0.ctor === 'Left') {
+												if (_p47._1.ctor === 'Right') {
+													var _v33 = _p48.right,
+														_v34 = r;
+													l = _v33;
+													r = _v34;
+													continue intersect;
+												} else {
+													var _v35 = _p48.left,
+														_v36 = r;
+													l = _v35;
+													r = _v36;
+													continue intersect;
+												}
+											} else {
+												if (_p47._1.ctor === 'Right') {
+													var _v37 = l,
+														_v38 = _p49.right;
+													l = _v37;
+													r = _v38;
+													continue intersect;
+												} else {
+													var _v39 = l,
+														_v40 = _p49.left;
+													l = _v39;
+													r = _v40;
+													continue intersect;
+												}
+											}
+										default:
+											return _elm_community$intdict$IntDict$Empty;
+									}
+							}
+					}
+				} while(false);
+				return _elm_community$intdict$IntDict$Empty;
+			} while(false);
+			return A2(_elm_community$intdict$IntDict$member, _p44._0._0.key, r) ? l : _elm_community$intdict$IntDict$Empty;
+		}
+	});
+var _elm_community$intdict$IntDict$diff = F2(
+	function (l, r) {
+		diff:
+		while (true) {
+			var _p50 = {ctor: '_Tuple2', _0: l, _1: r};
+			_v41_2:
+			do {
+				_v41_1:
+				do {
+					switch (_p50._0.ctor) {
+						case 'Empty':
+							return _elm_community$intdict$IntDict$Empty;
+						case 'Leaf':
+							switch (_p50._1.ctor) {
+								case 'Empty':
+									break _v41_1;
+								case 'Leaf':
+									break _v41_2;
+								default:
+									break _v41_2;
+							}
+						default:
+							switch (_p50._1.ctor) {
+								case 'Empty':
+									break _v41_1;
+								case 'Leaf':
+									return A2(_elm_community$intdict$IntDict$remove, _p50._1._0.key, l);
+								default:
+									var _p53 = _p50._1._0;
+									var _p52 = _p50._0._0;
+									var _p51 = A2(_elm_community$intdict$IntDict$determineBranchRelation, _p52, _p53);
+									switch (_p51.ctor) {
+										case 'SamePrefix':
+											return A3(
+												_elm_community$intdict$IntDict$inner,
+												_p52.prefix,
+												A2(_elm_community$intdict$IntDict$diff, _p52.left, _p53.left),
+												A2(_elm_community$intdict$IntDict$diff, _p52.right, _p53.right));
+										case 'Parent':
+											if (_p51._0.ctor === 'Left') {
+												if (_p51._1.ctor === 'Left') {
+													return A3(
+														_elm_community$intdict$IntDict$inner,
+														_p52.prefix,
+														A2(_elm_community$intdict$IntDict$diff, _p52.left, r),
+														_p52.right);
+												} else {
+													return A3(
+														_elm_community$intdict$IntDict$inner,
+														_p52.prefix,
+														_p52.left,
+														A2(_elm_community$intdict$IntDict$diff, _p52.right, r));
+												}
+											} else {
+												if (_p51._1.ctor === 'Left') {
+													var _v43 = l,
+														_v44 = _p53.left;
+													l = _v43;
+													r = _v44;
+													continue diff;
+												} else {
+													var _v45 = l,
+														_v46 = _p53.right;
+													l = _v45;
+													r = _v46;
+													continue diff;
+												}
+											}
+										default:
+											return l;
+									}
+							}
+					}
+				} while(false);
+				return l;
+			} while(false);
+			return A2(_elm_community$intdict$IntDict$member, _p50._0._0.key, r) ? _elm_community$intdict$IntDict$Empty : l;
+		}
+	});
+var _elm_community$intdict$IntDict$merge = F6(
+	function (left, both, right, l, r, acc) {
+		var m = A3(_elm_community$intdict$IntDict$merge, left, both, right);
+		var _p54 = {ctor: '_Tuple2', _0: l, _1: r};
+		_v47_2:
+		do {
+			_v47_1:
+			do {
+				switch (_p54._0.ctor) {
+					case 'Empty':
+						return A3(_elm_community$intdict$IntDict$foldl, right, acc, r);
+					case 'Leaf':
+						switch (_p54._1.ctor) {
+							case 'Empty':
+								break _v47_1;
+							case 'Leaf':
+								break _v47_2;
+							default:
+								break _v47_2;
+						}
+					default:
+						switch (_p54._1.ctor) {
+							case 'Empty':
+								break _v47_1;
+							case 'Leaf':
+								var _p58 = _p54._1._0;
+								var _p57 = A2(_elm_community$intdict$IntDict$get, _p58.key, l);
+								if (_p57.ctor === 'Nothing') {
+									return A3(
+										m,
+										l,
+										_elm_community$intdict$IntDict$Empty,
+										A3(right, _p58.key, _p58.value, acc));
+								} else {
+									return A3(
+										m,
+										A2(_elm_community$intdict$IntDict$remove, _p58.key, l),
+										_elm_community$intdict$IntDict$Empty,
+										A4(both, _p58.key, _p57._0, _p58.value, acc));
+								}
+							default:
+								var _p61 = _p54._1._0;
+								var _p60 = _p54._0._0;
+								var _p59 = A2(_elm_community$intdict$IntDict$determineBranchRelation, _p60, _p61);
+								switch (_p59.ctor) {
+									case 'SamePrefix':
+										return A3(
+											m,
+											_p60.right,
+											_p61.right,
+											A3(m, _p60.left, _p61.left, acc));
+									case 'Parent':
+										if (_p59._0.ctor === 'Left') {
+											if (_p59._1.ctor === 'Left') {
+												return A3(
+													m,
+													_p60.right,
+													_elm_community$intdict$IntDict$Empty,
+													A3(m, _p60.left, r, acc));
+											} else {
+												return A3(
+													m,
+													_p60.right,
+													r,
+													A3(m, _p60.left, _elm_community$intdict$IntDict$Empty, acc));
+											}
+										} else {
+											if (_p59._1.ctor === 'Left') {
+												return A3(
+													m,
+													_elm_community$intdict$IntDict$Empty,
+													_p61.right,
+													A3(m, l, _p61.left, acc));
+											} else {
+												return A3(
+													m,
+													l,
+													_p61.right,
+													A3(m, _elm_community$intdict$IntDict$Empty, _p61.left, acc));
+											}
+										}
+									default:
+										if (_p59._1.ctor === 'Left') {
+											return A3(
+												m,
+												_elm_community$intdict$IntDict$Empty,
+												r,
+												A3(m, l, _elm_community$intdict$IntDict$Empty, acc));
+										} else {
+											return A3(
+												m,
+												l,
+												_elm_community$intdict$IntDict$Empty,
+												A3(m, _elm_community$intdict$IntDict$Empty, r, acc));
+										}
+								}
+						}
+				}
+			} while(false);
+			return A3(_elm_community$intdict$IntDict$foldl, left, acc, l);
+		} while(false);
+		var _p56 = _p54._0._0;
+		var _p55 = A2(_elm_community$intdict$IntDict$get, _p56.key, r);
+		if (_p55.ctor === 'Nothing') {
+			return A3(
+				m,
+				_elm_community$intdict$IntDict$Empty,
+				r,
+				A3(left, _p56.key, _p56.value, acc));
+		} else {
+			return A3(
+				m,
+				_elm_community$intdict$IntDict$Empty,
+				A2(_elm_community$intdict$IntDict$remove, _p56.key, r),
+				A4(both, _p56.key, _p56.value, _p55._0, acc));
+		}
+	});
+
+var _elm_community$intdict$IntDict_Safe$InvalidKey = {ctor: 'InvalidKey'};
+var _elm_community$intdict$IntDict_Safe$safeWrapper = F2(
+	function (k, f) {
+		return (!_elm_community$intdict$IntDict$isValidKey(k)) ? _elm_lang$core$Result$Err(_elm_community$intdict$IntDict_Safe$InvalidKey) : _elm_lang$core$Result$Ok(
+			f(
+				{ctor: '_Tuple0'}));
+	});
+var _elm_community$intdict$IntDict_Safe$safeInsert = F3(
+	function (k, v, dict) {
+		return A2(
+			_elm_community$intdict$IntDict_Safe$safeWrapper,
+			k,
+			function (_p0) {
+				var _p1 = _p0;
+				return A3(_elm_community$intdict$IntDict$insert, k, v, dict);
+			});
+	});
+var _elm_community$intdict$IntDict_Safe$safeRemove = F2(
+	function (k, dict) {
+		return A2(
+			_elm_community$intdict$IntDict_Safe$safeWrapper,
+			k,
+			function (_p2) {
+				var _p3 = _p2;
+				return A2(_elm_community$intdict$IntDict$remove, k, dict);
+			});
+	});
+var _elm_community$intdict$IntDict_Safe$safeUpdate = F3(
+	function (k, alter, dict) {
+		return A2(
+			_elm_community$intdict$IntDict_Safe$safeWrapper,
+			k,
+			function (_p4) {
+				var _p5 = _p4;
+				return A3(_elm_community$intdict$IntDict$update, k, alter, dict);
+			});
+	});
+var _elm_community$intdict$IntDict_Safe$safeGet = F2(
+	function (k, dict) {
+		return A2(
+			_elm_community$intdict$IntDict_Safe$safeWrapper,
+			k,
+			function (_p6) {
+				var _p7 = _p6;
+				return A2(_elm_community$intdict$IntDict$get, k, dict);
+			});
+	});
+var _elm_community$intdict$IntDict_Safe$safeMember = F2(
+	function (k, dict) {
+		return A2(
+			_elm_community$intdict$IntDict_Safe$safeWrapper,
+			k,
+			function (_p8) {
+				var _p9 = _p8;
+				return A2(_elm_community$intdict$IntDict$member, k, dict);
+			});
+	});
+
 
 /*
  * Copyright (c) 2010 Mozilla Corporation
@@ -1920,3030 +5878,6 @@ var _elm_community$linear_algebra$Native_MJS = function() {
     };
 
 }();
-
-//import Native.Utils //
-
-var _elm_lang$core$Native_Basics = function() {
-
-function div(a, b)
-{
-	return (a / b) | 0;
-}
-function rem(a, b)
-{
-	return a % b;
-}
-function mod(a, b)
-{
-	if (b === 0)
-	{
-		throw new Error('Cannot perform mod 0. Division by zero error.');
-	}
-	var r = a % b;
-	var m = a === 0 ? 0 : (b > 0 ? (a >= 0 ? r : r + b) : -mod(-a, -b));
-
-	return m === b ? 0 : m;
-}
-function logBase(base, n)
-{
-	return Math.log(n) / Math.log(base);
-}
-function negate(n)
-{
-	return -n;
-}
-function abs(n)
-{
-	return n < 0 ? -n : n;
-}
-
-function min(a, b)
-{
-	return _elm_lang$core$Native_Utils.cmp(a, b) < 0 ? a : b;
-}
-function max(a, b)
-{
-	return _elm_lang$core$Native_Utils.cmp(a, b) > 0 ? a : b;
-}
-function clamp(lo, hi, n)
-{
-	return _elm_lang$core$Native_Utils.cmp(n, lo) < 0
-		? lo
-		: _elm_lang$core$Native_Utils.cmp(n, hi) > 0
-			? hi
-			: n;
-}
-
-var ord = ['LT', 'EQ', 'GT'];
-
-function compare(x, y)
-{
-	return { ctor: ord[_elm_lang$core$Native_Utils.cmp(x, y) + 1] };
-}
-
-function xor(a, b)
-{
-	return a !== b;
-}
-function not(b)
-{
-	return !b;
-}
-function isInfinite(n)
-{
-	return n === Infinity || n === -Infinity;
-}
-
-function truncate(n)
-{
-	return n | 0;
-}
-
-function degrees(d)
-{
-	return d * Math.PI / 180;
-}
-function turns(t)
-{
-	return 2 * Math.PI * t;
-}
-function fromPolar(point)
-{
-	var r = point._0;
-	var t = point._1;
-	return _elm_lang$core$Native_Utils.Tuple2(r * Math.cos(t), r * Math.sin(t));
-}
-function toPolar(point)
-{
-	var x = point._0;
-	var y = point._1;
-	return _elm_lang$core$Native_Utils.Tuple2(Math.sqrt(x * x + y * y), Math.atan2(y, x));
-}
-
-return {
-	div: F2(div),
-	rem: F2(rem),
-	mod: F2(mod),
-
-	pi: Math.PI,
-	e: Math.E,
-	cos: Math.cos,
-	sin: Math.sin,
-	tan: Math.tan,
-	acos: Math.acos,
-	asin: Math.asin,
-	atan: Math.atan,
-	atan2: F2(Math.atan2),
-
-	degrees: degrees,
-	turns: turns,
-	fromPolar: fromPolar,
-	toPolar: toPolar,
-
-	sqrt: Math.sqrt,
-	logBase: F2(logBase),
-	negate: negate,
-	abs: abs,
-	min: F2(min),
-	max: F2(max),
-	clamp: F3(clamp),
-	compare: F2(compare),
-
-	xor: F2(xor),
-	not: not,
-
-	truncate: truncate,
-	ceiling: Math.ceil,
-	floor: Math.floor,
-	round: Math.round,
-	toFloat: function(x) { return x; },
-	isNaN: isNaN,
-	isInfinite: isInfinite
-};
-
-}();
-//import //
-
-var _elm_lang$core$Native_Utils = function() {
-
-// COMPARISONS
-
-function eq(x, y)
-{
-	var stack = [];
-	var isEqual = eqHelp(x, y, 0, stack);
-	var pair;
-	while (isEqual && (pair = stack.pop()))
-	{
-		isEqual = eqHelp(pair.x, pair.y, 0, stack);
-	}
-	return isEqual;
-}
-
-
-function eqHelp(x, y, depth, stack)
-{
-	if (depth > 100)
-	{
-		stack.push({ x: x, y: y });
-		return true;
-	}
-
-	if (x === y)
-	{
-		return true;
-	}
-
-	if (typeof x !== 'object')
-	{
-		if (typeof x === 'function')
-		{
-			throw new Error(
-				'Trying to use `(==)` on functions. There is no way to know if functions are "the same" in the Elm sense.'
-				+ ' Read more about this at http://package.elm-lang.org/packages/elm-lang/core/latest/Basics#=='
-				+ ' which describes why it is this way and what the better version will look like.'
-			);
-		}
-		return false;
-	}
-
-	if (x === null || y === null)
-	{
-		return false
-	}
-
-	if (x instanceof Date)
-	{
-		return x.getTime() === y.getTime();
-	}
-
-	if (!('ctor' in x))
-	{
-		for (var key in x)
-		{
-			if (!eqHelp(x[key], y[key], depth + 1, stack))
-			{
-				return false;
-			}
-		}
-		return true;
-	}
-
-	// convert Dicts and Sets to lists
-	if (x.ctor === 'RBNode_elm_builtin' || x.ctor === 'RBEmpty_elm_builtin')
-	{
-		x = _elm_lang$core$Dict$toList(x);
-		y = _elm_lang$core$Dict$toList(y);
-	}
-	if (x.ctor === 'Set_elm_builtin')
-	{
-		x = _elm_lang$core$Set$toList(x);
-		y = _elm_lang$core$Set$toList(y);
-	}
-
-	// check if lists are equal without recursion
-	if (x.ctor === '::')
-	{
-		var a = x;
-		var b = y;
-		while (a.ctor === '::' && b.ctor === '::')
-		{
-			if (!eqHelp(a._0, b._0, depth + 1, stack))
-			{
-				return false;
-			}
-			a = a._1;
-			b = b._1;
-		}
-		return a.ctor === b.ctor;
-	}
-
-	// check if Arrays are equal
-	if (x.ctor === '_Array')
-	{
-		var xs = _elm_lang$core$Native_Array.toJSArray(x);
-		var ys = _elm_lang$core$Native_Array.toJSArray(y);
-		if (xs.length !== ys.length)
-		{
-			return false;
-		}
-		for (var i = 0; i < xs.length; i++)
-		{
-			if (!eqHelp(xs[i], ys[i], depth + 1, stack))
-			{
-				return false;
-			}
-		}
-		return true;
-	}
-
-	if (!eqHelp(x.ctor, y.ctor, depth + 1, stack))
-	{
-		return false;
-	}
-
-	for (var key in x)
-	{
-		if (!eqHelp(x[key], y[key], depth + 1, stack))
-		{
-			return false;
-		}
-	}
-	return true;
-}
-
-// Code in Generate/JavaScript.hs, Basics.js, and List.js depends on
-// the particular integer values assigned to LT, EQ, and GT.
-
-var LT = -1, EQ = 0, GT = 1;
-
-function cmp(x, y)
-{
-	if (typeof x !== 'object')
-	{
-		return x === y ? EQ : x < y ? LT : GT;
-	}
-
-	if (x instanceof String)
-	{
-		var a = x.valueOf();
-		var b = y.valueOf();
-		return a === b ? EQ : a < b ? LT : GT;
-	}
-
-	if (x.ctor === '::' || x.ctor === '[]')
-	{
-		while (x.ctor === '::' && y.ctor === '::')
-		{
-			var ord = cmp(x._0, y._0);
-			if (ord !== EQ)
-			{
-				return ord;
-			}
-			x = x._1;
-			y = y._1;
-		}
-		return x.ctor === y.ctor ? EQ : x.ctor === '[]' ? LT : GT;
-	}
-
-	if (x.ctor.slice(0, 6) === '_Tuple')
-	{
-		var ord;
-		var n = x.ctor.slice(6) - 0;
-		var err = 'cannot compare tuples with more than 6 elements.';
-		if (n === 0) return EQ;
-		if (n >= 1) { ord = cmp(x._0, y._0); if (ord !== EQ) return ord;
-		if (n >= 2) { ord = cmp(x._1, y._1); if (ord !== EQ) return ord;
-		if (n >= 3) { ord = cmp(x._2, y._2); if (ord !== EQ) return ord;
-		if (n >= 4) { ord = cmp(x._3, y._3); if (ord !== EQ) return ord;
-		if (n >= 5) { ord = cmp(x._4, y._4); if (ord !== EQ) return ord;
-		if (n >= 6) { ord = cmp(x._5, y._5); if (ord !== EQ) return ord;
-		if (n >= 7) throw new Error('Comparison error: ' + err); } } } } } }
-		return EQ;
-	}
-
-	throw new Error(
-		'Comparison error: comparison is only defined on ints, '
-		+ 'floats, times, chars, strings, lists of comparable values, '
-		+ 'and tuples of comparable values.'
-	);
-}
-
-
-// COMMON VALUES
-
-var Tuple0 = {
-	ctor: '_Tuple0'
-};
-
-function Tuple2(x, y)
-{
-	return {
-		ctor: '_Tuple2',
-		_0: x,
-		_1: y
-	};
-}
-
-function chr(c)
-{
-	return new String(c);
-}
-
-
-// GUID
-
-var count = 0;
-function guid(_)
-{
-	return count++;
-}
-
-
-// RECORDS
-
-function update(oldRecord, updatedFields)
-{
-	var newRecord = {};
-
-	for (var key in oldRecord)
-	{
-		newRecord[key] = oldRecord[key];
-	}
-
-	for (var key in updatedFields)
-	{
-		newRecord[key] = updatedFields[key];
-	}
-
-	return newRecord;
-}
-
-
-//// LIST STUFF ////
-
-var Nil = { ctor: '[]' };
-
-function Cons(hd, tl)
-{
-	return {
-		ctor: '::',
-		_0: hd,
-		_1: tl
-	};
-}
-
-function append(xs, ys)
-{
-	// append Strings
-	if (typeof xs === 'string')
-	{
-		return xs + ys;
-	}
-
-	// append Lists
-	if (xs.ctor === '[]')
-	{
-		return ys;
-	}
-	var root = Cons(xs._0, Nil);
-	var curr = root;
-	xs = xs._1;
-	while (xs.ctor !== '[]')
-	{
-		curr._1 = Cons(xs._0, Nil);
-		xs = xs._1;
-		curr = curr._1;
-	}
-	curr._1 = ys;
-	return root;
-}
-
-
-// CRASHES
-
-function crash(moduleName, region)
-{
-	return function(message) {
-		throw new Error(
-			'Ran into a `Debug.crash` in module `' + moduleName + '` ' + regionToString(region) + '\n'
-			+ 'The message provided by the code author is:\n\n    '
-			+ message
-		);
-	};
-}
-
-function crashCase(moduleName, region, value)
-{
-	return function(message) {
-		throw new Error(
-			'Ran into a `Debug.crash` in module `' + moduleName + '`\n\n'
-			+ 'This was caused by the `case` expression ' + regionToString(region) + '.\n'
-			+ 'One of the branches ended with a crash and the following value got through:\n\n    ' + toString(value) + '\n\n'
-			+ 'The message provided by the code author is:\n\n    '
-			+ message
-		);
-	};
-}
-
-function regionToString(region)
-{
-	if (region.start.line == region.end.line)
-	{
-		return 'on line ' + region.start.line;
-	}
-	return 'between lines ' + region.start.line + ' and ' + region.end.line;
-}
-
-
-// TO STRING
-
-function toString(v)
-{
-	var type = typeof v;
-	if (type === 'function')
-	{
-		var name = v.func ? v.func.name : v.name;
-		return '<function' + (name === '' ? '' : ':') + name + '>';
-	}
-
-	if (type === 'boolean')
-	{
-		return v ? 'True' : 'False';
-	}
-
-	if (type === 'number')
-	{
-		return v + '';
-	}
-
-	if (v instanceof String)
-	{
-		return '\'' + addSlashes(v, true) + '\'';
-	}
-
-	if (type === 'string')
-	{
-		return '"' + addSlashes(v, false) + '"';
-	}
-
-	if (v === null)
-	{
-		return 'null';
-	}
-
-	if (type === 'object' && 'ctor' in v)
-	{
-		var ctorStarter = v.ctor.substring(0, 5);
-
-		if (ctorStarter === '_Tupl')
-		{
-			var output = [];
-			for (var k in v)
-			{
-				if (k === 'ctor') continue;
-				output.push(toString(v[k]));
-			}
-			return '(' + output.join(',') + ')';
-		}
-
-		if (ctorStarter === '_Task')
-		{
-			return '<task>'
-		}
-
-		if (v.ctor === '_Array')
-		{
-			var list = _elm_lang$core$Array$toList(v);
-			return 'Array.fromList ' + toString(list);
-		}
-
-		if (v.ctor === '<decoder>')
-		{
-			return '<decoder>';
-		}
-
-		if (v.ctor === '_Process')
-		{
-			return '<process:' + v.id + '>';
-		}
-
-		if (v.ctor === '::')
-		{
-			var output = '[' + toString(v._0);
-			v = v._1;
-			while (v.ctor === '::')
-			{
-				output += ',' + toString(v._0);
-				v = v._1;
-			}
-			return output + ']';
-		}
-
-		if (v.ctor === '[]')
-		{
-			return '[]';
-		}
-
-		if (v.ctor === 'Set_elm_builtin')
-		{
-			return 'Set.fromList ' + toString(_elm_lang$core$Set$toList(v));
-		}
-
-		if (v.ctor === 'RBNode_elm_builtin' || v.ctor === 'RBEmpty_elm_builtin')
-		{
-			return 'Dict.fromList ' + toString(_elm_lang$core$Dict$toList(v));
-		}
-
-		var output = '';
-		for (var i in v)
-		{
-			if (i === 'ctor') continue;
-			var str = toString(v[i]);
-			var c0 = str[0];
-			var parenless = c0 === '{' || c0 === '(' || c0 === '<' || c0 === '"' || str.indexOf(' ') < 0;
-			output += ' ' + (parenless ? str : '(' + str + ')');
-		}
-		return v.ctor + output;
-	}
-
-	if (type === 'object')
-	{
-		if (v instanceof Date)
-		{
-			return '<' + v.toString() + '>';
-		}
-
-		if (v.elm_web_socket)
-		{
-			return '<websocket>';
-		}
-
-		var output = [];
-		for (var k in v)
-		{
-			output.push(k + ' = ' + toString(v[k]));
-		}
-		if (output.length === 0)
-		{
-			return '{}';
-		}
-		return '{ ' + output.join(', ') + ' }';
-	}
-
-	return '<internal structure>';
-}
-
-function addSlashes(str, isChar)
-{
-	var s = str.replace(/\\/g, '\\\\')
-			  .replace(/\n/g, '\\n')
-			  .replace(/\t/g, '\\t')
-			  .replace(/\r/g, '\\r')
-			  .replace(/\v/g, '\\v')
-			  .replace(/\0/g, '\\0');
-	if (isChar)
-	{
-		return s.replace(/\'/g, '\\\'');
-	}
-	else
-	{
-		return s.replace(/\"/g, '\\"');
-	}
-}
-
-
-return {
-	eq: eq,
-	cmp: cmp,
-	Tuple0: Tuple0,
-	Tuple2: Tuple2,
-	chr: chr,
-	update: update,
-	guid: guid,
-
-	append: F2(append),
-
-	crash: crash,
-	crashCase: crashCase,
-
-	toString: toString
-};
-
-}();
-var _elm_lang$core$Basics$never = function (_p0) {
-	never:
-	while (true) {
-		var _p1 = _p0;
-		var _v1 = _p1._0;
-		_p0 = _v1;
-		continue never;
-	}
-};
-var _elm_lang$core$Basics$uncurry = F2(
-	function (f, _p2) {
-		var _p3 = _p2;
-		return A2(f, _p3._0, _p3._1);
-	});
-var _elm_lang$core$Basics$curry = F3(
-	function (f, a, b) {
-		return f(
-			{ctor: '_Tuple2', _0: a, _1: b});
-	});
-var _elm_lang$core$Basics$flip = F3(
-	function (f, b, a) {
-		return A2(f, a, b);
-	});
-var _elm_lang$core$Basics$always = F2(
-	function (a, _p4) {
-		return a;
-	});
-var _elm_lang$core$Basics$identity = function (x) {
-	return x;
-};
-var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
-_elm_lang$core$Basics_ops['<|'] = F2(
-	function (f, x) {
-		return f(x);
-	});
-var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
-_elm_lang$core$Basics_ops['|>'] = F2(
-	function (x, f) {
-		return f(x);
-	});
-var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
-_elm_lang$core$Basics_ops['>>'] = F3(
-	function (f, g, x) {
-		return g(
-			f(x));
-	});
-var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
-_elm_lang$core$Basics_ops['<<'] = F3(
-	function (g, f, x) {
-		return g(
-			f(x));
-	});
-var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
-_elm_lang$core$Basics_ops['++'] = _elm_lang$core$Native_Utils.append;
-var _elm_lang$core$Basics$toString = _elm_lang$core$Native_Utils.toString;
-var _elm_lang$core$Basics$isInfinite = _elm_lang$core$Native_Basics.isInfinite;
-var _elm_lang$core$Basics$isNaN = _elm_lang$core$Native_Basics.isNaN;
-var _elm_lang$core$Basics$toFloat = _elm_lang$core$Native_Basics.toFloat;
-var _elm_lang$core$Basics$ceiling = _elm_lang$core$Native_Basics.ceiling;
-var _elm_lang$core$Basics$floor = _elm_lang$core$Native_Basics.floor;
-var _elm_lang$core$Basics$truncate = _elm_lang$core$Native_Basics.truncate;
-var _elm_lang$core$Basics$round = _elm_lang$core$Native_Basics.round;
-var _elm_lang$core$Basics$not = _elm_lang$core$Native_Basics.not;
-var _elm_lang$core$Basics$xor = _elm_lang$core$Native_Basics.xor;
-var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
-_elm_lang$core$Basics_ops['||'] = _elm_lang$core$Native_Basics.or;
-var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
-_elm_lang$core$Basics_ops['&&'] = _elm_lang$core$Native_Basics.and;
-var _elm_lang$core$Basics$max = _elm_lang$core$Native_Basics.max;
-var _elm_lang$core$Basics$min = _elm_lang$core$Native_Basics.min;
-var _elm_lang$core$Basics$compare = _elm_lang$core$Native_Basics.compare;
-var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
-_elm_lang$core$Basics_ops['>='] = _elm_lang$core$Native_Basics.ge;
-var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
-_elm_lang$core$Basics_ops['<='] = _elm_lang$core$Native_Basics.le;
-var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
-_elm_lang$core$Basics_ops['>'] = _elm_lang$core$Native_Basics.gt;
-var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
-_elm_lang$core$Basics_ops['<'] = _elm_lang$core$Native_Basics.lt;
-var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
-_elm_lang$core$Basics_ops['/='] = _elm_lang$core$Native_Basics.neq;
-var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
-_elm_lang$core$Basics_ops['=='] = _elm_lang$core$Native_Basics.eq;
-var _elm_lang$core$Basics$e = _elm_lang$core$Native_Basics.e;
-var _elm_lang$core$Basics$pi = _elm_lang$core$Native_Basics.pi;
-var _elm_lang$core$Basics$clamp = _elm_lang$core$Native_Basics.clamp;
-var _elm_lang$core$Basics$logBase = _elm_lang$core$Native_Basics.logBase;
-var _elm_lang$core$Basics$abs = _elm_lang$core$Native_Basics.abs;
-var _elm_lang$core$Basics$negate = _elm_lang$core$Native_Basics.negate;
-var _elm_lang$core$Basics$sqrt = _elm_lang$core$Native_Basics.sqrt;
-var _elm_lang$core$Basics$atan2 = _elm_lang$core$Native_Basics.atan2;
-var _elm_lang$core$Basics$atan = _elm_lang$core$Native_Basics.atan;
-var _elm_lang$core$Basics$asin = _elm_lang$core$Native_Basics.asin;
-var _elm_lang$core$Basics$acos = _elm_lang$core$Native_Basics.acos;
-var _elm_lang$core$Basics$tan = _elm_lang$core$Native_Basics.tan;
-var _elm_lang$core$Basics$sin = _elm_lang$core$Native_Basics.sin;
-var _elm_lang$core$Basics$cos = _elm_lang$core$Native_Basics.cos;
-var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
-_elm_lang$core$Basics_ops['^'] = _elm_lang$core$Native_Basics.exp;
-var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
-_elm_lang$core$Basics_ops['%'] = _elm_lang$core$Native_Basics.mod;
-var _elm_lang$core$Basics$rem = _elm_lang$core$Native_Basics.rem;
-var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
-_elm_lang$core$Basics_ops['//'] = _elm_lang$core$Native_Basics.div;
-var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
-_elm_lang$core$Basics_ops['/'] = _elm_lang$core$Native_Basics.floatDiv;
-var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
-_elm_lang$core$Basics_ops['*'] = _elm_lang$core$Native_Basics.mul;
-var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
-_elm_lang$core$Basics_ops['-'] = _elm_lang$core$Native_Basics.sub;
-var _elm_lang$core$Basics_ops = _elm_lang$core$Basics_ops || {};
-_elm_lang$core$Basics_ops['+'] = _elm_lang$core$Native_Basics.add;
-var _elm_lang$core$Basics$toPolar = _elm_lang$core$Native_Basics.toPolar;
-var _elm_lang$core$Basics$fromPolar = _elm_lang$core$Native_Basics.fromPolar;
-var _elm_lang$core$Basics$turns = _elm_lang$core$Native_Basics.turns;
-var _elm_lang$core$Basics$degrees = _elm_lang$core$Native_Basics.degrees;
-var _elm_lang$core$Basics$radians = function (t) {
-	return t;
-};
-var _elm_lang$core$Basics$GT = {ctor: 'GT'};
-var _elm_lang$core$Basics$EQ = {ctor: 'EQ'};
-var _elm_lang$core$Basics$LT = {ctor: 'LT'};
-var _elm_lang$core$Basics$JustOneMore = function (a) {
-	return {ctor: 'JustOneMore', _0: a};
-};
-
-//import Native.Utils //
-
-var _elm_lang$core$Native_Debug = function() {
-
-function log(tag, value)
-{
-	var msg = tag + ': ' + _elm_lang$core$Native_Utils.toString(value);
-	var process = process || {};
-	if (process.stdout)
-	{
-		process.stdout.write(msg);
-	}
-	else
-	{
-		console.log(msg);
-	}
-	return value;
-}
-
-function crash(message)
-{
-	throw new Error(message);
-}
-
-return {
-	crash: crash,
-	log: F2(log)
-};
-
-}();
-var _elm_lang$core$Debug$crash = _elm_lang$core$Native_Debug.crash;
-var _elm_lang$core$Debug$log = _elm_lang$core$Native_Debug.log;
-
-var _elm_lang$core$Maybe$withDefault = F2(
-	function ($default, maybe) {
-		var _p0 = maybe;
-		if (_p0.ctor === 'Just') {
-			return _p0._0;
-		} else {
-			return $default;
-		}
-	});
-var _elm_lang$core$Maybe$Nothing = {ctor: 'Nothing'};
-var _elm_lang$core$Maybe$andThen = F2(
-	function (callback, maybeValue) {
-		var _p1 = maybeValue;
-		if (_p1.ctor === 'Just') {
-			return callback(_p1._0);
-		} else {
-			return _elm_lang$core$Maybe$Nothing;
-		}
-	});
-var _elm_lang$core$Maybe$Just = function (a) {
-	return {ctor: 'Just', _0: a};
-};
-var _elm_lang$core$Maybe$map = F2(
-	function (f, maybe) {
-		var _p2 = maybe;
-		if (_p2.ctor === 'Just') {
-			return _elm_lang$core$Maybe$Just(
-				f(_p2._0));
-		} else {
-			return _elm_lang$core$Maybe$Nothing;
-		}
-	});
-var _elm_lang$core$Maybe$map2 = F3(
-	function (func, ma, mb) {
-		var _p3 = {ctor: '_Tuple2', _0: ma, _1: mb};
-		if (((_p3.ctor === '_Tuple2') && (_p3._0.ctor === 'Just')) && (_p3._1.ctor === 'Just')) {
-			return _elm_lang$core$Maybe$Just(
-				A2(func, _p3._0._0, _p3._1._0));
-		} else {
-			return _elm_lang$core$Maybe$Nothing;
-		}
-	});
-var _elm_lang$core$Maybe$map3 = F4(
-	function (func, ma, mb, mc) {
-		var _p4 = {ctor: '_Tuple3', _0: ma, _1: mb, _2: mc};
-		if ((((_p4.ctor === '_Tuple3') && (_p4._0.ctor === 'Just')) && (_p4._1.ctor === 'Just')) && (_p4._2.ctor === 'Just')) {
-			return _elm_lang$core$Maybe$Just(
-				A3(func, _p4._0._0, _p4._1._0, _p4._2._0));
-		} else {
-			return _elm_lang$core$Maybe$Nothing;
-		}
-	});
-var _elm_lang$core$Maybe$map4 = F5(
-	function (func, ma, mb, mc, md) {
-		var _p5 = {ctor: '_Tuple4', _0: ma, _1: mb, _2: mc, _3: md};
-		if (((((_p5.ctor === '_Tuple4') && (_p5._0.ctor === 'Just')) && (_p5._1.ctor === 'Just')) && (_p5._2.ctor === 'Just')) && (_p5._3.ctor === 'Just')) {
-			return _elm_lang$core$Maybe$Just(
-				A4(func, _p5._0._0, _p5._1._0, _p5._2._0, _p5._3._0));
-		} else {
-			return _elm_lang$core$Maybe$Nothing;
-		}
-	});
-var _elm_lang$core$Maybe$map5 = F6(
-	function (func, ma, mb, mc, md, me) {
-		var _p6 = {ctor: '_Tuple5', _0: ma, _1: mb, _2: mc, _3: md, _4: me};
-		if ((((((_p6.ctor === '_Tuple5') && (_p6._0.ctor === 'Just')) && (_p6._1.ctor === 'Just')) && (_p6._2.ctor === 'Just')) && (_p6._3.ctor === 'Just')) && (_p6._4.ctor === 'Just')) {
-			return _elm_lang$core$Maybe$Just(
-				A5(func, _p6._0._0, _p6._1._0, _p6._2._0, _p6._3._0, _p6._4._0));
-		} else {
-			return _elm_lang$core$Maybe$Nothing;
-		}
-	});
-
-//import Native.Utils //
-
-var _elm_lang$core$Native_List = function() {
-
-var Nil = { ctor: '[]' };
-
-function Cons(hd, tl)
-{
-	return { ctor: '::', _0: hd, _1: tl };
-}
-
-function fromArray(arr)
-{
-	var out = Nil;
-	for (var i = arr.length; i--; )
-	{
-		out = Cons(arr[i], out);
-	}
-	return out;
-}
-
-function toArray(xs)
-{
-	var out = [];
-	while (xs.ctor !== '[]')
-	{
-		out.push(xs._0);
-		xs = xs._1;
-	}
-	return out;
-}
-
-function foldr(f, b, xs)
-{
-	var arr = toArray(xs);
-	var acc = b;
-	for (var i = arr.length; i--; )
-	{
-		acc = A2(f, arr[i], acc);
-	}
-	return acc;
-}
-
-function map2(f, xs, ys)
-{
-	var arr = [];
-	while (xs.ctor !== '[]' && ys.ctor !== '[]')
-	{
-		arr.push(A2(f, xs._0, ys._0));
-		xs = xs._1;
-		ys = ys._1;
-	}
-	return fromArray(arr);
-}
-
-function map3(f, xs, ys, zs)
-{
-	var arr = [];
-	while (xs.ctor !== '[]' && ys.ctor !== '[]' && zs.ctor !== '[]')
-	{
-		arr.push(A3(f, xs._0, ys._0, zs._0));
-		xs = xs._1;
-		ys = ys._1;
-		zs = zs._1;
-	}
-	return fromArray(arr);
-}
-
-function map4(f, ws, xs, ys, zs)
-{
-	var arr = [];
-	while (   ws.ctor !== '[]'
-		   && xs.ctor !== '[]'
-		   && ys.ctor !== '[]'
-		   && zs.ctor !== '[]')
-	{
-		arr.push(A4(f, ws._0, xs._0, ys._0, zs._0));
-		ws = ws._1;
-		xs = xs._1;
-		ys = ys._1;
-		zs = zs._1;
-	}
-	return fromArray(arr);
-}
-
-function map5(f, vs, ws, xs, ys, zs)
-{
-	var arr = [];
-	while (   vs.ctor !== '[]'
-		   && ws.ctor !== '[]'
-		   && xs.ctor !== '[]'
-		   && ys.ctor !== '[]'
-		   && zs.ctor !== '[]')
-	{
-		arr.push(A5(f, vs._0, ws._0, xs._0, ys._0, zs._0));
-		vs = vs._1;
-		ws = ws._1;
-		xs = xs._1;
-		ys = ys._1;
-		zs = zs._1;
-	}
-	return fromArray(arr);
-}
-
-function sortBy(f, xs)
-{
-	return fromArray(toArray(xs).sort(function(a, b) {
-		return _elm_lang$core$Native_Utils.cmp(f(a), f(b));
-	}));
-}
-
-function sortWith(f, xs)
-{
-	return fromArray(toArray(xs).sort(function(a, b) {
-		var ord = f(a)(b).ctor;
-		return ord === 'EQ' ? 0 : ord === 'LT' ? -1 : 1;
-	}));
-}
-
-return {
-	Nil: Nil,
-	Cons: Cons,
-	cons: F2(Cons),
-	toArray: toArray,
-	fromArray: fromArray,
-
-	foldr: F3(foldr),
-
-	map2: F3(map2),
-	map3: F4(map3),
-	map4: F5(map4),
-	map5: F6(map5),
-	sortBy: F2(sortBy),
-	sortWith: F2(sortWith)
-};
-
-}();
-var _elm_lang$core$List$sortWith = _elm_lang$core$Native_List.sortWith;
-var _elm_lang$core$List$sortBy = _elm_lang$core$Native_List.sortBy;
-var _elm_lang$core$List$sort = function (xs) {
-	return A2(_elm_lang$core$List$sortBy, _elm_lang$core$Basics$identity, xs);
-};
-var _elm_lang$core$List$drop = F2(
-	function (n, list) {
-		drop:
-		while (true) {
-			if (_elm_lang$core$Native_Utils.cmp(n, 0) < 1) {
-				return list;
-			} else {
-				var _p0 = list;
-				if (_p0.ctor === '[]') {
-					return list;
-				} else {
-					var _v1 = n - 1,
-						_v2 = _p0._1;
-					n = _v1;
-					list = _v2;
-					continue drop;
-				}
-			}
-		}
-	});
-var _elm_lang$core$List$map5 = _elm_lang$core$Native_List.map5;
-var _elm_lang$core$List$map4 = _elm_lang$core$Native_List.map4;
-var _elm_lang$core$List$map3 = _elm_lang$core$Native_List.map3;
-var _elm_lang$core$List$map2 = _elm_lang$core$Native_List.map2;
-var _elm_lang$core$List$any = F2(
-	function (isOkay, list) {
-		any:
-		while (true) {
-			var _p1 = list;
-			if (_p1.ctor === '[]') {
-				return false;
-			} else {
-				if (isOkay(_p1._0)) {
-					return true;
-				} else {
-					var _v4 = isOkay,
-						_v5 = _p1._1;
-					isOkay = _v4;
-					list = _v5;
-					continue any;
-				}
-			}
-		}
-	});
-var _elm_lang$core$List$all = F2(
-	function (isOkay, list) {
-		return !A2(
-			_elm_lang$core$List$any,
-			function (_p2) {
-				return !isOkay(_p2);
-			},
-			list);
-	});
-var _elm_lang$core$List$foldr = _elm_lang$core$Native_List.foldr;
-var _elm_lang$core$List$foldl = F3(
-	function (func, acc, list) {
-		foldl:
-		while (true) {
-			var _p3 = list;
-			if (_p3.ctor === '[]') {
-				return acc;
-			} else {
-				var _v7 = func,
-					_v8 = A2(func, _p3._0, acc),
-					_v9 = _p3._1;
-				func = _v7;
-				acc = _v8;
-				list = _v9;
-				continue foldl;
-			}
-		}
-	});
-var _elm_lang$core$List$length = function (xs) {
-	return A3(
-		_elm_lang$core$List$foldl,
-		F2(
-			function (_p4, i) {
-				return i + 1;
-			}),
-		0,
-		xs);
-};
-var _elm_lang$core$List$sum = function (numbers) {
-	return A3(
-		_elm_lang$core$List$foldl,
-		F2(
-			function (x, y) {
-				return x + y;
-			}),
-		0,
-		numbers);
-};
-var _elm_lang$core$List$product = function (numbers) {
-	return A3(
-		_elm_lang$core$List$foldl,
-		F2(
-			function (x, y) {
-				return x * y;
-			}),
-		1,
-		numbers);
-};
-var _elm_lang$core$List$maximum = function (list) {
-	var _p5 = list;
-	if (_p5.ctor === '::') {
-		return _elm_lang$core$Maybe$Just(
-			A3(_elm_lang$core$List$foldl, _elm_lang$core$Basics$max, _p5._0, _p5._1));
-	} else {
-		return _elm_lang$core$Maybe$Nothing;
-	}
-};
-var _elm_lang$core$List$minimum = function (list) {
-	var _p6 = list;
-	if (_p6.ctor === '::') {
-		return _elm_lang$core$Maybe$Just(
-			A3(_elm_lang$core$List$foldl, _elm_lang$core$Basics$min, _p6._0, _p6._1));
-	} else {
-		return _elm_lang$core$Maybe$Nothing;
-	}
-};
-var _elm_lang$core$List$member = F2(
-	function (x, xs) {
-		return A2(
-			_elm_lang$core$List$any,
-			function (a) {
-				return _elm_lang$core$Native_Utils.eq(a, x);
-			},
-			xs);
-	});
-var _elm_lang$core$List$isEmpty = function (xs) {
-	var _p7 = xs;
-	if (_p7.ctor === '[]') {
-		return true;
-	} else {
-		return false;
-	}
-};
-var _elm_lang$core$List$tail = function (list) {
-	var _p8 = list;
-	if (_p8.ctor === '::') {
-		return _elm_lang$core$Maybe$Just(_p8._1);
-	} else {
-		return _elm_lang$core$Maybe$Nothing;
-	}
-};
-var _elm_lang$core$List$head = function (list) {
-	var _p9 = list;
-	if (_p9.ctor === '::') {
-		return _elm_lang$core$Maybe$Just(_p9._0);
-	} else {
-		return _elm_lang$core$Maybe$Nothing;
-	}
-};
-var _elm_lang$core$List_ops = _elm_lang$core$List_ops || {};
-_elm_lang$core$List_ops['::'] = _elm_lang$core$Native_List.cons;
-var _elm_lang$core$List$map = F2(
-	function (f, xs) {
-		return A3(
-			_elm_lang$core$List$foldr,
-			F2(
-				function (x, acc) {
-					return {
-						ctor: '::',
-						_0: f(x),
-						_1: acc
-					};
-				}),
-			{ctor: '[]'},
-			xs);
-	});
-var _elm_lang$core$List$filter = F2(
-	function (pred, xs) {
-		var conditionalCons = F2(
-			function (front, back) {
-				return pred(front) ? {ctor: '::', _0: front, _1: back} : back;
-			});
-		return A3(
-			_elm_lang$core$List$foldr,
-			conditionalCons,
-			{ctor: '[]'},
-			xs);
-	});
-var _elm_lang$core$List$maybeCons = F3(
-	function (f, mx, xs) {
-		var _p10 = f(mx);
-		if (_p10.ctor === 'Just') {
-			return {ctor: '::', _0: _p10._0, _1: xs};
-		} else {
-			return xs;
-		}
-	});
-var _elm_lang$core$List$filterMap = F2(
-	function (f, xs) {
-		return A3(
-			_elm_lang$core$List$foldr,
-			_elm_lang$core$List$maybeCons(f),
-			{ctor: '[]'},
-			xs);
-	});
-var _elm_lang$core$List$reverse = function (list) {
-	return A3(
-		_elm_lang$core$List$foldl,
-		F2(
-			function (x, y) {
-				return {ctor: '::', _0: x, _1: y};
-			}),
-		{ctor: '[]'},
-		list);
-};
-var _elm_lang$core$List$scanl = F3(
-	function (f, b, xs) {
-		var scan1 = F2(
-			function (x, accAcc) {
-				var _p11 = accAcc;
-				if (_p11.ctor === '::') {
-					return {
-						ctor: '::',
-						_0: A2(f, x, _p11._0),
-						_1: accAcc
-					};
-				} else {
-					return {ctor: '[]'};
-				}
-			});
-		return _elm_lang$core$List$reverse(
-			A3(
-				_elm_lang$core$List$foldl,
-				scan1,
-				{
-					ctor: '::',
-					_0: b,
-					_1: {ctor: '[]'}
-				},
-				xs));
-	});
-var _elm_lang$core$List$append = F2(
-	function (xs, ys) {
-		var _p12 = ys;
-		if (_p12.ctor === '[]') {
-			return xs;
-		} else {
-			return A3(
-				_elm_lang$core$List$foldr,
-				F2(
-					function (x, y) {
-						return {ctor: '::', _0: x, _1: y};
-					}),
-				ys,
-				xs);
-		}
-	});
-var _elm_lang$core$List$concat = function (lists) {
-	return A3(
-		_elm_lang$core$List$foldr,
-		_elm_lang$core$List$append,
-		{ctor: '[]'},
-		lists);
-};
-var _elm_lang$core$List$concatMap = F2(
-	function (f, list) {
-		return _elm_lang$core$List$concat(
-			A2(_elm_lang$core$List$map, f, list));
-	});
-var _elm_lang$core$List$partition = F2(
-	function (pred, list) {
-		var step = F2(
-			function (x, _p13) {
-				var _p14 = _p13;
-				var _p16 = _p14._0;
-				var _p15 = _p14._1;
-				return pred(x) ? {
-					ctor: '_Tuple2',
-					_0: {ctor: '::', _0: x, _1: _p16},
-					_1: _p15
-				} : {
-					ctor: '_Tuple2',
-					_0: _p16,
-					_1: {ctor: '::', _0: x, _1: _p15}
-				};
-			});
-		return A3(
-			_elm_lang$core$List$foldr,
-			step,
-			{
-				ctor: '_Tuple2',
-				_0: {ctor: '[]'},
-				_1: {ctor: '[]'}
-			},
-			list);
-	});
-var _elm_lang$core$List$unzip = function (pairs) {
-	var step = F2(
-		function (_p18, _p17) {
-			var _p19 = _p18;
-			var _p20 = _p17;
-			return {
-				ctor: '_Tuple2',
-				_0: {ctor: '::', _0: _p19._0, _1: _p20._0},
-				_1: {ctor: '::', _0: _p19._1, _1: _p20._1}
-			};
-		});
-	return A3(
-		_elm_lang$core$List$foldr,
-		step,
-		{
-			ctor: '_Tuple2',
-			_0: {ctor: '[]'},
-			_1: {ctor: '[]'}
-		},
-		pairs);
-};
-var _elm_lang$core$List$intersperse = F2(
-	function (sep, xs) {
-		var _p21 = xs;
-		if (_p21.ctor === '[]') {
-			return {ctor: '[]'};
-		} else {
-			var step = F2(
-				function (x, rest) {
-					return {
-						ctor: '::',
-						_0: sep,
-						_1: {ctor: '::', _0: x, _1: rest}
-					};
-				});
-			var spersed = A3(
-				_elm_lang$core$List$foldr,
-				step,
-				{ctor: '[]'},
-				_p21._1);
-			return {ctor: '::', _0: _p21._0, _1: spersed};
-		}
-	});
-var _elm_lang$core$List$takeReverse = F3(
-	function (n, list, taken) {
-		takeReverse:
-		while (true) {
-			if (_elm_lang$core$Native_Utils.cmp(n, 0) < 1) {
-				return taken;
-			} else {
-				var _p22 = list;
-				if (_p22.ctor === '[]') {
-					return taken;
-				} else {
-					var _v23 = n - 1,
-						_v24 = _p22._1,
-						_v25 = {ctor: '::', _0: _p22._0, _1: taken};
-					n = _v23;
-					list = _v24;
-					taken = _v25;
-					continue takeReverse;
-				}
-			}
-		}
-	});
-var _elm_lang$core$List$takeTailRec = F2(
-	function (n, list) {
-		return _elm_lang$core$List$reverse(
-			A3(
-				_elm_lang$core$List$takeReverse,
-				n,
-				list,
-				{ctor: '[]'}));
-	});
-var _elm_lang$core$List$takeFast = F3(
-	function (ctr, n, list) {
-		if (_elm_lang$core$Native_Utils.cmp(n, 0) < 1) {
-			return {ctor: '[]'};
-		} else {
-			var _p23 = {ctor: '_Tuple2', _0: n, _1: list};
-			_v26_5:
-			do {
-				_v26_1:
-				do {
-					if (_p23.ctor === '_Tuple2') {
-						if (_p23._1.ctor === '[]') {
-							return list;
-						} else {
-							if (_p23._1._1.ctor === '::') {
-								switch (_p23._0) {
-									case 1:
-										break _v26_1;
-									case 2:
-										return {
-											ctor: '::',
-											_0: _p23._1._0,
-											_1: {
-												ctor: '::',
-												_0: _p23._1._1._0,
-												_1: {ctor: '[]'}
-											}
-										};
-									case 3:
-										if (_p23._1._1._1.ctor === '::') {
-											return {
-												ctor: '::',
-												_0: _p23._1._0,
-												_1: {
-													ctor: '::',
-													_0: _p23._1._1._0,
-													_1: {
-														ctor: '::',
-														_0: _p23._1._1._1._0,
-														_1: {ctor: '[]'}
-													}
-												}
-											};
-										} else {
-											break _v26_5;
-										}
-									default:
-										if ((_p23._1._1._1.ctor === '::') && (_p23._1._1._1._1.ctor === '::')) {
-											var _p28 = _p23._1._1._1._0;
-											var _p27 = _p23._1._1._0;
-											var _p26 = _p23._1._0;
-											var _p25 = _p23._1._1._1._1._0;
-											var _p24 = _p23._1._1._1._1._1;
-											return (_elm_lang$core$Native_Utils.cmp(ctr, 1000) > 0) ? {
-												ctor: '::',
-												_0: _p26,
-												_1: {
-													ctor: '::',
-													_0: _p27,
-													_1: {
-														ctor: '::',
-														_0: _p28,
-														_1: {
-															ctor: '::',
-															_0: _p25,
-															_1: A2(_elm_lang$core$List$takeTailRec, n - 4, _p24)
-														}
-													}
-												}
-											} : {
-												ctor: '::',
-												_0: _p26,
-												_1: {
-													ctor: '::',
-													_0: _p27,
-													_1: {
-														ctor: '::',
-														_0: _p28,
-														_1: {
-															ctor: '::',
-															_0: _p25,
-															_1: A3(_elm_lang$core$List$takeFast, ctr + 1, n - 4, _p24)
-														}
-													}
-												}
-											};
-										} else {
-											break _v26_5;
-										}
-								}
-							} else {
-								if (_p23._0 === 1) {
-									break _v26_1;
-								} else {
-									break _v26_5;
-								}
-							}
-						}
-					} else {
-						break _v26_5;
-					}
-				} while(false);
-				return {
-					ctor: '::',
-					_0: _p23._1._0,
-					_1: {ctor: '[]'}
-				};
-			} while(false);
-			return list;
-		}
-	});
-var _elm_lang$core$List$take = F2(
-	function (n, list) {
-		return A3(_elm_lang$core$List$takeFast, 0, n, list);
-	});
-var _elm_lang$core$List$repeatHelp = F3(
-	function (result, n, value) {
-		repeatHelp:
-		while (true) {
-			if (_elm_lang$core$Native_Utils.cmp(n, 0) < 1) {
-				return result;
-			} else {
-				var _v27 = {ctor: '::', _0: value, _1: result},
-					_v28 = n - 1,
-					_v29 = value;
-				result = _v27;
-				n = _v28;
-				value = _v29;
-				continue repeatHelp;
-			}
-		}
-	});
-var _elm_lang$core$List$repeat = F2(
-	function (n, value) {
-		return A3(
-			_elm_lang$core$List$repeatHelp,
-			{ctor: '[]'},
-			n,
-			value);
-	});
-var _elm_lang$core$List$rangeHelp = F3(
-	function (lo, hi, list) {
-		rangeHelp:
-		while (true) {
-			if (_elm_lang$core$Native_Utils.cmp(lo, hi) < 1) {
-				var _v30 = lo,
-					_v31 = hi - 1,
-					_v32 = {ctor: '::', _0: hi, _1: list};
-				lo = _v30;
-				hi = _v31;
-				list = _v32;
-				continue rangeHelp;
-			} else {
-				return list;
-			}
-		}
-	});
-var _elm_lang$core$List$range = F2(
-	function (lo, hi) {
-		return A3(
-			_elm_lang$core$List$rangeHelp,
-			lo,
-			hi,
-			{ctor: '[]'});
-	});
-var _elm_lang$core$List$indexedMap = F2(
-	function (f, xs) {
-		return A3(
-			_elm_lang$core$List$map2,
-			f,
-			A2(
-				_elm_lang$core$List$range,
-				0,
-				_elm_lang$core$List$length(xs) - 1),
-			xs);
-	});
-
-var _elm_lang$core$Result$toMaybe = function (result) {
-	var _p0 = result;
-	if (_p0.ctor === 'Ok') {
-		return _elm_lang$core$Maybe$Just(_p0._0);
-	} else {
-		return _elm_lang$core$Maybe$Nothing;
-	}
-};
-var _elm_lang$core$Result$withDefault = F2(
-	function (def, result) {
-		var _p1 = result;
-		if (_p1.ctor === 'Ok') {
-			return _p1._0;
-		} else {
-			return def;
-		}
-	});
-var _elm_lang$core$Result$Err = function (a) {
-	return {ctor: 'Err', _0: a};
-};
-var _elm_lang$core$Result$andThen = F2(
-	function (callback, result) {
-		var _p2 = result;
-		if (_p2.ctor === 'Ok') {
-			return callback(_p2._0);
-		} else {
-			return _elm_lang$core$Result$Err(_p2._0);
-		}
-	});
-var _elm_lang$core$Result$Ok = function (a) {
-	return {ctor: 'Ok', _0: a};
-};
-var _elm_lang$core$Result$map = F2(
-	function (func, ra) {
-		var _p3 = ra;
-		if (_p3.ctor === 'Ok') {
-			return _elm_lang$core$Result$Ok(
-				func(_p3._0));
-		} else {
-			return _elm_lang$core$Result$Err(_p3._0);
-		}
-	});
-var _elm_lang$core$Result$map2 = F3(
-	function (func, ra, rb) {
-		var _p4 = {ctor: '_Tuple2', _0: ra, _1: rb};
-		if (_p4._0.ctor === 'Ok') {
-			if (_p4._1.ctor === 'Ok') {
-				return _elm_lang$core$Result$Ok(
-					A2(func, _p4._0._0, _p4._1._0));
-			} else {
-				return _elm_lang$core$Result$Err(_p4._1._0);
-			}
-		} else {
-			return _elm_lang$core$Result$Err(_p4._0._0);
-		}
-	});
-var _elm_lang$core$Result$map3 = F4(
-	function (func, ra, rb, rc) {
-		var _p5 = {ctor: '_Tuple3', _0: ra, _1: rb, _2: rc};
-		if (_p5._0.ctor === 'Ok') {
-			if (_p5._1.ctor === 'Ok') {
-				if (_p5._2.ctor === 'Ok') {
-					return _elm_lang$core$Result$Ok(
-						A3(func, _p5._0._0, _p5._1._0, _p5._2._0));
-				} else {
-					return _elm_lang$core$Result$Err(_p5._2._0);
-				}
-			} else {
-				return _elm_lang$core$Result$Err(_p5._1._0);
-			}
-		} else {
-			return _elm_lang$core$Result$Err(_p5._0._0);
-		}
-	});
-var _elm_lang$core$Result$map4 = F5(
-	function (func, ra, rb, rc, rd) {
-		var _p6 = {ctor: '_Tuple4', _0: ra, _1: rb, _2: rc, _3: rd};
-		if (_p6._0.ctor === 'Ok') {
-			if (_p6._1.ctor === 'Ok') {
-				if (_p6._2.ctor === 'Ok') {
-					if (_p6._3.ctor === 'Ok') {
-						return _elm_lang$core$Result$Ok(
-							A4(func, _p6._0._0, _p6._1._0, _p6._2._0, _p6._3._0));
-					} else {
-						return _elm_lang$core$Result$Err(_p6._3._0);
-					}
-				} else {
-					return _elm_lang$core$Result$Err(_p6._2._0);
-				}
-			} else {
-				return _elm_lang$core$Result$Err(_p6._1._0);
-			}
-		} else {
-			return _elm_lang$core$Result$Err(_p6._0._0);
-		}
-	});
-var _elm_lang$core$Result$map5 = F6(
-	function (func, ra, rb, rc, rd, re) {
-		var _p7 = {ctor: '_Tuple5', _0: ra, _1: rb, _2: rc, _3: rd, _4: re};
-		if (_p7._0.ctor === 'Ok') {
-			if (_p7._1.ctor === 'Ok') {
-				if (_p7._2.ctor === 'Ok') {
-					if (_p7._3.ctor === 'Ok') {
-						if (_p7._4.ctor === 'Ok') {
-							return _elm_lang$core$Result$Ok(
-								A5(func, _p7._0._0, _p7._1._0, _p7._2._0, _p7._3._0, _p7._4._0));
-						} else {
-							return _elm_lang$core$Result$Err(_p7._4._0);
-						}
-					} else {
-						return _elm_lang$core$Result$Err(_p7._3._0);
-					}
-				} else {
-					return _elm_lang$core$Result$Err(_p7._2._0);
-				}
-			} else {
-				return _elm_lang$core$Result$Err(_p7._1._0);
-			}
-		} else {
-			return _elm_lang$core$Result$Err(_p7._0._0);
-		}
-	});
-var _elm_lang$core$Result$mapError = F2(
-	function (f, result) {
-		var _p8 = result;
-		if (_p8.ctor === 'Ok') {
-			return _elm_lang$core$Result$Ok(_p8._0);
-		} else {
-			return _elm_lang$core$Result$Err(
-				f(_p8._0));
-		}
-	});
-var _elm_lang$core$Result$fromMaybe = F2(
-	function (err, maybe) {
-		var _p9 = maybe;
-		if (_p9.ctor === 'Just') {
-			return _elm_lang$core$Result$Ok(_p9._0);
-		} else {
-			return _elm_lang$core$Result$Err(err);
-		}
-	});
-
-//import Maybe, Native.List, Native.Utils, Result //
-
-var _elm_lang$core$Native_String = function() {
-
-function isEmpty(str)
-{
-	return str.length === 0;
-}
-function cons(chr, str)
-{
-	return chr + str;
-}
-function uncons(str)
-{
-	var hd = str[0];
-	if (hd)
-	{
-		return _elm_lang$core$Maybe$Just(_elm_lang$core$Native_Utils.Tuple2(_elm_lang$core$Native_Utils.chr(hd), str.slice(1)));
-	}
-	return _elm_lang$core$Maybe$Nothing;
-}
-function append(a, b)
-{
-	return a + b;
-}
-function concat(strs)
-{
-	return _elm_lang$core$Native_List.toArray(strs).join('');
-}
-function length(str)
-{
-	return str.length;
-}
-function map(f, str)
-{
-	var out = str.split('');
-	for (var i = out.length; i--; )
-	{
-		out[i] = f(_elm_lang$core$Native_Utils.chr(out[i]));
-	}
-	return out.join('');
-}
-function filter(pred, str)
-{
-	return str.split('').map(_elm_lang$core$Native_Utils.chr).filter(pred).join('');
-}
-function reverse(str)
-{
-	return str.split('').reverse().join('');
-}
-function foldl(f, b, str)
-{
-	var len = str.length;
-	for (var i = 0; i < len; ++i)
-	{
-		b = A2(f, _elm_lang$core$Native_Utils.chr(str[i]), b);
-	}
-	return b;
-}
-function foldr(f, b, str)
-{
-	for (var i = str.length; i--; )
-	{
-		b = A2(f, _elm_lang$core$Native_Utils.chr(str[i]), b);
-	}
-	return b;
-}
-function split(sep, str)
-{
-	return _elm_lang$core$Native_List.fromArray(str.split(sep));
-}
-function join(sep, strs)
-{
-	return _elm_lang$core$Native_List.toArray(strs).join(sep);
-}
-function repeat(n, str)
-{
-	var result = '';
-	while (n > 0)
-	{
-		if (n & 1)
-		{
-			result += str;
-		}
-		n >>= 1, str += str;
-	}
-	return result;
-}
-function slice(start, end, str)
-{
-	return str.slice(start, end);
-}
-function left(n, str)
-{
-	return n < 1 ? '' : str.slice(0, n);
-}
-function right(n, str)
-{
-	return n < 1 ? '' : str.slice(-n);
-}
-function dropLeft(n, str)
-{
-	return n < 1 ? str : str.slice(n);
-}
-function dropRight(n, str)
-{
-	return n < 1 ? str : str.slice(0, -n);
-}
-function pad(n, chr, str)
-{
-	var half = (n - str.length) / 2;
-	return repeat(Math.ceil(half), chr) + str + repeat(half | 0, chr);
-}
-function padRight(n, chr, str)
-{
-	return str + repeat(n - str.length, chr);
-}
-function padLeft(n, chr, str)
-{
-	return repeat(n - str.length, chr) + str;
-}
-
-function trim(str)
-{
-	return str.trim();
-}
-function trimLeft(str)
-{
-	return str.replace(/^\s+/, '');
-}
-function trimRight(str)
-{
-	return str.replace(/\s+$/, '');
-}
-
-function words(str)
-{
-	return _elm_lang$core$Native_List.fromArray(str.trim().split(/\s+/g));
-}
-function lines(str)
-{
-	return _elm_lang$core$Native_List.fromArray(str.split(/\r\n|\r|\n/g));
-}
-
-function toUpper(str)
-{
-	return str.toUpperCase();
-}
-function toLower(str)
-{
-	return str.toLowerCase();
-}
-
-function any(pred, str)
-{
-	for (var i = str.length; i--; )
-	{
-		if (pred(_elm_lang$core$Native_Utils.chr(str[i])))
-		{
-			return true;
-		}
-	}
-	return false;
-}
-function all(pred, str)
-{
-	for (var i = str.length; i--; )
-	{
-		if (!pred(_elm_lang$core$Native_Utils.chr(str[i])))
-		{
-			return false;
-		}
-	}
-	return true;
-}
-
-function contains(sub, str)
-{
-	return str.indexOf(sub) > -1;
-}
-function startsWith(sub, str)
-{
-	return str.indexOf(sub) === 0;
-}
-function endsWith(sub, str)
-{
-	return str.length >= sub.length &&
-		str.lastIndexOf(sub) === str.length - sub.length;
-}
-function indexes(sub, str)
-{
-	var subLen = sub.length;
-	
-	if (subLen < 1)
-	{
-		return _elm_lang$core$Native_List.Nil;
-	}
-
-	var i = 0;
-	var is = [];
-
-	while ((i = str.indexOf(sub, i)) > -1)
-	{
-		is.push(i);
-		i = i + subLen;
-	}	
-	
-	return _elm_lang$core$Native_List.fromArray(is);
-}
-
-function toInt(s)
-{
-	var len = s.length;
-	if (len === 0)
-	{
-		return _elm_lang$core$Result$Err("could not convert string '" + s + "' to an Int" );
-	}
-	var start = 0;
-	if (s[0] === '-')
-	{
-		if (len === 1)
-		{
-			return _elm_lang$core$Result$Err("could not convert string '" + s + "' to an Int" );
-		}
-		start = 1;
-	}
-	for (var i = start; i < len; ++i)
-	{
-		var c = s[i];
-		if (c < '0' || '9' < c)
-		{
-			return _elm_lang$core$Result$Err("could not convert string '" + s + "' to an Int" );
-		}
-	}
-	return _elm_lang$core$Result$Ok(parseInt(s, 10));
-}
-
-function toFloat(s)
-{
-	var len = s.length;
-	if (len === 0)
-	{
-		return _elm_lang$core$Result$Err("could not convert string '" + s + "' to a Float" );
-	}
-	var start = 0;
-	if (s[0] === '-')
-	{
-		if (len === 1)
-		{
-			return _elm_lang$core$Result$Err("could not convert string '" + s + "' to a Float" );
-		}
-		start = 1;
-	}
-	var dotCount = 0;
-	for (var i = start; i < len; ++i)
-	{
-		var c = s[i];
-		if ('0' <= c && c <= '9')
-		{
-			continue;
-		}
-		if (c === '.')
-		{
-			dotCount += 1;
-			if (dotCount <= 1)
-			{
-				continue;
-			}
-		}
-		return _elm_lang$core$Result$Err("could not convert string '" + s + "' to a Float" );
-	}
-	return _elm_lang$core$Result$Ok(parseFloat(s));
-}
-
-function toList(str)
-{
-	return _elm_lang$core$Native_List.fromArray(str.split('').map(_elm_lang$core$Native_Utils.chr));
-}
-function fromList(chars)
-{
-	return _elm_lang$core$Native_List.toArray(chars).join('');
-}
-
-return {
-	isEmpty: isEmpty,
-	cons: F2(cons),
-	uncons: uncons,
-	append: F2(append),
-	concat: concat,
-	length: length,
-	map: F2(map),
-	filter: F2(filter),
-	reverse: reverse,
-	foldl: F3(foldl),
-	foldr: F3(foldr),
-
-	split: F2(split),
-	join: F2(join),
-	repeat: F2(repeat),
-
-	slice: F3(slice),
-	left: F2(left),
-	right: F2(right),
-	dropLeft: F2(dropLeft),
-	dropRight: F2(dropRight),
-
-	pad: F3(pad),
-	padLeft: F3(padLeft),
-	padRight: F3(padRight),
-
-	trim: trim,
-	trimLeft: trimLeft,
-	trimRight: trimRight,
-
-	words: words,
-	lines: lines,
-
-	toUpper: toUpper,
-	toLower: toLower,
-
-	any: F2(any),
-	all: F2(all),
-
-	contains: F2(contains),
-	startsWith: F2(startsWith),
-	endsWith: F2(endsWith),
-	indexes: F2(indexes),
-
-	toInt: toInt,
-	toFloat: toFloat,
-	toList: toList,
-	fromList: fromList
-};
-
-}();
-
-//import Native.Utils //
-
-var _elm_lang$core$Native_Char = function() {
-
-return {
-	fromCode: function(c) { return _elm_lang$core$Native_Utils.chr(String.fromCharCode(c)); },
-	toCode: function(c) { return c.charCodeAt(0); },
-	toUpper: function(c) { return _elm_lang$core$Native_Utils.chr(c.toUpperCase()); },
-	toLower: function(c) { return _elm_lang$core$Native_Utils.chr(c.toLowerCase()); },
-	toLocaleUpper: function(c) { return _elm_lang$core$Native_Utils.chr(c.toLocaleUpperCase()); },
-	toLocaleLower: function(c) { return _elm_lang$core$Native_Utils.chr(c.toLocaleLowerCase()); }
-};
-
-}();
-var _elm_lang$core$Char$fromCode = _elm_lang$core$Native_Char.fromCode;
-var _elm_lang$core$Char$toCode = _elm_lang$core$Native_Char.toCode;
-var _elm_lang$core$Char$toLocaleLower = _elm_lang$core$Native_Char.toLocaleLower;
-var _elm_lang$core$Char$toLocaleUpper = _elm_lang$core$Native_Char.toLocaleUpper;
-var _elm_lang$core$Char$toLower = _elm_lang$core$Native_Char.toLower;
-var _elm_lang$core$Char$toUpper = _elm_lang$core$Native_Char.toUpper;
-var _elm_lang$core$Char$isBetween = F3(
-	function (low, high, $char) {
-		var code = _elm_lang$core$Char$toCode($char);
-		return (_elm_lang$core$Native_Utils.cmp(
-			code,
-			_elm_lang$core$Char$toCode(low)) > -1) && (_elm_lang$core$Native_Utils.cmp(
-			code,
-			_elm_lang$core$Char$toCode(high)) < 1);
-	});
-var _elm_lang$core$Char$isUpper = A2(
-	_elm_lang$core$Char$isBetween,
-	_elm_lang$core$Native_Utils.chr('A'),
-	_elm_lang$core$Native_Utils.chr('Z'));
-var _elm_lang$core$Char$isLower = A2(
-	_elm_lang$core$Char$isBetween,
-	_elm_lang$core$Native_Utils.chr('a'),
-	_elm_lang$core$Native_Utils.chr('z'));
-var _elm_lang$core$Char$isDigit = A2(
-	_elm_lang$core$Char$isBetween,
-	_elm_lang$core$Native_Utils.chr('0'),
-	_elm_lang$core$Native_Utils.chr('9'));
-var _elm_lang$core$Char$isOctDigit = A2(
-	_elm_lang$core$Char$isBetween,
-	_elm_lang$core$Native_Utils.chr('0'),
-	_elm_lang$core$Native_Utils.chr('7'));
-var _elm_lang$core$Char$isHexDigit = function ($char) {
-	return _elm_lang$core$Char$isDigit($char) || (A3(
-		_elm_lang$core$Char$isBetween,
-		_elm_lang$core$Native_Utils.chr('a'),
-		_elm_lang$core$Native_Utils.chr('f'),
-		$char) || A3(
-		_elm_lang$core$Char$isBetween,
-		_elm_lang$core$Native_Utils.chr('A'),
-		_elm_lang$core$Native_Utils.chr('F'),
-		$char));
-};
-
-var _elm_lang$core$String$fromList = _elm_lang$core$Native_String.fromList;
-var _elm_lang$core$String$toList = _elm_lang$core$Native_String.toList;
-var _elm_lang$core$String$toFloat = _elm_lang$core$Native_String.toFloat;
-var _elm_lang$core$String$toInt = _elm_lang$core$Native_String.toInt;
-var _elm_lang$core$String$indices = _elm_lang$core$Native_String.indexes;
-var _elm_lang$core$String$indexes = _elm_lang$core$Native_String.indexes;
-var _elm_lang$core$String$endsWith = _elm_lang$core$Native_String.endsWith;
-var _elm_lang$core$String$startsWith = _elm_lang$core$Native_String.startsWith;
-var _elm_lang$core$String$contains = _elm_lang$core$Native_String.contains;
-var _elm_lang$core$String$all = _elm_lang$core$Native_String.all;
-var _elm_lang$core$String$any = _elm_lang$core$Native_String.any;
-var _elm_lang$core$String$toLower = _elm_lang$core$Native_String.toLower;
-var _elm_lang$core$String$toUpper = _elm_lang$core$Native_String.toUpper;
-var _elm_lang$core$String$lines = _elm_lang$core$Native_String.lines;
-var _elm_lang$core$String$words = _elm_lang$core$Native_String.words;
-var _elm_lang$core$String$trimRight = _elm_lang$core$Native_String.trimRight;
-var _elm_lang$core$String$trimLeft = _elm_lang$core$Native_String.trimLeft;
-var _elm_lang$core$String$trim = _elm_lang$core$Native_String.trim;
-var _elm_lang$core$String$padRight = _elm_lang$core$Native_String.padRight;
-var _elm_lang$core$String$padLeft = _elm_lang$core$Native_String.padLeft;
-var _elm_lang$core$String$pad = _elm_lang$core$Native_String.pad;
-var _elm_lang$core$String$dropRight = _elm_lang$core$Native_String.dropRight;
-var _elm_lang$core$String$dropLeft = _elm_lang$core$Native_String.dropLeft;
-var _elm_lang$core$String$right = _elm_lang$core$Native_String.right;
-var _elm_lang$core$String$left = _elm_lang$core$Native_String.left;
-var _elm_lang$core$String$slice = _elm_lang$core$Native_String.slice;
-var _elm_lang$core$String$repeat = _elm_lang$core$Native_String.repeat;
-var _elm_lang$core$String$join = _elm_lang$core$Native_String.join;
-var _elm_lang$core$String$split = _elm_lang$core$Native_String.split;
-var _elm_lang$core$String$foldr = _elm_lang$core$Native_String.foldr;
-var _elm_lang$core$String$foldl = _elm_lang$core$Native_String.foldl;
-var _elm_lang$core$String$reverse = _elm_lang$core$Native_String.reverse;
-var _elm_lang$core$String$filter = _elm_lang$core$Native_String.filter;
-var _elm_lang$core$String$map = _elm_lang$core$Native_String.map;
-var _elm_lang$core$String$length = _elm_lang$core$Native_String.length;
-var _elm_lang$core$String$concat = _elm_lang$core$Native_String.concat;
-var _elm_lang$core$String$append = _elm_lang$core$Native_String.append;
-var _elm_lang$core$String$uncons = _elm_lang$core$Native_String.uncons;
-var _elm_lang$core$String$cons = _elm_lang$core$Native_String.cons;
-var _elm_lang$core$String$fromChar = function ($char) {
-	return A2(_elm_lang$core$String$cons, $char, '');
-};
-var _elm_lang$core$String$isEmpty = _elm_lang$core$Native_String.isEmpty;
-
-var _elm_lang$core$Tuple$mapSecond = F2(
-	function (func, _p0) {
-		var _p1 = _p0;
-		return {
-			ctor: '_Tuple2',
-			_0: _p1._0,
-			_1: func(_p1._1)
-		};
-	});
-var _elm_lang$core$Tuple$mapFirst = F2(
-	function (func, _p2) {
-		var _p3 = _p2;
-		return {
-			ctor: '_Tuple2',
-			_0: func(_p3._0),
-			_1: _p3._1
-		};
-	});
-var _elm_lang$core$Tuple$second = function (_p4) {
-	var _p5 = _p4;
-	return _p5._1;
-};
-var _elm_lang$core$Tuple$first = function (_p6) {
-	var _p7 = _p6;
-	return _p7._0;
-};
-
-//import //
-
-var _elm_lang$core$Native_Platform = function() {
-
-
-// PROGRAMS
-
-function program(impl)
-{
-	return function(flagDecoder)
-	{
-		return function(object, moduleName)
-		{
-			object['worker'] = function worker(flags)
-			{
-				if (typeof flags !== 'undefined')
-				{
-					throw new Error(
-						'The `' + moduleName + '` module does not need flags.\n'
-						+ 'Call ' + moduleName + '.worker() with no arguments and you should be all set!'
-					);
-				}
-
-				return initialize(
-					impl.init,
-					impl.update,
-					impl.subscriptions,
-					renderer
-				);
-			};
-		};
-	};
-}
-
-function programWithFlags(impl)
-{
-	return function(flagDecoder)
-	{
-		return function(object, moduleName)
-		{
-			object['worker'] = function worker(flags)
-			{
-				if (typeof flagDecoder === 'undefined')
-				{
-					throw new Error(
-						'Are you trying to sneak a Never value into Elm? Trickster!\n'
-						+ 'It looks like ' + moduleName + '.main is defined with `programWithFlags` but has type `Program Never`.\n'
-						+ 'Use `program` instead if you do not want flags.'
-					);
-				}
-
-				var result = A2(_elm_lang$core$Native_Json.run, flagDecoder, flags);
-				if (result.ctor === 'Err')
-				{
-					throw new Error(
-						moduleName + '.worker(...) was called with an unexpected argument.\n'
-						+ 'I tried to convert it to an Elm value, but ran into this problem:\n\n'
-						+ result._0
-					);
-				}
-
-				return initialize(
-					impl.init(result._0),
-					impl.update,
-					impl.subscriptions,
-					renderer
-				);
-			};
-		};
-	};
-}
-
-function renderer(enqueue, _)
-{
-	return function(_) {};
-}
-
-
-// HTML TO PROGRAM
-
-function htmlToProgram(vnode)
-{
-	var emptyBag = batch(_elm_lang$core$Native_List.Nil);
-	var noChange = _elm_lang$core$Native_Utils.Tuple2(
-		_elm_lang$core$Native_Utils.Tuple0,
-		emptyBag
-	);
-
-	return _elm_lang$virtual_dom$VirtualDom$program({
-		init: noChange,
-		view: function(model) { return main; },
-		update: F2(function(msg, model) { return noChange; }),
-		subscriptions: function (model) { return emptyBag; }
-	});
-}
-
-
-// INITIALIZE A PROGRAM
-
-function initialize(init, update, subscriptions, renderer)
-{
-	// ambient state
-	var managers = {};
-	var updateView;
-
-	// init and update state in main process
-	var initApp = _elm_lang$core$Native_Scheduler.nativeBinding(function(callback) {
-		var model = init._0;
-		updateView = renderer(enqueue, model);
-		var cmds = init._1;
-		var subs = subscriptions(model);
-		dispatchEffects(managers, cmds, subs);
-		callback(_elm_lang$core$Native_Scheduler.succeed(model));
-	});
-
-	function onMessage(msg, model)
-	{
-		return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback) {
-			var results = A2(update, msg, model);
-			model = results._0;
-			updateView(model);
-			var cmds = results._1;
-			var subs = subscriptions(model);
-			dispatchEffects(managers, cmds, subs);
-			callback(_elm_lang$core$Native_Scheduler.succeed(model));
-		});
-	}
-
-	var mainProcess = spawnLoop(initApp, onMessage);
-
-	function enqueue(msg)
-	{
-		_elm_lang$core$Native_Scheduler.rawSend(mainProcess, msg);
-	}
-
-	var ports = setupEffects(managers, enqueue);
-
-	return ports ? { ports: ports } : {};
-}
-
-
-// EFFECT MANAGERS
-
-var effectManagers = {};
-
-function setupEffects(managers, callback)
-{
-	var ports;
-
-	// setup all necessary effect managers
-	for (var key in effectManagers)
-	{
-		var manager = effectManagers[key];
-
-		if (manager.isForeign)
-		{
-			ports = ports || {};
-			ports[key] = manager.tag === 'cmd'
-				? setupOutgoingPort(key)
-				: setupIncomingPort(key, callback);
-		}
-
-		managers[key] = makeManager(manager, callback);
-	}
-
-	return ports;
-}
-
-function makeManager(info, callback)
-{
-	var router = {
-		main: callback,
-		self: undefined
-	};
-
-	var tag = info.tag;
-	var onEffects = info.onEffects;
-	var onSelfMsg = info.onSelfMsg;
-
-	function onMessage(msg, state)
-	{
-		if (msg.ctor === 'self')
-		{
-			return A3(onSelfMsg, router, msg._0, state);
-		}
-
-		var fx = msg._0;
-		switch (tag)
-		{
-			case 'cmd':
-				return A3(onEffects, router, fx.cmds, state);
-
-			case 'sub':
-				return A3(onEffects, router, fx.subs, state);
-
-			case 'fx':
-				return A4(onEffects, router, fx.cmds, fx.subs, state);
-		}
-	}
-
-	var process = spawnLoop(info.init, onMessage);
-	router.self = process;
-	return process;
-}
-
-function sendToApp(router, msg)
-{
-	return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
-	{
-		router.main(msg);
-		callback(_elm_lang$core$Native_Scheduler.succeed(_elm_lang$core$Native_Utils.Tuple0));
-	});
-}
-
-function sendToSelf(router, msg)
-{
-	return A2(_elm_lang$core$Native_Scheduler.send, router.self, {
-		ctor: 'self',
-		_0: msg
-	});
-}
-
-
-// HELPER for STATEFUL LOOPS
-
-function spawnLoop(init, onMessage)
-{
-	var andThen = _elm_lang$core$Native_Scheduler.andThen;
-
-	function loop(state)
-	{
-		var handleMsg = _elm_lang$core$Native_Scheduler.receive(function(msg) {
-			return onMessage(msg, state);
-		});
-		return A2(andThen, loop, handleMsg);
-	}
-
-	var task = A2(andThen, loop, init);
-
-	return _elm_lang$core$Native_Scheduler.rawSpawn(task);
-}
-
-
-// BAGS
-
-function leaf(home)
-{
-	return function(value)
-	{
-		return {
-			type: 'leaf',
-			home: home,
-			value: value
-		};
-	};
-}
-
-function batch(list)
-{
-	return {
-		type: 'node',
-		branches: list
-	};
-}
-
-function map(tagger, bag)
-{
-	return {
-		type: 'map',
-		tagger: tagger,
-		tree: bag
-	}
-}
-
-
-// PIPE BAGS INTO EFFECT MANAGERS
-
-function dispatchEffects(managers, cmdBag, subBag)
-{
-	var effectsDict = {};
-	gatherEffects(true, cmdBag, effectsDict, null);
-	gatherEffects(false, subBag, effectsDict, null);
-
-	for (var home in managers)
-	{
-		var fx = home in effectsDict
-			? effectsDict[home]
-			: {
-				cmds: _elm_lang$core$Native_List.Nil,
-				subs: _elm_lang$core$Native_List.Nil
-			};
-
-		_elm_lang$core$Native_Scheduler.rawSend(managers[home], { ctor: 'fx', _0: fx });
-	}
-}
-
-function gatherEffects(isCmd, bag, effectsDict, taggers)
-{
-	switch (bag.type)
-	{
-		case 'leaf':
-			var home = bag.home;
-			var effect = toEffect(isCmd, home, taggers, bag.value);
-			effectsDict[home] = insert(isCmd, effect, effectsDict[home]);
-			return;
-
-		case 'node':
-			var list = bag.branches;
-			while (list.ctor !== '[]')
-			{
-				gatherEffects(isCmd, list._0, effectsDict, taggers);
-				list = list._1;
-			}
-			return;
-
-		case 'map':
-			gatherEffects(isCmd, bag.tree, effectsDict, {
-				tagger: bag.tagger,
-				rest: taggers
-			});
-			return;
-	}
-}
-
-function toEffect(isCmd, home, taggers, value)
-{
-	function applyTaggers(x)
-	{
-		var temp = taggers;
-		while (temp)
-		{
-			x = temp.tagger(x);
-			temp = temp.rest;
-		}
-		return x;
-	}
-
-	var map = isCmd
-		? effectManagers[home].cmdMap
-		: effectManagers[home].subMap;
-
-	return A2(map, applyTaggers, value)
-}
-
-function insert(isCmd, newEffect, effects)
-{
-	effects = effects || {
-		cmds: _elm_lang$core$Native_List.Nil,
-		subs: _elm_lang$core$Native_List.Nil
-	};
-	if (isCmd)
-	{
-		effects.cmds = _elm_lang$core$Native_List.Cons(newEffect, effects.cmds);
-		return effects;
-	}
-	effects.subs = _elm_lang$core$Native_List.Cons(newEffect, effects.subs);
-	return effects;
-}
-
-
-// PORTS
-
-function checkPortName(name)
-{
-	if (name in effectManagers)
-	{
-		throw new Error('There can only be one port named `' + name + '`, but your program has multiple.');
-	}
-}
-
-
-// OUTGOING PORTS
-
-function outgoingPort(name, converter)
-{
-	checkPortName(name);
-	effectManagers[name] = {
-		tag: 'cmd',
-		cmdMap: outgoingPortMap,
-		converter: converter,
-		isForeign: true
-	};
-	return leaf(name);
-}
-
-var outgoingPortMap = F2(function cmdMap(tagger, value) {
-	return value;
-});
-
-function setupOutgoingPort(name)
-{
-	var subs = [];
-	var converter = effectManagers[name].converter;
-
-	// CREATE MANAGER
-
-	var init = _elm_lang$core$Native_Scheduler.succeed(null);
-
-	function onEffects(router, cmdList, state)
-	{
-		while (cmdList.ctor !== '[]')
-		{
-			// grab a separate reference to subs in case unsubscribe is called
-			var currentSubs = subs;
-			var value = converter(cmdList._0);
-			for (var i = 0; i < currentSubs.length; i++)
-			{
-				currentSubs[i](value);
-			}
-			cmdList = cmdList._1;
-		}
-		return init;
-	}
-
-	effectManagers[name].init = init;
-	effectManagers[name].onEffects = F3(onEffects);
-
-	// PUBLIC API
-
-	function subscribe(callback)
-	{
-		subs.push(callback);
-	}
-
-	function unsubscribe(callback)
-	{
-		// copy subs into a new array in case unsubscribe is called within a
-		// subscribed callback
-		subs = subs.slice();
-		var index = subs.indexOf(callback);
-		if (index >= 0)
-		{
-			subs.splice(index, 1);
-		}
-	}
-
-	return {
-		subscribe: subscribe,
-		unsubscribe: unsubscribe
-	};
-}
-
-
-// INCOMING PORTS
-
-function incomingPort(name, converter)
-{
-	checkPortName(name);
-	effectManagers[name] = {
-		tag: 'sub',
-		subMap: incomingPortMap,
-		converter: converter,
-		isForeign: true
-	};
-	return leaf(name);
-}
-
-var incomingPortMap = F2(function subMap(tagger, finalTagger)
-{
-	return function(value)
-	{
-		return tagger(finalTagger(value));
-	};
-});
-
-function setupIncomingPort(name, callback)
-{
-	var sentBeforeInit = [];
-	var subs = _elm_lang$core$Native_List.Nil;
-	var converter = effectManagers[name].converter;
-	var currentOnEffects = preInitOnEffects;
-	var currentSend = preInitSend;
-
-	// CREATE MANAGER
-
-	var init = _elm_lang$core$Native_Scheduler.succeed(null);
-
-	function preInitOnEffects(router, subList, state)
-	{
-		var postInitResult = postInitOnEffects(router, subList, state);
-
-		for(var i = 0; i < sentBeforeInit.length; i++)
-		{
-			postInitSend(sentBeforeInit[i]);
-		}
-
-		sentBeforeInit = null; // to release objects held in queue
-		currentSend = postInitSend;
-		currentOnEffects = postInitOnEffects;
-		return postInitResult;
-	}
-
-	function postInitOnEffects(router, subList, state)
-	{
-		subs = subList;
-		return init;
-	}
-
-	function onEffects(router, subList, state)
-	{
-		return currentOnEffects(router, subList, state);
-	}
-
-	effectManagers[name].init = init;
-	effectManagers[name].onEffects = F3(onEffects);
-
-	// PUBLIC API
-
-	function preInitSend(value)
-	{
-		sentBeforeInit.push(value);
-	}
-
-	function postInitSend(incomingValue)
-	{
-		var result = A2(_elm_lang$core$Json_Decode$decodeValue, converter, incomingValue);
-		if (result.ctor === 'Err')
-		{
-			throw new Error('Trying to send an unexpected type of value through port `' + name + '`:\n' + result._0);
-		}
-
-		var value = result._0;
-		var temp = subs;
-		while (temp.ctor !== '[]')
-		{
-			callback(temp._0(value));
-			temp = temp._1;
-		}
-	}
-
-	function send(incomingValue)
-	{
-		currentSend(incomingValue);
-	}
-
-	return { send: send };
-}
-
-return {
-	// routers
-	sendToApp: F2(sendToApp),
-	sendToSelf: F2(sendToSelf),
-
-	// global setup
-	effectManagers: effectManagers,
-	outgoingPort: outgoingPort,
-	incomingPort: incomingPort,
-
-	htmlToProgram: htmlToProgram,
-	program: program,
-	programWithFlags: programWithFlags,
-	initialize: initialize,
-
-	// effect bags
-	leaf: leaf,
-	batch: batch,
-	map: F2(map)
-};
-
-}();
-
-//import Native.Utils //
-
-var _elm_lang$core$Native_Scheduler = function() {
-
-var MAX_STEPS = 10000;
-
-
-// TASKS
-
-function succeed(value)
-{
-	return {
-		ctor: '_Task_succeed',
-		value: value
-	};
-}
-
-function fail(error)
-{
-	return {
-		ctor: '_Task_fail',
-		value: error
-	};
-}
-
-function nativeBinding(callback)
-{
-	return {
-		ctor: '_Task_nativeBinding',
-		callback: callback,
-		cancel: null
-	};
-}
-
-function andThen(callback, task)
-{
-	return {
-		ctor: '_Task_andThen',
-		callback: callback,
-		task: task
-	};
-}
-
-function onError(callback, task)
-{
-	return {
-		ctor: '_Task_onError',
-		callback: callback,
-		task: task
-	};
-}
-
-function receive(callback)
-{
-	return {
-		ctor: '_Task_receive',
-		callback: callback
-	};
-}
-
-
-// PROCESSES
-
-function rawSpawn(task)
-{
-	var process = {
-		ctor: '_Process',
-		id: _elm_lang$core$Native_Utils.guid(),
-		root: task,
-		stack: null,
-		mailbox: []
-	};
-
-	enqueue(process);
-
-	return process;
-}
-
-function spawn(task)
-{
-	return nativeBinding(function(callback) {
-		var process = rawSpawn(task);
-		callback(succeed(process));
-	});
-}
-
-function rawSend(process, msg)
-{
-	process.mailbox.push(msg);
-	enqueue(process);
-}
-
-function send(process, msg)
-{
-	return nativeBinding(function(callback) {
-		rawSend(process, msg);
-		callback(succeed(_elm_lang$core$Native_Utils.Tuple0));
-	});
-}
-
-function kill(process)
-{
-	return nativeBinding(function(callback) {
-		var root = process.root;
-		if (root.ctor === '_Task_nativeBinding' && root.cancel)
-		{
-			root.cancel();
-		}
-
-		process.root = null;
-
-		callback(succeed(_elm_lang$core$Native_Utils.Tuple0));
-	});
-}
-
-function sleep(time)
-{
-	return nativeBinding(function(callback) {
-		var id = setTimeout(function() {
-			callback(succeed(_elm_lang$core$Native_Utils.Tuple0));
-		}, time);
-
-		return function() { clearTimeout(id); };
-	});
-}
-
-
-// STEP PROCESSES
-
-function step(numSteps, process)
-{
-	while (numSteps < MAX_STEPS)
-	{
-		var ctor = process.root.ctor;
-
-		if (ctor === '_Task_succeed')
-		{
-			while (process.stack && process.stack.ctor === '_Task_onError')
-			{
-				process.stack = process.stack.rest;
-			}
-			if (process.stack === null)
-			{
-				break;
-			}
-			process.root = process.stack.callback(process.root.value);
-			process.stack = process.stack.rest;
-			++numSteps;
-			continue;
-		}
-
-		if (ctor === '_Task_fail')
-		{
-			while (process.stack && process.stack.ctor === '_Task_andThen')
-			{
-				process.stack = process.stack.rest;
-			}
-			if (process.stack === null)
-			{
-				break;
-			}
-			process.root = process.stack.callback(process.root.value);
-			process.stack = process.stack.rest;
-			++numSteps;
-			continue;
-		}
-
-		if (ctor === '_Task_andThen')
-		{
-			process.stack = {
-				ctor: '_Task_andThen',
-				callback: process.root.callback,
-				rest: process.stack
-			};
-			process.root = process.root.task;
-			++numSteps;
-			continue;
-		}
-
-		if (ctor === '_Task_onError')
-		{
-			process.stack = {
-				ctor: '_Task_onError',
-				callback: process.root.callback,
-				rest: process.stack
-			};
-			process.root = process.root.task;
-			++numSteps;
-			continue;
-		}
-
-		if (ctor === '_Task_nativeBinding')
-		{
-			process.root.cancel = process.root.callback(function(newRoot) {
-				process.root = newRoot;
-				enqueue(process);
-			});
-
-			break;
-		}
-
-		if (ctor === '_Task_receive')
-		{
-			var mailbox = process.mailbox;
-			if (mailbox.length === 0)
-			{
-				break;
-			}
-
-			process.root = process.root.callback(mailbox.shift());
-			++numSteps;
-			continue;
-		}
-
-		throw new Error(ctor);
-	}
-
-	if (numSteps < MAX_STEPS)
-	{
-		return numSteps + 1;
-	}
-	enqueue(process);
-
-	return numSteps;
-}
-
-
-// WORK QUEUE
-
-var working = false;
-var workQueue = [];
-
-function enqueue(process)
-{
-	workQueue.push(process);
-
-	if (!working)
-	{
-		setTimeout(work, 0);
-		working = true;
-	}
-}
-
-function work()
-{
-	var numSteps = 0;
-	var process;
-	while (numSteps < MAX_STEPS && (process = workQueue.shift()))
-	{
-		if (process.root)
-		{
-			numSteps = step(numSteps, process);
-		}
-	}
-	if (!process)
-	{
-		working = false;
-		return;
-	}
-	setTimeout(work, 0);
-}
-
-
-return {
-	succeed: succeed,
-	fail: fail,
-	nativeBinding: nativeBinding,
-	andThen: F2(andThen),
-	onError: F2(onError),
-	receive: receive,
-
-	spawn: spawn,
-	kill: kill,
-	sleep: sleep,
-	send: F2(send),
-
-	rawSpawn: rawSpawn,
-	rawSend: rawSend
-};
-
-}();
-var _elm_lang$core$Platform_Cmd$batch = _elm_lang$core$Native_Platform.batch;
-var _elm_lang$core$Platform_Cmd$none = _elm_lang$core$Platform_Cmd$batch(
-	{ctor: '[]'});
-var _elm_lang$core$Platform_Cmd_ops = _elm_lang$core$Platform_Cmd_ops || {};
-_elm_lang$core$Platform_Cmd_ops['!'] = F2(
-	function (model, commands) {
-		return {
-			ctor: '_Tuple2',
-			_0: model,
-			_1: _elm_lang$core$Platform_Cmd$batch(commands)
-		};
-	});
-var _elm_lang$core$Platform_Cmd$map = _elm_lang$core$Native_Platform.map;
-var _elm_lang$core$Platform_Cmd$Cmd = {ctor: 'Cmd'};
-
-var _elm_lang$core$Platform_Sub$batch = _elm_lang$core$Native_Platform.batch;
-var _elm_lang$core$Platform_Sub$none = _elm_lang$core$Platform_Sub$batch(
-	{ctor: '[]'});
-var _elm_lang$core$Platform_Sub$map = _elm_lang$core$Native_Platform.map;
-var _elm_lang$core$Platform_Sub$Sub = {ctor: 'Sub'};
-
-var _elm_lang$core$Platform$hack = _elm_lang$core$Native_Scheduler.succeed;
-var _elm_lang$core$Platform$sendToSelf = _elm_lang$core$Native_Platform.sendToSelf;
-var _elm_lang$core$Platform$sendToApp = _elm_lang$core$Native_Platform.sendToApp;
-var _elm_lang$core$Platform$programWithFlags = _elm_lang$core$Native_Platform.programWithFlags;
-var _elm_lang$core$Platform$program = _elm_lang$core$Native_Platform.program;
-var _elm_lang$core$Platform$Program = {ctor: 'Program'};
-var _elm_lang$core$Platform$Task = {ctor: 'Task'};
-var _elm_lang$core$Platform$ProcessId = {ctor: 'ProcessId'};
-var _elm_lang$core$Platform$Router = {ctor: 'Router'};
 
 var _elm_community$linear_algebra$Math_Vector3$cross = _elm_community$linear_algebra$Native_MJS.v3cross;
 var _elm_community$linear_algebra$Math_Vector3$dot = _elm_community$linear_algebra$Native_MJS.v3dot;
@@ -11342,6 +12276,137 @@ var _elm_lang$animation_frame$AnimationFrame$subMap = F2(
 	});
 _elm_lang$core$Native_Platform.effectManagers['AnimationFrame'] = {pkg: 'elm-lang/animation-frame', init: _elm_lang$animation_frame$AnimationFrame$init, onEffects: _elm_lang$animation_frame$AnimationFrame$onEffects, onSelfMsg: _elm_lang$animation_frame$AnimationFrame$onSelfMsg, tag: 'sub', subMap: _elm_lang$animation_frame$AnimationFrame$subMap};
 
+var _elm_lang$core$Set$foldr = F3(
+	function (f, b, _p0) {
+		var _p1 = _p0;
+		return A3(
+			_elm_lang$core$Dict$foldr,
+			F3(
+				function (k, _p2, b) {
+					return A2(f, k, b);
+				}),
+			b,
+			_p1._0);
+	});
+var _elm_lang$core$Set$foldl = F3(
+	function (f, b, _p3) {
+		var _p4 = _p3;
+		return A3(
+			_elm_lang$core$Dict$foldl,
+			F3(
+				function (k, _p5, b) {
+					return A2(f, k, b);
+				}),
+			b,
+			_p4._0);
+	});
+var _elm_lang$core$Set$toList = function (_p6) {
+	var _p7 = _p6;
+	return _elm_lang$core$Dict$keys(_p7._0);
+};
+var _elm_lang$core$Set$size = function (_p8) {
+	var _p9 = _p8;
+	return _elm_lang$core$Dict$size(_p9._0);
+};
+var _elm_lang$core$Set$member = F2(
+	function (k, _p10) {
+		var _p11 = _p10;
+		return A2(_elm_lang$core$Dict$member, k, _p11._0);
+	});
+var _elm_lang$core$Set$isEmpty = function (_p12) {
+	var _p13 = _p12;
+	return _elm_lang$core$Dict$isEmpty(_p13._0);
+};
+var _elm_lang$core$Set$Set_elm_builtin = function (a) {
+	return {ctor: 'Set_elm_builtin', _0: a};
+};
+var _elm_lang$core$Set$empty = _elm_lang$core$Set$Set_elm_builtin(_elm_lang$core$Dict$empty);
+var _elm_lang$core$Set$singleton = function (k) {
+	return _elm_lang$core$Set$Set_elm_builtin(
+		A2(
+			_elm_lang$core$Dict$singleton,
+			k,
+			{ctor: '_Tuple0'}));
+};
+var _elm_lang$core$Set$insert = F2(
+	function (k, _p14) {
+		var _p15 = _p14;
+		return _elm_lang$core$Set$Set_elm_builtin(
+			A3(
+				_elm_lang$core$Dict$insert,
+				k,
+				{ctor: '_Tuple0'},
+				_p15._0));
+	});
+var _elm_lang$core$Set$fromList = function (xs) {
+	return A3(_elm_lang$core$List$foldl, _elm_lang$core$Set$insert, _elm_lang$core$Set$empty, xs);
+};
+var _elm_lang$core$Set$map = F2(
+	function (f, s) {
+		return _elm_lang$core$Set$fromList(
+			A2(
+				_elm_lang$core$List$map,
+				f,
+				_elm_lang$core$Set$toList(s)));
+	});
+var _elm_lang$core$Set$remove = F2(
+	function (k, _p16) {
+		var _p17 = _p16;
+		return _elm_lang$core$Set$Set_elm_builtin(
+			A2(_elm_lang$core$Dict$remove, k, _p17._0));
+	});
+var _elm_lang$core$Set$union = F2(
+	function (_p19, _p18) {
+		var _p20 = _p19;
+		var _p21 = _p18;
+		return _elm_lang$core$Set$Set_elm_builtin(
+			A2(_elm_lang$core$Dict$union, _p20._0, _p21._0));
+	});
+var _elm_lang$core$Set$intersect = F2(
+	function (_p23, _p22) {
+		var _p24 = _p23;
+		var _p25 = _p22;
+		return _elm_lang$core$Set$Set_elm_builtin(
+			A2(_elm_lang$core$Dict$intersect, _p24._0, _p25._0));
+	});
+var _elm_lang$core$Set$diff = F2(
+	function (_p27, _p26) {
+		var _p28 = _p27;
+		var _p29 = _p26;
+		return _elm_lang$core$Set$Set_elm_builtin(
+			A2(_elm_lang$core$Dict$diff, _p28._0, _p29._0));
+	});
+var _elm_lang$core$Set$filter = F2(
+	function (p, _p30) {
+		var _p31 = _p30;
+		return _elm_lang$core$Set$Set_elm_builtin(
+			A2(
+				_elm_lang$core$Dict$filter,
+				F2(
+					function (k, _p32) {
+						return p(k);
+					}),
+				_p31._0));
+	});
+var _elm_lang$core$Set$partition = F2(
+	function (p, _p33) {
+		var _p34 = _p33;
+		var _p35 = A2(
+			_elm_lang$core$Dict$partition,
+			F2(
+				function (k, _p36) {
+					return p(k);
+				}),
+			_p34._0);
+		var p1 = _p35._0;
+		var p2 = _p35._1;
+		return {
+			ctor: '_Tuple2',
+			_0: _elm_lang$core$Set$Set_elm_builtin(p1),
+			_1: _elm_lang$core$Set$Set_elm_builtin(p2)
+		};
+	});
+
 var _elm_lang$dom$Native_Dom = function() {
 
 var fakeNode = {
@@ -11878,6 +12943,175 @@ var _elm_lang$html$Html_Attributes$classList = function (list) {
 };
 var _elm_lang$html$Html_Attributes$style = _elm_lang$virtual_dom$VirtualDom$style;
 
+var _elm_lang$keyboard$Keyboard$onSelfMsg = F3(
+	function (router, _p0, state) {
+		var _p1 = _p0;
+		var _p2 = A2(_elm_lang$core$Dict$get, _p1.category, state);
+		if (_p2.ctor === 'Nothing') {
+			return _elm_lang$core$Task$succeed(state);
+		} else {
+			var send = function (tagger) {
+				return A2(
+					_elm_lang$core$Platform$sendToApp,
+					router,
+					tagger(_p1.keyCode));
+			};
+			return A2(
+				_elm_lang$core$Task$andThen,
+				function (_p3) {
+					return _elm_lang$core$Task$succeed(state);
+				},
+				_elm_lang$core$Task$sequence(
+					A2(_elm_lang$core$List$map, send, _p2._0.taggers)));
+		}
+	});
+var _elm_lang$keyboard$Keyboard_ops = _elm_lang$keyboard$Keyboard_ops || {};
+_elm_lang$keyboard$Keyboard_ops['&>'] = F2(
+	function (task1, task2) {
+		return A2(
+			_elm_lang$core$Task$andThen,
+			function (_p4) {
+				return task2;
+			},
+			task1);
+	});
+var _elm_lang$keyboard$Keyboard$init = _elm_lang$core$Task$succeed(_elm_lang$core$Dict$empty);
+var _elm_lang$keyboard$Keyboard$categorizeHelpHelp = F2(
+	function (value, maybeValues) {
+		var _p5 = maybeValues;
+		if (_p5.ctor === 'Nothing') {
+			return _elm_lang$core$Maybe$Just(
+				{
+					ctor: '::',
+					_0: value,
+					_1: {ctor: '[]'}
+				});
+		} else {
+			return _elm_lang$core$Maybe$Just(
+				{ctor: '::', _0: value, _1: _p5._0});
+		}
+	});
+var _elm_lang$keyboard$Keyboard$categorizeHelp = F2(
+	function (subs, subDict) {
+		categorizeHelp:
+		while (true) {
+			var _p6 = subs;
+			if (_p6.ctor === '[]') {
+				return subDict;
+			} else {
+				var _v4 = _p6._1,
+					_v5 = A3(
+					_elm_lang$core$Dict$update,
+					_p6._0._0,
+					_elm_lang$keyboard$Keyboard$categorizeHelpHelp(_p6._0._1),
+					subDict);
+				subs = _v4;
+				subDict = _v5;
+				continue categorizeHelp;
+			}
+		}
+	});
+var _elm_lang$keyboard$Keyboard$categorize = function (subs) {
+	return A2(_elm_lang$keyboard$Keyboard$categorizeHelp, subs, _elm_lang$core$Dict$empty);
+};
+var _elm_lang$keyboard$Keyboard$keyCode = A2(_elm_lang$core$Json_Decode$field, 'keyCode', _elm_lang$core$Json_Decode$int);
+var _elm_lang$keyboard$Keyboard$subscription = _elm_lang$core$Native_Platform.leaf('Keyboard');
+var _elm_lang$keyboard$Keyboard$Watcher = F2(
+	function (a, b) {
+		return {taggers: a, pid: b};
+	});
+var _elm_lang$keyboard$Keyboard$Msg = F2(
+	function (a, b) {
+		return {category: a, keyCode: b};
+	});
+var _elm_lang$keyboard$Keyboard$onEffects = F3(
+	function (router, newSubs, oldState) {
+		var rightStep = F3(
+			function (category, taggers, task) {
+				return A2(
+					_elm_lang$core$Task$andThen,
+					function (state) {
+						return A2(
+							_elm_lang$core$Task$andThen,
+							function (pid) {
+								return _elm_lang$core$Task$succeed(
+									A3(
+										_elm_lang$core$Dict$insert,
+										category,
+										A2(_elm_lang$keyboard$Keyboard$Watcher, taggers, pid),
+										state));
+							},
+							_elm_lang$core$Process$spawn(
+								A3(
+									_elm_lang$dom$Dom_LowLevel$onDocument,
+									category,
+									_elm_lang$keyboard$Keyboard$keyCode,
+									function (_p7) {
+										return A2(
+											_elm_lang$core$Platform$sendToSelf,
+											router,
+											A2(_elm_lang$keyboard$Keyboard$Msg, category, _p7));
+									})));
+					},
+					task);
+			});
+		var bothStep = F4(
+			function (category, _p8, taggers, task) {
+				var _p9 = _p8;
+				return A2(
+					_elm_lang$core$Task$map,
+					A2(
+						_elm_lang$core$Dict$insert,
+						category,
+						A2(_elm_lang$keyboard$Keyboard$Watcher, taggers, _p9.pid)),
+					task);
+			});
+		var leftStep = F3(
+			function (category, _p10, task) {
+				var _p11 = _p10;
+				return A2(
+					_elm_lang$keyboard$Keyboard_ops['&>'],
+					_elm_lang$core$Process$kill(_p11.pid),
+					task);
+			});
+		return A6(
+			_elm_lang$core$Dict$merge,
+			leftStep,
+			bothStep,
+			rightStep,
+			oldState,
+			_elm_lang$keyboard$Keyboard$categorize(newSubs),
+			_elm_lang$core$Task$succeed(_elm_lang$core$Dict$empty));
+	});
+var _elm_lang$keyboard$Keyboard$MySub = F2(
+	function (a, b) {
+		return {ctor: 'MySub', _0: a, _1: b};
+	});
+var _elm_lang$keyboard$Keyboard$presses = function (tagger) {
+	return _elm_lang$keyboard$Keyboard$subscription(
+		A2(_elm_lang$keyboard$Keyboard$MySub, 'keypress', tagger));
+};
+var _elm_lang$keyboard$Keyboard$downs = function (tagger) {
+	return _elm_lang$keyboard$Keyboard$subscription(
+		A2(_elm_lang$keyboard$Keyboard$MySub, 'keydown', tagger));
+};
+var _elm_lang$keyboard$Keyboard$ups = function (tagger) {
+	return _elm_lang$keyboard$Keyboard$subscription(
+		A2(_elm_lang$keyboard$Keyboard$MySub, 'keyup', tagger));
+};
+var _elm_lang$keyboard$Keyboard$subMap = F2(
+	function (func, _p12) {
+		var _p13 = _p12;
+		return A2(
+			_elm_lang$keyboard$Keyboard$MySub,
+			_p13._0,
+			function (_p14) {
+				return func(
+					_p13._1(_p14));
+			});
+	});
+_elm_lang$core$Native_Platform.effectManagers['Keyboard'] = {pkg: 'elm-lang/keyboard', init: _elm_lang$keyboard$Keyboard$init, onEffects: _elm_lang$keyboard$Keyboard$onEffects, onSelfMsg: _elm_lang$keyboard$Keyboard$onSelfMsg, tag: 'sub', subMap: _elm_lang$keyboard$Keyboard$subMap};
+
 var _elm_lang$window$Native_Window = function()
 {
 
@@ -12001,10 +13235,6 @@ var _elm_lang$window$Window$subMap = F2(
 _elm_lang$core$Native_Platform.effectManagers['Window'] = {pkg: 'elm-lang/window', init: _elm_lang$window$Window$init, onEffects: _elm_lang$window$Window$onEffects, onSelfMsg: _elm_lang$window$Window$onSelfMsg, tag: 'sub', subMap: _elm_lang$window$Window$subMap};
 
 var _micktwomey$elmo_8$Elmo8_Layers_Common$makeProjectionMatrix = A4(_elm_community$linear_algebra$Math_Matrix4$makeOrtho2D, 0.0, 128.0, 128.0, 0.0);
-var _micktwomey$elmo_8$Elmo8_Layers_Common$pico8PaletteMapUri = 'http://elmo-8.twomeylee.name/assets/pico-8-palette-map.png';
-var _micktwomey$elmo_8$Elmo8_Layers_Common$pico8PaletteMapRelativeUri = '/assets/pico-8-palette-map.png';
-var _micktwomey$elmo_8$Elmo8_Layers_Common$pico8FontUri = 'http://elmo-8.twomeylee.name/assets/pico-8_regular_8.png';
-var _micktwomey$elmo_8$Elmo8_Layers_Common$pico8FontRelativeUri = '/assets/pico-8_regular_8.png';
 var _micktwomey$elmo_8$Elmo8_Layers_Common$CanvasSize = F2(
 	function (a, b) {
 		return {width: a, height: b};
@@ -12013,6 +13243,1038 @@ var _micktwomey$elmo_8$Elmo8_Layers_Common$Vertex = function (a) {
 	return {position: a};
 };
 
+var _micktwomey$elmo_8$Elmo8_GL_Characters$Character = F7(
+	function (a, b, c, d, e, f, g) {
+		return {characterWidth: a, offsetX: b, offsetY: c, x: d, y: e, width: f, height: g};
+	});
+var _micktwomey$elmo_8$Elmo8_GL_Characters$characterList = {
+	ctor: '::',
+	_0: {
+		ctor: '_Tuple2',
+		_0: _elm_lang$core$Native_Utils.chr(' '),
+		_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 10, 1, 11, 0, 0)
+	},
+	_1: {
+		ctor: '::',
+		_0: {
+			ctor: '_Tuple2',
+			_0: _elm_lang$core$Native_Utils.chr('!'),
+			_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 2, 0, 2, 1, 2, 10)
+		},
+		_1: {
+			ctor: '::',
+			_0: {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.chr('\"'),
+				_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 5, 1, 6, 4)
+			},
+			_1: {
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.chr('#'),
+					_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 12, 1, 6, 10)
+				},
+				_1: {
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.chr('$'),
+						_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 19, 1, 6, 10)
+					},
+					_1: {
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: _elm_lang$core$Native_Utils.chr('%'),
+							_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 26, 1, 6, 10)
+						},
+						_1: {
+							ctor: '::',
+							_0: {
+								ctor: '_Tuple2',
+								_0: _elm_lang$core$Native_Utils.chr('&'),
+								_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 33, 1, 6, 10)
+							},
+							_1: {
+								ctor: '::',
+								_0: {
+									ctor: '_Tuple2',
+									_0: _elm_lang$core$Native_Utils.chr('\''),
+									_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 40, 1, 4, 4)
+								},
+								_1: {
+									ctor: '::',
+									_0: {
+										ctor: '_Tuple2',
+										_0: _elm_lang$core$Native_Utils.chr('('),
+										_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 45, 1, 4, 10)
+									},
+									_1: {
+										ctor: '::',
+										_0: {
+											ctor: '_Tuple2',
+											_0: _elm_lang$core$Native_Utils.chr(')'),
+											_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 2, 0, 50, 1, 4, 10)
+										},
+										_1: {
+											ctor: '::',
+											_0: {
+												ctor: '_Tuple2',
+												_0: _elm_lang$core$Native_Utils.chr('*'),
+												_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 55, 1, 6, 10)
+											},
+											_1: {
+												ctor: '::',
+												_0: {
+													ctor: '_Tuple2',
+													_0: _elm_lang$core$Native_Utils.chr('+'),
+													_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 2, 62, 3, 6, 6)
+												},
+												_1: {
+													ctor: '::',
+													_0: {
+														ctor: '_Tuple2',
+														_0: _elm_lang$core$Native_Utils.chr(','),
+														_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 6, 69, 7, 4, 4)
+													},
+													_1: {
+														ctor: '::',
+														_0: {
+															ctor: '_Tuple2',
+															_0: _elm_lang$core$Native_Utils.chr('-'),
+															_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 4, 74, 5, 6, 2)
+														},
+														_1: {
+															ctor: '::',
+															_0: {
+																ctor: '_Tuple2',
+																_0: _elm_lang$core$Native_Utils.chr('.'),
+																_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 2, 8, 81, 9, 2, 2)
+															},
+															_1: {
+																ctor: '::',
+																_0: {
+																	ctor: '_Tuple2',
+																	_0: _elm_lang$core$Native_Utils.chr('/'),
+																	_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 84, 1, 6, 10)
+																},
+																_1: {
+																	ctor: '::',
+																	_0: {
+																		ctor: '_Tuple2',
+																		_0: _elm_lang$core$Native_Utils.chr('0'),
+																		_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 91, 1, 6, 10)
+																	},
+																	_1: {
+																		ctor: '::',
+																		_0: {
+																			ctor: '_Tuple2',
+																			_0: _elm_lang$core$Native_Utils.chr('1'),
+																			_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 98, 1, 6, 10)
+																		},
+																		_1: {
+																			ctor: '::',
+																			_0: {
+																				ctor: '_Tuple2',
+																				_0: _elm_lang$core$Native_Utils.chr('2'),
+																				_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 105, 1, 6, 10)
+																			},
+																			_1: {
+																				ctor: '::',
+																				_0: {
+																					ctor: '_Tuple2',
+																					_0: _elm_lang$core$Native_Utils.chr('3'),
+																					_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 112, 1, 6, 10)
+																				},
+																				_1: {
+																					ctor: '::',
+																					_0: {
+																						ctor: '_Tuple2',
+																						_0: _elm_lang$core$Native_Utils.chr('4'),
+																						_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 119, 1, 6, 10)
+																					},
+																					_1: {
+																						ctor: '::',
+																						_0: {
+																							ctor: '_Tuple2',
+																							_0: _elm_lang$core$Native_Utils.chr('5'),
+																							_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 1, 12, 6, 10)
+																						},
+																						_1: {
+																							ctor: '::',
+																							_0: {
+																								ctor: '_Tuple2',
+																								_0: _elm_lang$core$Native_Utils.chr('6'),
+																								_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 8, 12, 6, 10)
+																							},
+																							_1: {
+																								ctor: '::',
+																								_0: {
+																									ctor: '_Tuple2',
+																									_0: _elm_lang$core$Native_Utils.chr('7'),
+																									_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 15, 12, 6, 10)
+																								},
+																								_1: {
+																									ctor: '::',
+																									_0: {
+																										ctor: '_Tuple2',
+																										_0: _elm_lang$core$Native_Utils.chr('8'),
+																										_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 22, 12, 6, 10)
+																									},
+																									_1: {
+																										ctor: '::',
+																										_0: {
+																											ctor: '_Tuple2',
+																											_0: _elm_lang$core$Native_Utils.chr('9'),
+																											_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 29, 12, 6, 10)
+																										},
+																										_1: {
+																											ctor: '::',
+																											_0: {
+																												ctor: '_Tuple2',
+																												_0: _elm_lang$core$Native_Utils.chr(':'),
+																												_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 2, 2, 36, 14, 2, 6)
+																											},
+																											_1: {
+																												ctor: '::',
+																												_0: {
+																													ctor: '_Tuple2',
+																													_0: _elm_lang$core$Native_Utils.chr(';'),
+																													_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 2, 39, 14, 4, 8)
+																												},
+																												_1: {
+																													ctor: '::',
+																													_0: {
+																														ctor: '_Tuple2',
+																														_0: _elm_lang$core$Native_Utils.chr('<'),
+																														_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 44, 12, 6, 10)
+																													},
+																													_1: {
+																														ctor: '::',
+																														_0: {
+																															ctor: '_Tuple2',
+																															_0: _elm_lang$core$Native_Utils.chr('='),
+																															_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 2, 51, 14, 6, 6)
+																														},
+																														_1: {
+																															ctor: '::',
+																															_0: {
+																																ctor: '_Tuple2',
+																																_0: _elm_lang$core$Native_Utils.chr('>'),
+																																_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 58, 12, 6, 10)
+																															},
+																															_1: {
+																																ctor: '::',
+																																_0: {
+																																	ctor: '_Tuple2',
+																																	_0: _elm_lang$core$Native_Utils.chr('?'),
+																																	_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 65, 12, 6, 10)
+																																},
+																																_1: {
+																																	ctor: '::',
+																																	_0: {
+																																		ctor: '_Tuple2',
+																																		_0: _elm_lang$core$Native_Utils.chr('@'),
+																																		_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 72, 12, 6, 10)
+																																	},
+																																	_1: {
+																																		ctor: '::',
+																																		_0: {
+																																			ctor: '_Tuple2',
+																																			_0: _elm_lang$core$Native_Utils.chr('A'),
+																																			_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 79, 12, 6, 10)
+																																		},
+																																		_1: {
+																																			ctor: '::',
+																																			_0: {
+																																				ctor: '_Tuple2',
+																																				_0: _elm_lang$core$Native_Utils.chr('B'),
+																																				_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 86, 12, 6, 10)
+																																			},
+																																			_1: {
+																																				ctor: '::',
+																																				_0: {
+																																					ctor: '_Tuple2',
+																																					_0: _elm_lang$core$Native_Utils.chr('C'),
+																																					_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 93, 12, 6, 10)
+																																				},
+																																				_1: {
+																																					ctor: '::',
+																																					_0: {
+																																						ctor: '_Tuple2',
+																																						_0: _elm_lang$core$Native_Utils.chr('D'),
+																																						_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 100, 12, 6, 10)
+																																					},
+																																					_1: {
+																																						ctor: '::',
+																																						_0: {
+																																							ctor: '_Tuple2',
+																																							_0: _elm_lang$core$Native_Utils.chr('E'),
+																																							_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 107, 12, 6, 10)
+																																						},
+																																						_1: {
+																																							ctor: '::',
+																																							_0: {
+																																								ctor: '_Tuple2',
+																																								_0: _elm_lang$core$Native_Utils.chr('F'),
+																																								_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 114, 12, 6, 10)
+																																							},
+																																							_1: {
+																																								ctor: '::',
+																																								_0: {
+																																									ctor: '_Tuple2',
+																																									_0: _elm_lang$core$Native_Utils.chr('G'),
+																																									_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 1, 23, 6, 10)
+																																								},
+																																								_1: {
+																																									ctor: '::',
+																																									_0: {
+																																										ctor: '_Tuple2',
+																																										_0: _elm_lang$core$Native_Utils.chr('H'),
+																																										_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 8, 23, 6, 10)
+																																									},
+																																									_1: {
+																																										ctor: '::',
+																																										_0: {
+																																											ctor: '_Tuple2',
+																																											_0: _elm_lang$core$Native_Utils.chr('I'),
+																																											_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 15, 23, 6, 10)
+																																										},
+																																										_1: {
+																																											ctor: '::',
+																																											_0: {
+																																												ctor: '_Tuple2',
+																																												_0: _elm_lang$core$Native_Utils.chr('J'),
+																																												_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 22, 23, 6, 10)
+																																											},
+																																											_1: {
+																																												ctor: '::',
+																																												_0: {
+																																													ctor: '_Tuple2',
+																																													_0: _elm_lang$core$Native_Utils.chr('K'),
+																																													_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 29, 23, 6, 10)
+																																												},
+																																												_1: {
+																																													ctor: '::',
+																																													_0: {
+																																														ctor: '_Tuple2',
+																																														_0: _elm_lang$core$Native_Utils.chr('L'),
+																																														_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 36, 23, 6, 10)
+																																													},
+																																													_1: {
+																																														ctor: '::',
+																																														_0: {
+																																															ctor: '_Tuple2',
+																																															_0: _elm_lang$core$Native_Utils.chr('M'),
+																																															_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 43, 23, 6, 10)
+																																														},
+																																														_1: {
+																																															ctor: '::',
+																																															_0: {
+																																																ctor: '_Tuple2',
+																																																_0: _elm_lang$core$Native_Utils.chr('N'),
+																																																_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 50, 23, 6, 10)
+																																															},
+																																															_1: {
+																																																ctor: '::',
+																																																_0: {
+																																																	ctor: '_Tuple2',
+																																																	_0: _elm_lang$core$Native_Utils.chr('O'),
+																																																	_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 57, 23, 6, 10)
+																																																},
+																																																_1: {
+																																																	ctor: '::',
+																																																	_0: {
+																																																		ctor: '_Tuple2',
+																																																		_0: _elm_lang$core$Native_Utils.chr('P'),
+																																																		_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 64, 23, 6, 10)
+																																																	},
+																																																	_1: {
+																																																		ctor: '::',
+																																																		_0: {
+																																																			ctor: '_Tuple2',
+																																																			_0: _elm_lang$core$Native_Utils.chr('Q'),
+																																																			_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 71, 23, 6, 10)
+																																																		},
+																																																		_1: {
+																																																			ctor: '::',
+																																																			_0: {
+																																																				ctor: '_Tuple2',
+																																																				_0: _elm_lang$core$Native_Utils.chr('R'),
+																																																				_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 78, 23, 6, 10)
+																																																			},
+																																																			_1: {
+																																																				ctor: '::',
+																																																				_0: {
+																																																					ctor: '_Tuple2',
+																																																					_0: _elm_lang$core$Native_Utils.chr('S'),
+																																																					_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 85, 23, 6, 10)
+																																																				},
+																																																				_1: {
+																																																					ctor: '::',
+																																																					_0: {
+																																																						ctor: '_Tuple2',
+																																																						_0: _elm_lang$core$Native_Utils.chr('T'),
+																																																						_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 92, 23, 6, 10)
+																																																					},
+																																																					_1: {
+																																																						ctor: '::',
+																																																						_0: {
+																																																							ctor: '_Tuple2',
+																																																							_0: _elm_lang$core$Native_Utils.chr('U'),
+																																																							_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 99, 23, 6, 10)
+																																																						},
+																																																						_1: {
+																																																							ctor: '::',
+																																																							_0: {
+																																																								ctor: '_Tuple2',
+																																																								_0: _elm_lang$core$Native_Utils.chr('V'),
+																																																								_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 106, 23, 6, 10)
+																																																							},
+																																																							_1: {
+																																																								ctor: '::',
+																																																								_0: {
+																																																									ctor: '_Tuple2',
+																																																									_0: _elm_lang$core$Native_Utils.chr('W'),
+																																																									_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 113, 23, 6, 10)
+																																																								},
+																																																								_1: {
+																																																									ctor: '::',
+																																																									_0: {
+																																																										ctor: '_Tuple2',
+																																																										_0: _elm_lang$core$Native_Utils.chr('X'),
+																																																										_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 120, 23, 6, 10)
+																																																									},
+																																																									_1: {
+																																																										ctor: '::',
+																																																										_0: {
+																																																											ctor: '_Tuple2',
+																																																											_0: _elm_lang$core$Native_Utils.chr('Y'),
+																																																											_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 1, 34, 6, 10)
+																																																										},
+																																																										_1: {
+																																																											ctor: '::',
+																																																											_0: {
+																																																												ctor: '_Tuple2',
+																																																												_0: _elm_lang$core$Native_Utils.chr('Z'),
+																																																												_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 8, 34, 6, 10)
+																																																											},
+																																																											_1: {
+																																																												ctor: '::',
+																																																												_0: {
+																																																													ctor: '_Tuple2',
+																																																													_0: _elm_lang$core$Native_Utils.chr('['),
+																																																													_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 15, 34, 4, 10)
+																																																												},
+																																																												_1: {
+																																																													ctor: '::',
+																																																													_0: {
+																																																														ctor: '_Tuple2',
+																																																														_0: _elm_lang$core$Native_Utils.chr('\\'),
+																																																														_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 20, 34, 6, 10)
+																																																													},
+																																																													_1: {
+																																																														ctor: '::',
+																																																														_0: {
+																																																															ctor: '_Tuple2',
+																																																															_0: _elm_lang$core$Native_Utils.chr(']'),
+																																																															_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 2, 0, 27, 34, 4, 10)
+																																																														},
+																																																														_1: {
+																																																															ctor: '::',
+																																																															_0: {
+																																																																ctor: '_Tuple2',
+																																																																_0: _elm_lang$core$Native_Utils.chr('^'),
+																																																																_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 32, 34, 6, 4)
+																																																															},
+																																																															_1: {
+																																																																ctor: '::',
+																																																																_0: {
+																																																																	ctor: '_Tuple2',
+																																																																	_0: _elm_lang$core$Native_Utils.chr('_'),
+																																																																	_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 8, 39, 42, 6, 2)
+																																																																},
+																																																																_1: {
+																																																																	ctor: '::',
+																																																																	_0: {
+																																																																		ctor: '_Tuple2',
+																																																																		_0: _elm_lang$core$Native_Utils.chr('`'),
+																																																																		_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 2, 0, 46, 34, 4, 4)
+																																																																	},
+																																																																	_1: {
+																																																																		ctor: '::',
+																																																																		_0: {
+																																																																			ctor: '_Tuple2',
+																																																																			_0: _elm_lang$core$Native_Utils.chr('a'),
+																																																																			_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 2, 51, 36, 6, 8)
+																																																																		},
+																																																																		_1: {
+																																																																			ctor: '::',
+																																																																			_0: {
+																																																																				ctor: '_Tuple2',
+																																																																				_0: _elm_lang$core$Native_Utils.chr('b'),
+																																																																				_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 2, 58, 36, 6, 8)
+																																																																			},
+																																																																			_1: {
+																																																																				ctor: '::',
+																																																																				_0: {
+																																																																					ctor: '_Tuple2',
+																																																																					_0: _elm_lang$core$Native_Utils.chr('c'),
+																																																																					_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 2, 65, 36, 6, 8)
+																																																																				},
+																																																																				_1: {
+																																																																					ctor: '::',
+																																																																					_0: {
+																																																																						ctor: '_Tuple2',
+																																																																						_0: _elm_lang$core$Native_Utils.chr('d'),
+																																																																						_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 2, 72, 36, 6, 8)
+																																																																					},
+																																																																					_1: {
+																																																																						ctor: '::',
+																																																																						_0: {
+																																																																							ctor: '_Tuple2',
+																																																																							_0: _elm_lang$core$Native_Utils.chr('e'),
+																																																																							_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 2, 79, 36, 6, 8)
+																																																																						},
+																																																																						_1: {
+																																																																							ctor: '::',
+																																																																							_0: {
+																																																																								ctor: '_Tuple2',
+																																																																								_0: _elm_lang$core$Native_Utils.chr('f'),
+																																																																								_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 2, 86, 36, 6, 8)
+																																																																							},
+																																																																							_1: {
+																																																																								ctor: '::',
+																																																																								_0: {
+																																																																									ctor: '_Tuple2',
+																																																																									_0: _elm_lang$core$Native_Utils.chr('g'),
+																																																																									_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 2, 93, 36, 6, 8)
+																																																																								},
+																																																																								_1: {
+																																																																									ctor: '::',
+																																																																									_0: {
+																																																																										ctor: '_Tuple2',
+																																																																										_0: _elm_lang$core$Native_Utils.chr('h'),
+																																																																										_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 2, 100, 36, 6, 8)
+																																																																									},
+																																																																									_1: {
+																																																																										ctor: '::',
+																																																																										_0: {
+																																																																											ctor: '_Tuple2',
+																																																																											_0: _elm_lang$core$Native_Utils.chr('i'),
+																																																																											_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 2, 107, 36, 6, 8)
+																																																																										},
+																																																																										_1: {
+																																																																											ctor: '::',
+																																																																											_0: {
+																																																																												ctor: '_Tuple2',
+																																																																												_0: _elm_lang$core$Native_Utils.chr('j'),
+																																																																												_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 2, 114, 36, 6, 8)
+																																																																											},
+																																																																											_1: {
+																																																																												ctor: '::',
+																																																																												_0: {
+																																																																													ctor: '_Tuple2',
+																																																																													_0: _elm_lang$core$Native_Utils.chr('k'),
+																																																																													_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 2, 1, 47, 6, 8)
+																																																																												},
+																																																																												_1: {
+																																																																													ctor: '::',
+																																																																													_0: {
+																																																																														ctor: '_Tuple2',
+																																																																														_0: _elm_lang$core$Native_Utils.chr('l'),
+																																																																														_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 2, 8, 47, 6, 8)
+																																																																													},
+																																																																													_1: {
+																																																																														ctor: '::',
+																																																																														_0: {
+																																																																															ctor: '_Tuple2',
+																																																																															_0: _elm_lang$core$Native_Utils.chr('m'),
+																																																																															_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 2, 15, 47, 6, 8)
+																																																																														},
+																																																																														_1: {
+																																																																															ctor: '::',
+																																																																															_0: {
+																																																																																ctor: '_Tuple2',
+																																																																																_0: _elm_lang$core$Native_Utils.chr('n'),
+																																																																																_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 2, 22, 47, 6, 8)
+																																																																															},
+																																																																															_1: {
+																																																																																ctor: '::',
+																																																																																_0: {
+																																																																																	ctor: '_Tuple2',
+																																																																																	_0: _elm_lang$core$Native_Utils.chr('o'),
+																																																																																	_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 2, 29, 47, 6, 8)
+																																																																																},
+																																																																																_1: {
+																																																																																	ctor: '::',
+																																																																																	_0: {
+																																																																																		ctor: '_Tuple2',
+																																																																																		_0: _elm_lang$core$Native_Utils.chr('p'),
+																																																																																		_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 2, 36, 47, 6, 8)
+																																																																																	},
+																																																																																	_1: {
+																																																																																		ctor: '::',
+																																																																																		_0: {
+																																																																																			ctor: '_Tuple2',
+																																																																																			_0: _elm_lang$core$Native_Utils.chr('q'),
+																																																																																			_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 2, 43, 47, 6, 8)
+																																																																																		},
+																																																																																		_1: {
+																																																																																			ctor: '::',
+																																																																																			_0: {
+																																																																																				ctor: '_Tuple2',
+																																																																																				_0: _elm_lang$core$Native_Utils.chr('r'),
+																																																																																				_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 2, 50, 47, 6, 8)
+																																																																																			},
+																																																																																			_1: {
+																																																																																				ctor: '::',
+																																																																																				_0: {
+																																																																																					ctor: '_Tuple2',
+																																																																																					_0: _elm_lang$core$Native_Utils.chr('s'),
+																																																																																					_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 2, 57, 47, 6, 8)
+																																																																																				},
+																																																																																				_1: {
+																																																																																					ctor: '::',
+																																																																																					_0: {
+																																																																																						ctor: '_Tuple2',
+																																																																																						_0: _elm_lang$core$Native_Utils.chr('t'),
+																																																																																						_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 2, 64, 47, 6, 8)
+																																																																																					},
+																																																																																					_1: {
+																																																																																						ctor: '::',
+																																																																																						_0: {
+																																																																																							ctor: '_Tuple2',
+																																																																																							_0: _elm_lang$core$Native_Utils.chr('u'),
+																																																																																							_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 2, 71, 47, 6, 8)
+																																																																																						},
+																																																																																						_1: {
+																																																																																							ctor: '::',
+																																																																																							_0: {
+																																																																																								ctor: '_Tuple2',
+																																																																																								_0: _elm_lang$core$Native_Utils.chr('v'),
+																																																																																								_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 2, 78, 47, 6, 8)
+																																																																																							},
+																																																																																							_1: {
+																																																																																								ctor: '::',
+																																																																																								_0: {
+																																																																																									ctor: '_Tuple2',
+																																																																																									_0: _elm_lang$core$Native_Utils.chr('w'),
+																																																																																									_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 2, 85, 47, 6, 8)
+																																																																																								},
+																																																																																								_1: {
+																																																																																									ctor: '::',
+																																																																																									_0: {
+																																																																																										ctor: '_Tuple2',
+																																																																																										_0: _elm_lang$core$Native_Utils.chr('x'),
+																																																																																										_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 2, 92, 47, 6, 8)
+																																																																																									},
+																																																																																									_1: {
+																																																																																										ctor: '::',
+																																																																																										_0: {
+																																																																																											ctor: '_Tuple2',
+																																																																																											_0: _elm_lang$core$Native_Utils.chr('y'),
+																																																																																											_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 2, 99, 47, 6, 8)
+																																																																																										},
+																																																																																										_1: {
+																																																																																											ctor: '::',
+																																																																																											_0: {
+																																																																																												ctor: '_Tuple2',
+																																																																																												_0: _elm_lang$core$Native_Utils.chr('z'),
+																																																																																												_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 2, 106, 47, 6, 8)
+																																																																																											},
+																																																																																											_1: {
+																																																																																												ctor: '::',
+																																																																																												_0: {
+																																																																																													ctor: '_Tuple2',
+																																																																																													_0: _elm_lang$core$Native_Utils.chr('{'),
+																																																																																													_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 113, 45, 6, 10)
+																																																																																												},
+																																																																																												_1: {
+																																																																																													ctor: '::',
+																																																																																													_0: {
+																																																																																														ctor: '_Tuple2',
+																																																																																														_0: _elm_lang$core$Native_Utils.chr('|'),
+																																																																																														_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 2, 0, 120, 45, 2, 10)
+																																																																																													},
+																																																																																													_1: {
+																																																																																														ctor: '::',
+																																																																																														_0: {
+																																																																																															ctor: '_Tuple2',
+																																																																																															_0: _elm_lang$core$Native_Utils.chr('}'),
+																																																																																															_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 0, 1, 56, 6, 10)
+																																																																																														},
+																																																																																														_1: {
+																																																																																															ctor: '::',
+																																																																																															_0: {
+																																																																																																ctor: '_Tuple2',
+																																																																																																_0: _elm_lang$core$Native_Utils.chr('~'),
+																																																																																																_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 8, 0, 2, 8, 58, 6, 6)
+																																																																																															},
+																																																																																															_1: {
+																																																																																																ctor: '::',
+																																																																																																_0: {
+																																																																																																	ctor: '_Tuple2',
+																																																																																																	_0: _elm_lang$core$Native_Utils.chr('À'),
+																																																																																																	_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 16, 0, 0, 15, 56, 14, 10)
+																																																																																																},
+																																																																																																_1: {
+																																																																																																	ctor: '::',
+																																																																																																	_0: {
+																																																																																																		ctor: '_Tuple2',
+																																																																																																		_0: _elm_lang$core$Native_Utils.chr('Á'),
+																																																																																																		_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 16, 0, 0, 30, 56, 14, 10)
+																																																																																																	},
+																																																																																																	_1: {
+																																																																																																		ctor: '::',
+																																																																																																		_0: {
+																																																																																																			ctor: '_Tuple2',
+																																																																																																			_0: _elm_lang$core$Native_Utils.chr('Â'),
+																																																																																																			_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 16, 0, 0, 45, 56, 14, 10)
+																																																																																																		},
+																																																																																																		_1: {
+																																																																																																			ctor: '::',
+																																																																																																			_0: {
+																																																																																																				ctor: '_Tuple2',
+																																																																																																				_0: _elm_lang$core$Native_Utils.chr('Ã'),
+																																																																																																				_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 16, 0, 0, 60, 56, 14, 10)
+																																																																																																			},
+																																																																																																			_1: {
+																																																																																																				ctor: '::',
+																																																																																																				_0: {
+																																																																																																					ctor: '_Tuple2',
+																																																																																																					_0: _elm_lang$core$Native_Utils.chr('Ä'),
+																																																																																																					_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 16, 0, 0, 75, 56, 14, 10)
+																																																																																																				},
+																																																																																																				_1: {
+																																																																																																					ctor: '::',
+																																																																																																					_0: {
+																																																																																																						ctor: '_Tuple2',
+																																																																																																						_0: _elm_lang$core$Native_Utils.chr('Å'),
+																																																																																																						_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 16, 2, 0, 90, 56, 10, 10)
+																																																																																																					},
+																																																																																																					_1: {
+																																																																																																						ctor: '::',
+																																																																																																						_0: {
+																																																																																																							ctor: '_Tuple2',
+																																																																																																							_0: _elm_lang$core$Native_Utils.chr('Æ'),
+																																																																																																							_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 16, 2, 0, 101, 56, 10, 10)
+																																																																																																						},
+																																																																																																						_1: {
+																																																																																																							ctor: '::',
+																																																																																																							_0: {
+																																																																																																								ctor: '_Tuple2',
+																																																																																																								_0: _elm_lang$core$Native_Utils.chr('Ç'),
+																																																																																																								_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 16, 2, 0, 112, 56, 10, 10)
+																																																																																																							},
+																																																																																																							_1: {
+																																																																																																								ctor: '::',
+																																																																																																								_0: {
+																																																																																																									ctor: '_Tuple2',
+																																																																																																									_0: _elm_lang$core$Native_Utils.chr('È'),
+																																																																																																									_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 16, 0, 0, 1, 67, 14, 10)
+																																																																																																								},
+																																																																																																								_1: {
+																																																																																																									ctor: '::',
+																																																																																																									_0: {
+																																																																																																										ctor: '_Tuple2',
+																																																																																																										_0: _elm_lang$core$Native_Utils.chr('É'),
+																																																																																																										_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 16, 2, 0, 16, 67, 10, 10)
+																																																																																																									},
+																																																																																																									_1: {
+																																																																																																										ctor: '::',
+																																																																																																										_0: {
+																																																																																																											ctor: '_Tuple2',
+																																																																																																											_0: _elm_lang$core$Native_Utils.chr('Ê'),
+																																																																																																											_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 16, 0, 0, 27, 67, 14, 10)
+																																																																																																										},
+																																																																																																										_1: {
+																																																																																																											ctor: '::',
+																																																																																																											_0: {
+																																																																																																												ctor: '_Tuple2',
+																																																																																																												_0: _elm_lang$core$Native_Utils.chr('Ë'),
+																																																																																																												_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 16, 0, 0, 42, 67, 14, 10)
+																																																																																																											},
+																																																																																																											_1: {
+																																																																																																												ctor: '::',
+																																																																																																												_0: {
+																																																																																																													ctor: '_Tuple2',
+																																																																																																													_0: _elm_lang$core$Native_Utils.chr('Ì'),
+																																																																																																													_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 16, 0, 0, 57, 67, 14, 10)
+																																																																																																												},
+																																																																																																												_1: {
+																																																																																																													ctor: '::',
+																																																																																																													_0: {
+																																																																																																														ctor: '_Tuple2',
+																																																																																																														_0: _elm_lang$core$Native_Utils.chr('Í'),
+																																																																																																														_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 16, 2, 0, 72, 67, 10, 10)
+																																																																																																													},
+																																																																																																													_1: {
+																																																																																																														ctor: '::',
+																																																																																																														_0: {
+																																																																																																															ctor: '_Tuple2',
+																																																																																																															_0: _elm_lang$core$Native_Utils.chr('Î'),
+																																																																																																															_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 16, 0, 0, 83, 67, 14, 10)
+																																																																																																														},
+																																																																																																														_1: {
+																																																																																																															ctor: '::',
+																																																																																																															_0: {
+																																																																																																																ctor: '_Tuple2',
+																																																																																																																_0: _elm_lang$core$Native_Utils.chr('Ï'),
+																																																																																																																_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 16, 2, 0, 98, 67, 10, 10)
+																																																																																																															},
+																																																																																																															_1: {
+																																																																																																																ctor: '::',
+																																																																																																																_0: {
+																																																																																																																	ctor: '_Tuple2',
+																																																																																																																	_0: _elm_lang$core$Native_Utils.chr('Ð'),
+																																																																																																																	_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 16, 0, 4, 109, 71, 14, 2)
+																																																																																																																},
+																																																																																																																_1: {
+																																																																																																																	ctor: '::',
+																																																																																																																	_0: {
+																																																																																																																		ctor: '_Tuple2',
+																																																																																																																		_0: _elm_lang$core$Native_Utils.chr('Ñ'),
+																																																																																																																		_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 16, 0, 0, 1, 78, 14, 10)
+																																																																																																																	},
+																																																																																																																	_1: {
+																																																																																																																		ctor: '::',
+																																																																																																																		_0: {
+																																																																																																																			ctor: '_Tuple2',
+																																																																																																																			_0: _elm_lang$core$Native_Utils.chr('Ò'),
+																																																																																																																			_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 16, 0, 0, 16, 78, 14, 10)
+																																																																																																																		},
+																																																																																																																		_1: {
+																																																																																																																			ctor: '::',
+																																																																																																																			_0: {
+																																																																																																																				ctor: '_Tuple2',
+																																																																																																																				_0: _elm_lang$core$Native_Utils.chr('Ó'),
+																																																																																																																				_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 16, 2, 0, 31, 78, 10, 10)
+																																																																																																																			},
+																																																																																																																			_1: {
+																																																																																																																				ctor: '::',
+																																																																																																																				_0: {
+																																																																																																																					ctor: '_Tuple2',
+																																																																																																																					_0: _elm_lang$core$Native_Utils.chr('Ô'),
+																																																																																																																					_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 16, 0, 0, 42, 78, 14, 10)
+																																																																																																																				},
+																																																																																																																				_1: {
+																																																																																																																					ctor: '::',
+																																																																																																																					_0: {
+																																																																																																																						ctor: '_Tuple2',
+																																																																																																																						_0: _elm_lang$core$Native_Utils.chr('Õ'),
+																																																																																																																						_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 16, 0, 2, 57, 80, 14, 6)
+																																																																																																																					},
+																																																																																																																					_1: {
+																																																																																																																						ctor: '::',
+																																																																																																																						_0: {
+																																																																																																																							ctor: '_Tuple2',
+																																																																																																																							_0: _elm_lang$core$Native_Utils.chr('Ö'),
+																																																																																																																							_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 16, 0, 2, 72, 80, 14, 6)
+																																																																																																																						},
+																																																																																																																						_1: {
+																																																																																																																							ctor: '::',
+																																																																																																																							_0: {
+																																																																																																																								ctor: '_Tuple2',
+																																																																																																																								_0: _elm_lang$core$Native_Utils.chr('×'),
+																																																																																																																								_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 16, 0, 0, 87, 78, 14, 10)
+																																																																																																																							},
+																																																																																																																							_1: {
+																																																																																																																								ctor: '::',
+																																																																																																																								_0: {
+																																																																																																																									ctor: '_Tuple2',
+																																																																																																																									_0: _elm_lang$core$Native_Utils.chr('Ø'),
+																																																																																																																									_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 16, 0, 0, 102, 78, 14, 10)
+																																																																																																																								},
+																																																																																																																								_1: {
+																																																																																																																									ctor: '::',
+																																																																																																																									_0: {
+																																																																																																																										ctor: '_Tuple2',
+																																																																																																																										_0: _elm_lang$core$Native_Utils.chr('Ù'),
+																																																																																																																										_1: A7(_micktwomey$elmo_8$Elmo8_GL_Characters$Character, 16, 0, 0, 1, 89, 14, 10)
+																																																																																																																									},
+																																																																																																																									_1: {ctor: '[]'}
+																																																																																																																								}
+																																																																																																																							}
+																																																																																																																						}
+																																																																																																																					}
+																																																																																																																				}
+																																																																																																																			}
+																																																																																																																		}
+																																																																																																																	}
+																																																																																																																}
+																																																																																																															}
+																																																																																																														}
+																																																																																																													}
+																																																																																																												}
+																																																																																																											}
+																																																																																																										}
+																																																																																																									}
+																																																																																																								}
+																																																																																																							}
+																																																																																																						}
+																																																																																																					}
+																																																																																																				}
+																																																																																																			}
+																																																																																																		}
+																																																																																																	}
+																																																																																																}
+																																																																																															}
+																																																																																														}
+																																																																																													}
+																																																																																												}
+																																																																																											}
+																																																																																										}
+																																																																																									}
+																																																																																								}
+																																																																																							}
+																																																																																						}
+																																																																																					}
+																																																																																				}
+																																																																																			}
+																																																																																		}
+																																																																																	}
+																																																																																}
+																																																																															}
+																																																																														}
+																																																																													}
+																																																																												}
+																																																																											}
+																																																																										}
+																																																																									}
+																																																																								}
+																																																																							}
+																																																																						}
+																																																																					}
+																																																																				}
+																																																																			}
+																																																																		}
+																																																																	}
+																																																																}
+																																																															}
+																																																														}
+																																																													}
+																																																												}
+																																																											}
+																																																										}
+																																																									}
+																																																								}
+																																																							}
+																																																						}
+																																																					}
+																																																				}
+																																																			}
+																																																		}
+																																																	}
+																																																}
+																																															}
+																																														}
+																																													}
+																																												}
+																																											}
+																																										}
+																																									}
+																																								}
+																																							}
+																																						}
+																																					}
+																																				}
+																																			}
+																																		}
+																																	}
+																																}
+																															}
+																														}
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+};
+
+var _micktwomey$elmo_8$Elmo8_GL_Font$fontMap = _elm_lang$core$Dict$fromList(_micktwomey$elmo_8$Elmo8_GL_Characters$characterList);
+var _micktwomey$elmo_8$Elmo8_GL_Font$Vertex = function (a) {
+	return {position: a};
+};
+var _micktwomey$elmo_8$Elmo8_GL_Font$meshWidthHeight = F2(
+	function (width, height) {
+		return _elm_community$webgl$WebGL$Triangle(
+			{
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple3',
+					_0: _micktwomey$elmo_8$Elmo8_GL_Font$Vertex(
+						A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)),
+					_1: _micktwomey$elmo_8$Elmo8_GL_Font$Vertex(
+						A2(_elm_community$linear_algebra$Math_Vector2$vec2, width, height)),
+					_2: _micktwomey$elmo_8$Elmo8_GL_Font$Vertex(
+						A2(_elm_community$linear_algebra$Math_Vector2$vec2, width, 0))
+				},
+				_1: {
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple3',
+						_0: _micktwomey$elmo_8$Elmo8_GL_Font$Vertex(
+							A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)),
+						_1: _micktwomey$elmo_8$Elmo8_GL_Font$Vertex(
+							A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, height)),
+						_2: _micktwomey$elmo_8$Elmo8_GL_Font$Vertex(
+							A2(_elm_community$linear_algebra$Math_Vector2$vec2, width, height))
+					},
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _micktwomey$elmo_8$Elmo8_GL_Font$meshesFromCharacters = _elm_lang$core$Dict$fromList(
+	A2(
+		_elm_lang$core$List$map,
+		function (_p0) {
+			var _p1 = _p0;
+			var _p2 = _p1._1;
+			return {
+				ctor: '_Tuple2',
+				_0: {ctor: '_Tuple2', _0: _p2.width, _1: _p2.height},
+				_1: A2(
+					_micktwomey$elmo_8$Elmo8_GL_Font$meshWidthHeight,
+					_elm_lang$core$Basics$toFloat(_p2.width),
+					_elm_lang$core$Basics$toFloat(_p2.height))
+			};
+		},
+		_micktwomey$elmo_8$Elmo8_GL_Characters$characterList));
+
+var _micktwomey$elmo_8$Elmo8_Textures_Pico8Font$pico8FontDataUri = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAAAXNSR0IArs4c6QAACVBJREFUeAHtmuuW2zYQg5Oevv8rt53N+RJoClKULKeVBf/oXIABKSxNb5399i2vRzvwnaf/659X5d//eWlePa01H2HV19eqJjPFJyf2dauvPc1HM44D911R1yTva6k/YOrBkTmdZw6tXhf3DwYSn+nAn2cfm9M0m+fkFUfz2UzHWEfnXQ9cMddb0e+cM7Xuo8/3fRXuesyBUaOtcw6jN4u5AWbuPACzN0A/cb0uX+i500iPCLfmXK/6+lKOzipnJUcHLnVpkjuMnsbOB3tlf2jsxdHaOjfjzLDcAOriA/OfN8DRk+xOlevhKdhsHTC4zJ6NXY+69MhZi1rXUszhyv0d+WwPYOy59kOPvSlGLzcATjw0/rwBOB391Ix8gcdc8XqP2mkwpxx6jq89ZuBXrTnc3ut18dBipqLjKd5z5WveedRwqCv2HrXujx5z+tz0jsbcAEcdCz8OfJIDX1+59quFB9QrRq8i8JU5uETVpEd0a4CNInvYm53xwPoaqgnH9dwcfIfR65zSdr0Rn76bU4zcxXwEOFce1Pv5S2A9s57uFQ86v59e1VzF4Kn20V7fe2nVq/pOC4w5OI4PpjPkYOhUdBg8MOWTgzkuGFyNM0x55LkBcOKhcXMDcNrwQk/TDIPvYp9TjsN0TbjaY0Z7jkevR+acDr0+s1fP5sBYd09rBZ9pzjCnnRvAufKg3tcN0E8np0h9gOMw5fXczdGDq5rkytEefe05HXoVmanczVW/Xsr70fn3fx2HHto61TFq5RzNZxozzK2TG8C58qDe1w3gTm73YIXTZ6o+OqcnmFntsQY95dCDo1F52tfccdAEg0+fehT7XPGY7Rj94nSserw6pnNwVmNugFWnwosDn+jA5q9v3dVCj2tGa/JuTHFXsJkmmGqvaMJfmS/OTBMtOKpJDw5xxtlbD000tNa81tJa8yNYcfMRUC48+LX5JZCTt+oH/H4Ca36Greqf4bl1+/6oVb/PFQavY9TFIYfr5qrHq/OpwX93zA3wux3/n623+Sp4tjc94TPeEQzNo+8C+MwfWXPEPavFHHtSfTB6jgP2rsia7IWa9XID4MRDo70B3Gnh5IBd4VfXpL5C+6jGbG2e2XHoKYceewCjfiXOtBxGjz31OjfAKz+ND5jd3ACcjtXn6nzqOm3kq1qd1+c5wZ13pEZzVQsec0T6o7Xhge/xO6/PF44GGDWzZ2NugLPOZS4OfIID9u/k9Joh7w9bV1DHtOeuKMdHF8zNwdF4lK+zyX85kI+AX148Mtv8Eugc6O9I3nnKVQ45POrik4NVj7xj1MVxL3CdJ+/84naM+eJ2jPkr52aaDmN/7M3txc3RI6JD3WNugO7Iw+rNDcBpcx6A7Z0oNzvrdb1ez2YLc3x67HlPA5w5ao1gaFI7jvbIj/KZ04iG28MMU42e5wbojjys/roBOD08OyesavLOgft/jOzZ7Y3ngEPtuKu9mcYMQ9/thR6cd8XcAO9y9ia6XzfAymnrHD3ZYNojV4x81ZsRH+2RDribdz10OoZO4WDaW5mD4yKaDmMd5WheM9TFJXdas15ugJk7weLApzuw+avgT3/YT3++/jGgHw18pHQP8hHQHXlYvfklkFPCSdo7QfC6ZzoHhjZ1xT7v5uDrPHOuB5844+yt19fRWvNaS2vNr8Z4LqI+36wH1mNugO7Iw2r7VbA7VWd9QUvfFZqXLrWu0eeU1zHq4pCrJjnYbB3HUf6rOfqzPYHpWszRU47m4KsxN8CqUx/K29wAnDJOFPXes8Njbo+/gs+0wFhX9RzWeY6jGkdytNyMw+ixJ63poQVWNTkcYmHkcKq3+soNsOrUh/I2N8DsGfvp4tTNZvYwNJ3WrMccUbnkipGzHzjUowivzxe/Y9QjrZW+W6fPdY5bF47Dul5ugO5I6jjwJAc2fxXMg69cHcXlqmFuNZY+s6x1pO7cvXUdn97eLPsrHjPa0/k9fEXD6Wmvcl2fNeGAjfrwiPkIwImHxs0/BnFqOEXOE+WQO96sp/po0NurSxfObA2H1Rp9lnU7f4UHZ09DcWb6etTFHXHQAZ9x0SMyS03MDYATD432fwPPnLCj/ukaNXu0rhlONbPV09certyVnHXQJTK7h8NzsWs5DvoOO9vLDXDWuQ+ZszeAO42u94oH6HGqV+tX1nSzo/Udlz2C9dkZDpfZqyJrjvTBR+vlBhg585D+Lb8H4GczOvXgRPcuODPLjNOrtfZw9qNxNgOm/MpH6xfGzIxTPF65AXAiMQ480YHNF0EYwDVCTZxdK//1DHsk6l5He4M7iqoBZ6Sl3BEHDaLO0COiMePAfSXmI+AV9z5gdnMDcOp4Lk7fqA+vYueAoUE94yqncp1d1e+80qCHHvVoPXD4ylvB4Lv5wtBwvI45Dr0rYm6AK1y8scbXF0GjUzd6Lvh1wsmv4HYNtN07yfX6fK/R633qPRze0YjubM9wRtrgpaF58Y/WukZuAHXjgfnXDcDJ5CTt+QC/eOSjWXDHBWN2VLv99BnH6T30e7/XaFdf885brVfWhTNaD7zW1PxMrfvODaBuPDDf/GMQJ4tTSMQXcGoX4fRZx+292cxIdzQDX9cYcZXzSs6arEMcacJXnB6z1Mq5Ms8NcKWb0YoDd3Ng+kXQ6GFWrqWVKwzOaB36ut6ZGXT+q3hmz6sz/ZnUq465Oh8BzpUH9Zb+HmB0Gt1pO8LF55WZPc4MB2O/vWYfLu5xZzgYuqP1Rzzm3hlzA7zT3RtoL90APIc7qb0Hdy/yblAeWjMMvuMUhobjgfXZ3u+16jLbOb3WGfZC7Br0iYWjR281or3Kzw2w6tSH8jZfBI2ecXYaOXEzjurC116fpXZcnTuaj/Toz9bd4+zhtdcRh3X1eeBq7x15boB3uHojzcu+B+AUj06uw+nt+aWaZ2b29N+Nn9nz6kzfu3rVMVfnBnCupBcHHuVAXTf14qF/VOs1c4n3cyAfAff7mV264xyAS+28n1gOwP1+ZpfuOAfgUjvvJ5YDcL+f2aU7zgG41M77ieUA3O9ndumOcwAutfN+YjkA9/uZZcdxIA7EgTgQB+JAHIgDcSAOxIE4EAfiQByIA3EgDsSBOBAH4kAciANxIA7EgTgQB+JAHIgDcSAOxIE4EAfiQByIA3EgDsSBOBAH4kAciANxIA7EgTgQB+JAHIgDT3Xgb1iQqbZElHg2AAAAAElFTkSuQmCC';
+
+var _micktwomey$elmo_8$Elmo8_Textures_Pico8PaletteMap$pico8PaletteMapDataUri = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAANNJREFUOBGlkzsKwlAQRe+MWNlapk4RSBELmyxA9yBoI0JAFFyF23ABNjYBdQsG0lnbpxOsdGSEB0HyeUkWcDh3PpcAiBuusH4Dm/kHl/SBuOdgttxi5DrAeAfsD0AYgF5D+PczouSIqD8AJgTuApM3Bbc1K6xybhPbwCrnpjPnYZVzk4X9wyqnW5KKzbaLYJWTPDOpO1UZrKcm8RZSdecqWJOTnCBlT1IHa3KSLJCiD7OBNTl3gX/J/atI/rdtzWZs7gJrsdi0qqnZtJK1km1hlX8Bnpcdm8aa7AQAAAAASUVORK5CYII=';
+
+var _micktwomey$elmo_8$Elmo8_Assets$pico8PaletteMapUri = 'http://elmo-8.twomeylee.name/assets/pico-8-palette-map.png';
+var _micktwomey$elmo_8$Elmo8_Assets$pico8PaletteMapRelativeUri = '/assets/pico-8-palette-map.png';
+var _micktwomey$elmo_8$Elmo8_Assets$pico8FontUri = 'http://elmo-8.twomeylee.name/assets/pico-8_regular_8.png';
+var _micktwomey$elmo_8$Elmo8_Assets$pico8FontRelativeUri = '/assets/pico-8_regular_8.png';
 var _micktwomey$elmo_8$Elmo8_Assets$loadWebglTextureWithFallbacks = function (urls) {
 	var _p0 = urls;
 	if (_p0.ctor === '[]') {
@@ -12023,63 +14285,358 @@ var _micktwomey$elmo_8$Elmo8_Assets$loadWebglTextureWithFallbacks = function (ur
 			function (_p1) {
 				return _micktwomey$elmo_8$Elmo8_Assets$loadWebglTextureWithFallbacks(_p0._1);
 			},
-			_elm_community$webgl$WebGL$loadTexture(_p0._0));
+			A2(_elm_community$webgl$WebGL$loadTextureWithFilter, _elm_community$webgl$WebGL$Nearest, _p0._0));
 	}
 };
-
-var _micktwomey$elmo_8$Elmo8_Textures_Pico8PaletteMap$pico8PaletteMapDataUri = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAANNJREFUOBGlkzsKwlAQRe+MWNlapk4RSBELmyxA9yBoI0JAFFyF23ABNjYBdQsG0lnbpxOsdGSEB0HyeUkWcDh3PpcAiBuusH4Dm/kHl/SBuOdgttxi5DrAeAfsD0AYgF5D+PczouSIqD8AJgTuApM3Bbc1K6xybhPbwCrnpjPnYZVzk4X9wyqnW5KKzbaLYJWTPDOpO1UZrKcm8RZSdecqWJOTnCBlT1IHa3KSLJCiD7OBNTl3gX/J/atI/rdtzWZs7gJrsdi0qqnZtJK1km1hlX8Bnpcdm8aa7AQAAAAASUVORK5CYII=';
-
-var _micktwomey$elmo_8$Elmo8_Layers_Pixels$pixelsFragmentShader = {'src': '\n    precision mediump float;\n    uniform sampler2D paletteTexture;\n    uniform vec2 paletteSize;\n    varying float colourIndex;\n    varying float colourRemap;\n    void main () {\n        // Texture origin bottom left\n        // Use slightly less than 1.0 to slightly nudge into correct pixel\n        float index = colourIndex / paletteSize.x;\n        float remap = 0.999 - (colourRemap / paletteSize.y);\n        gl_FragColor = texture2D(paletteTexture, vec2(index, remap));\n    }\n'};
-var _micktwomey$elmo_8$Elmo8_Layers_Pixels$pixelsVertexShader = {'src': '\n    precision mediump float;\n    attribute vec2 position;\n    uniform vec2 canvasSize;\n    uniform vec2 screenSize;\n    uniform mat4 projectionMatrix;\n    uniform int pixelX;\n    uniform int pixelY;\n    uniform int index;\n    uniform int remap;\n    varying float colourIndex;\n    varying float colourRemap;\n    void main () {\n        gl_PointSize = canvasSize.x / screenSize.x;\n\n        gl_Position = projectionMatrix * vec4(position.x + float(pixelX) + 0.5, position.y + float(pixelY) + 0.5, 0.0, 1.0);\n\n        colourIndex = float(index);\n        colourRemap = float(remap);\n    }\n'};
-var _micktwomey$elmo_8$Elmo8_Layers_Pixels$mesh = _elm_community$webgl$WebGL$Points(
+var _micktwomey$elmo_8$Elmo8_Assets$loadFontTexture = _micktwomey$elmo_8$Elmo8_Assets$loadWebglTextureWithFallbacks(
 	{
 		ctor: '::',
-		_0: _micktwomey$elmo_8$Elmo8_Layers_Common$Vertex(
+		_0: _micktwomey$elmo_8$Elmo8_Textures_Pico8Font$pico8FontDataUri,
+		_1: {
+			ctor: '::',
+			_0: _micktwomey$elmo_8$Elmo8_Assets$pico8FontRelativeUri,
+			_1: {
+				ctor: '::',
+				_0: _micktwomey$elmo_8$Elmo8_Assets$pico8FontUri,
+				_1: {ctor: '[]'}
+			}
+		}
+	});
+var _micktwomey$elmo_8$Elmo8_Assets$loadPaletteMapTexture = _micktwomey$elmo_8$Elmo8_Assets$loadWebglTextureWithFallbacks(
+	{
+		ctor: '::',
+		_0: _micktwomey$elmo_8$Elmo8_Textures_Pico8PaletteMap$pico8PaletteMapDataUri,
+		_1: {
+			ctor: '::',
+			_0: _micktwomey$elmo_8$Elmo8_Assets$pico8PaletteMapRelativeUri,
+			_1: {
+				ctor: '::',
+				_0: _micktwomey$elmo_8$Elmo8_Assets$pico8PaletteMapUri,
+				_1: {ctor: '[]'}
+			}
+		}
+	});
+var _micktwomey$elmo_8$Elmo8_Assets$update = F2(
+	function (msg, model) {
+		var _p2 = msg;
+		if (_p2.ctor === 'TextureLoadError') {
+			return A2(
+				_elm_lang$core$Platform_Cmd_ops['!'],
+				model,
+				{ctor: '[]'});
+		} else {
+			var _p4 = _p2._1;
+			var _p3 = _elm_community$webgl$WebGL$textureSize(_p4);
+			var width = _p3._0;
+			var height = _p3._1;
+			var textureSize = A2(
+				_elm_community$linear_algebra$Math_Vector2$vec2,
+				_elm_lang$core$Basics$toFloat(width),
+				_elm_lang$core$Basics$toFloat(height));
+			var loadedTexture = {texture: _p4, textureSize: textureSize};
+			return A2(
+				_elm_lang$core$Platform_Cmd_ops['!'],
+				_elm_lang$core$Native_Utils.update(
+					model,
+					{
+						textures: A3(_elm_lang$core$Dict$insert, _p2._0, loadedTexture, model.textures)
+					}),
+				{ctor: '[]'});
+		}
+	});
+var _micktwomey$elmo_8$Elmo8_Assets$getTexture = F2(
+	function (_p5, key) {
+		var _p6 = _p5;
+		return A2(_elm_lang$core$Dict$get, key, _p6.textures);
+	});
+var _micktwomey$elmo_8$Elmo8_Assets$paletteKey = 'elmo8.palette';
+var _micktwomey$elmo_8$Elmo8_Assets$getPalette = function (model) {
+	return A2(_micktwomey$elmo_8$Elmo8_Assets$getTexture, model, _micktwomey$elmo_8$Elmo8_Assets$paletteKey);
+};
+var _micktwomey$elmo_8$Elmo8_Assets$fontKey = 'elmo8.font';
+var _micktwomey$elmo_8$Elmo8_Assets$getFont = function (model) {
+	return A2(_micktwomey$elmo_8$Elmo8_Assets$getTexture, model, _micktwomey$elmo_8$Elmo8_Assets$fontKey);
+};
+var _micktwomey$elmo_8$Elmo8_Assets$Model = F2(
+	function (a, b) {
+		return {textures: a, characterMeshes: b};
+	});
+var _micktwomey$elmo_8$Elmo8_Assets$Texture = F2(
+	function (a, b) {
+		return {texture: a, textureSize: b};
+	});
+var _micktwomey$elmo_8$Elmo8_Assets$Character = F4(
+	function (a, b, c, d) {
+		return {width: a, height: b, x: c, y: d};
+	});
+var _micktwomey$elmo_8$Elmo8_Assets$TextureLoaded = F2(
+	function (a, b) {
+		return {ctor: 'TextureLoaded', _0: a, _1: b};
+	});
+var _micktwomey$elmo_8$Elmo8_Assets$TextureLoadError = F2(
+	function (a, b) {
+		return {ctor: 'TextureLoadError', _0: a, _1: b};
+	});
+var _micktwomey$elmo_8$Elmo8_Assets$loadTexture = F3(
+	function (model, key, urls) {
+		return A2(
+			_elm_lang$core$Platform_Cmd_ops['!'],
+			model,
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$core$Task$attempt,
+					function (result) {
+						var _p7 = result;
+						if (_p7.ctor === 'Err') {
+							return A2(_micktwomey$elmo_8$Elmo8_Assets$TextureLoadError, key, _p7._0);
+						} else {
+							return A2(_micktwomey$elmo_8$Elmo8_Assets$TextureLoaded, key, _p7._0);
+						}
+					},
+					_micktwomey$elmo_8$Elmo8_Assets$loadWebglTextureWithFallbacks(urls)),
+				_1: {ctor: '[]'}
+			});
+	});
+var _micktwomey$elmo_8$Elmo8_Assets$init = function () {
+	var emptyModel = A2(_micktwomey$elmo_8$Elmo8_Assets$Model, _elm_lang$core$Dict$empty, _micktwomey$elmo_8$Elmo8_GL_Font$meshesFromCharacters);
+	var _p8 = A3(
+		_micktwomey$elmo_8$Elmo8_Assets$loadTexture,
+		emptyModel,
+		_micktwomey$elmo_8$Elmo8_Assets$fontKey,
+		{
+			ctor: '::',
+			_0: _micktwomey$elmo_8$Elmo8_Textures_Pico8Font$pico8FontDataUri,
+			_1: {
+				ctor: '::',
+				_0: _micktwomey$elmo_8$Elmo8_Assets$pico8FontRelativeUri,
+				_1: {
+					ctor: '::',
+					_0: _micktwomey$elmo_8$Elmo8_Assets$pico8FontUri,
+					_1: {ctor: '[]'}
+				}
+			}
+		});
+	var fontModel = _p8._0;
+	var fontMsg = _p8._1;
+	var _p9 = A3(
+		_micktwomey$elmo_8$Elmo8_Assets$loadTexture,
+		fontModel,
+		_micktwomey$elmo_8$Elmo8_Assets$paletteKey,
+		{
+			ctor: '::',
+			_0: _micktwomey$elmo_8$Elmo8_Textures_Pico8PaletteMap$pico8PaletteMapDataUri,
+			_1: {
+				ctor: '::',
+				_0: _micktwomey$elmo_8$Elmo8_Assets$pico8PaletteMapRelativeUri,
+				_1: {
+					ctor: '::',
+					_0: _micktwomey$elmo_8$Elmo8_Assets$pico8PaletteMapUri,
+					_1: {ctor: '[]'}
+				}
+			}
+		});
+	var model = _p9._0;
+	var paletteMsg = _p9._1;
+	return A2(
+		_elm_lang$core$Platform_Cmd_ops['!'],
+		model,
+		{
+			ctor: '::',
+			_0: fontMsg,
+			_1: {
+				ctor: '::',
+				_0: paletteMsg,
+				_1: {ctor: '[]'}
+			}
+		});
+}();
+
+var _micktwomey$elmo_8$Elmo8_GL_Shaders$textFragmentShader = {'src': '\n  precision mediump float;\n  uniform mat4 projectionMatrix;\n  uniform sampler2D fontTexture;\n  uniform vec2 textureSize;\n  uniform vec2 charCoords;\n  uniform sampler2D paletteTexture;\n  uniform vec2 paletteTextureSize;\n  varying vec2 texturePos;\n  varying float colourIndex;\n  void main () {\n    vec2 size = vec2(64.0, 64.0) / textureSize;\n\n    vec2 textureClipSpace = (projectionMatrix * vec4((charCoords + texturePos) * size, 0, 1)).xy;\n    vec4 temp = texture2D(fontTexture, textureClipSpace);\n\n    float index = colourIndex / paletteTextureSize.x;\n    // float remap = 0.999 - (colourRemap / paletteSize.y);\n    float remap = 0.999 - 0.0;\n    vec4 paletteColour = texture2D(paletteTexture, vec2(index, remap));\n\n    gl_FragColor = vec4(paletteColour.rgb, temp.a);\n  }\n'};
+var _micktwomey$elmo_8$Elmo8_GL_Shaders$textVertexShader = {'src': '\n  precision mediump float;\n  attribute vec2 position;\n  uniform vec2 screenSize;\n  uniform mat4 theMatrix;\n  uniform int colour;\n  varying vec2 texturePos;\n  varying float colourIndex;\n  void main () {\n    texturePos = position;\n    colourIndex = float(colour);\n    gl_Position = vec4((theMatrix * vec4(position, 0.0, 1.0)).xy, 0, 1);\n  }\n'};
+var _micktwomey$elmo_8$Elmo8_GL_Shaders$spriteFragmentShader = {'src': '\n  precision mediump float;\n  uniform mat4 projectionMatrix;\n  uniform sampler2D texture;\n  uniform vec2 textureSize;\n  uniform int spriteIndex;\n  varying vec2 texturePos;\n  void main () {\n    vec2 size = vec2(64.0, 64.0) / textureSize;\n\n    int sprites = 16;\n    float spriteX = mod((8.0 * float(spriteIndex)), textureSize.x);\n    float spriteY = float(spriteIndex / sprites) * 8.0;\n    vec2 spriteOffset = vec2(spriteX, spriteY);\n\n    vec2 textureClipSpace = (projectionMatrix * vec4((spriteOffset + texturePos) * size, 0, 1)).xy;\n    vec4 temp = texture2D(texture, textureClipSpace);\n    gl_FragColor = temp;\n  }\n'};
+var _micktwomey$elmo_8$Elmo8_GL_Shaders$spriteVertexShader = {'src': '\n  precision mediump float;\n  attribute vec2 position;\n  uniform int spriteX;\n  uniform int spriteY;\n  uniform vec2 screenSize;\n  uniform mat4 projectionMatrix;\n  varying vec2 texturePos;\n  void main () {\n    texturePos = position;\n    gl_Position = projectionMatrix * vec4(position.x + float(spriteX), position.y + float(spriteY), 0.0, 1.0);\n  }\n'};
+var _micktwomey$elmo_8$Elmo8_GL_Shaders$pixelsFragmentShader = {'src': '\n    precision mediump float;\n    uniform sampler2D paletteTexture;\n    uniform vec2 paletteSize;\n    varying float colourIndex;\n    varying float colourRemap;\n    void main () {\n        // Texture origin bottom left\n        // Use slightly less than 1.0 to slightly nudge into correct pixel\n        float index = colourIndex / paletteSize.x;\n        float remap = 0.999 - (colourRemap / paletteSize.y);\n        gl_FragColor = texture2D(paletteTexture, vec2(index, remap));\n    }\n'};
+var _micktwomey$elmo_8$Elmo8_GL_Shaders$pixelsVertexShader = {'src': '\n    precision mediump float;\n    attribute vec2 position;\n    uniform vec2 canvasSize;\n    uniform vec2 screenSize;\n    uniform mat4 projectionMatrix;\n    uniform int pixelX;\n    uniform int pixelY;\n    uniform int index;\n    uniform int remap;\n    varying float colourIndex;\n    varying float colourRemap;\n    void main () {\n        gl_PointSize = canvasSize.x / screenSize.x;\n\n        gl_Position = projectionMatrix * vec4(position.x + float(pixelX) + 0.5, position.y + float(pixelY) + 0.5, 0.0, 1.0);\n\n        colourIndex = float(index);\n        colourRemap = float(remap);\n    }\n'};
+
+var _micktwomey$elmo_8$Elmo8_GL_Renderers$Vertex = function (a) {
+	return {position: a};
+};
+var _micktwomey$elmo_8$Elmo8_GL_Renderers$pixelMesh = _elm_community$webgl$WebGL$Points(
+	{
+		ctor: '::',
+		_0: _micktwomey$elmo_8$Elmo8_GL_Renderers$Vertex(
 			A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)),
 		_1: {ctor: '[]'}
 	});
+var _micktwomey$elmo_8$Elmo8_GL_Renderers$renderPixel = F3(
+	function (_p1, assets, _p0) {
+		var _p2 = _p1;
+		var _p3 = _p0;
+		var _p4 = _micktwomey$elmo_8$Elmo8_Assets$getPalette(assets);
+		if (_p4.ctor === 'Just') {
+			var _p5 = _p4._0;
+			return _elm_lang$core$Maybe$Just(
+				A4(
+					_elm_community$webgl$WebGL$render,
+					_micktwomey$elmo_8$Elmo8_GL_Shaders$pixelsVertexShader,
+					_micktwomey$elmo_8$Elmo8_GL_Shaders$pixelsFragmentShader,
+					_micktwomey$elmo_8$Elmo8_GL_Renderers$pixelMesh,
+					{canvasSize: _p2.screenSize, screenSize: _p2.resolution, projectionMatrix: _p2.projectionMatrix, paletteTexture: _p5.texture, paletteSize: _p5.textureSize, pixelX: _p3.x, pixelY: _p3.y, index: _p3.colour, remap: 0}));
+		} else {
+			return _elm_lang$core$Maybe$Nothing;
+		}
+	});
+var _micktwomey$elmo_8$Elmo8_GL_Renderers$spriteMesh = _elm_community$webgl$WebGL$Triangle(
+	{
+		ctor: '::',
+		_0: {
+			ctor: '_Tuple3',
+			_0: _micktwomey$elmo_8$Elmo8_GL_Renderers$Vertex(
+				A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)),
+			_1: _micktwomey$elmo_8$Elmo8_GL_Renderers$Vertex(
+				A2(_elm_community$linear_algebra$Math_Vector2$vec2, 8, 8)),
+			_2: _micktwomey$elmo_8$Elmo8_GL_Renderers$Vertex(
+				A2(_elm_community$linear_algebra$Math_Vector2$vec2, 8, 0))
+		},
+		_1: {
+			ctor: '::',
+			_0: {
+				ctor: '_Tuple3',
+				_0: _micktwomey$elmo_8$Elmo8_GL_Renderers$Vertex(
+					A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)),
+				_1: _micktwomey$elmo_8$Elmo8_GL_Renderers$Vertex(
+					A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 8)),
+				_2: _micktwomey$elmo_8$Elmo8_GL_Renderers$Vertex(
+					A2(_elm_community$linear_algebra$Math_Vector2$vec2, 8, 8))
+			},
+			_1: {ctor: '[]'}
+		}
+	});
+var _micktwomey$elmo_8$Elmo8_GL_Renderers$renderSprite = F3(
+	function (_p7, assets, _p6) {
+		var _p8 = _p7;
+		var _p9 = _p6;
+		var _p10 = A2(_micktwomey$elmo_8$Elmo8_Assets$getTexture, assets, _p9.textureKey);
+		if (_p10.ctor === 'Just') {
+			var _p11 = _p10._0;
+			return _elm_lang$core$Maybe$Just(
+				A4(
+					_elm_community$webgl$WebGL$render,
+					_micktwomey$elmo_8$Elmo8_GL_Shaders$spriteVertexShader,
+					_micktwomey$elmo_8$Elmo8_GL_Shaders$spriteFragmentShader,
+					_micktwomey$elmo_8$Elmo8_GL_Renderers$spriteMesh,
+					{screenSize: _p8.screenSize, texture: _p11.texture, textureSize: _p11.textureSize, projectionMatrix: _p8.projectionMatrix, spriteX: _p9.x, spriteY: _p9.y, spriteIndex: _p9.sprite}));
+		} else {
+			return _elm_lang$core$Maybe$Nothing;
+		}
+	});
+var _micktwomey$elmo_8$Elmo8_GL_Renderers$defaultFontMesh = _elm_community$webgl$WebGL$Triangle(
+	{
+		ctor: '::',
+		_0: {
+			ctor: '_Tuple3',
+			_0: _micktwomey$elmo_8$Elmo8_GL_Renderers$Vertex(
+				A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)),
+			_1: _micktwomey$elmo_8$Elmo8_GL_Renderers$Vertex(
+				A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)),
+			_2: _micktwomey$elmo_8$Elmo8_GL_Renderers$Vertex(
+				A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 0))
+		},
+		_1: {
+			ctor: '::',
+			_0: {
+				ctor: '_Tuple3',
+				_0: _micktwomey$elmo_8$Elmo8_GL_Renderers$Vertex(
+					A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)),
+				_1: _micktwomey$elmo_8$Elmo8_GL_Renderers$Vertex(
+					A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 1)),
+				_2: _micktwomey$elmo_8$Elmo8_GL_Renderers$Vertex(
+					A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1))
+			},
+			_1: {ctor: '[]'}
+		}
+	});
+var _micktwomey$elmo_8$Elmo8_GL_Renderers$renderChar = F2(
+	function (_p13, _p12) {
+		var _p14 = _p13;
+		var _p19 = _p14.projectionMatrix;
+		var _p18 = _p14.palette;
+		var _p17 = _p14.font;
+		var _p15 = _p12;
+		var _p16 = _p15.character;
+		return A4(
+			_elm_community$webgl$WebGL$render,
+			_micktwomey$elmo_8$Elmo8_GL_Shaders$textVertexShader,
+			_micktwomey$elmo_8$Elmo8_GL_Shaders$textFragmentShader,
+			A2(
+				_elm_lang$core$Maybe$withDefault,
+				_micktwomey$elmo_8$Elmo8_GL_Renderers$defaultFontMesh,
+				A2(
+					_elm_lang$core$Dict$get,
+					{ctor: '_Tuple2', _0: _p16.width, _1: _p16.height},
+					_p14.fontMeshes)),
+			{
+				screenSize: _p14.screenSize,
+				fontTexture: _p17.texture,
+				textureSize: _p17.textureSize,
+				projectionMatrix: _p19,
+				charCoords: A2(
+					_elm_community$linear_algebra$Math_Vector2$vec2,
+					_elm_lang$core$Basics$toFloat(_p16.x),
+					_elm_lang$core$Basics$toFloat(_p16.y)),
+				colour: _p15.colour,
+				paletteTexture: _p18.texture,
+				paletteTextureSize: _p18.textureSize,
+				theMatrix: A4(
+					_elm_community$linear_algebra$Math_Matrix4$scale3,
+					0.5,
+					0.5,
+					1.0,
+					A4(
+						_elm_community$linear_algebra$Math_Matrix4$translate3,
+						_elm_lang$core$Basics$toFloat(_p15.x),
+						_elm_lang$core$Basics$toFloat(_p15.y),
+						0.0,
+						_p19))
+			});
+	});
+
 var _micktwomey$elmo_8$Elmo8_Layers_Pixels$renderPixel = F3(
 	function (model, texture, _p0) {
 		var _p1 = _p0;
-		var _p2 = _p1._1;
-		return A4(
-			_elm_community$webgl$WebGL$render,
-			_micktwomey$elmo_8$Elmo8_Layers_Pixels$pixelsVertexShader,
-			_micktwomey$elmo_8$Elmo8_Layers_Pixels$pixelsFragmentShader,
-			_micktwomey$elmo_8$Elmo8_Layers_Pixels$mesh,
+		return A3(
+			_micktwomey$elmo_8$Elmo8_GL_Renderers$renderPixel,
+			{resolution: model.screenSize, projectionMatrix: model.projectionMatrix, screenSize: model.canvasSize},
 			{
-				canvasSize: model.canvasSize,
-				screenSize: model.screenSize,
-				projectionMatrix: model.projectionMatrix,
-				paletteTexture: texture,
-				paletteSize: model.paletteSize,
-				pixelX: _p1._0._0,
-				pixelY: _p1._0._1,
-				index: A2(
-					_elm_lang$core$Maybe$withDefault,
-					_p2,
-					A2(_elm_lang$core$Dict$get, _p2, model.pixelPalette)),
-				remap: A2(
-					_elm_lang$core$Maybe$withDefault,
-					0,
-					A2(_elm_lang$core$Dict$get, _p2, model.screenPalette))
-			});
+				textures: _elm_lang$core$Dict$fromList(
+					{
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: _micktwomey$elmo_8$Elmo8_Assets$paletteKey,
+							_1: {texture: texture, textureSize: model.paletteSize}
+						},
+						_1: {ctor: '[]'}
+					})
+			},
+			{x: _p1._0._0, y: _p1._0._1, colour: _p1._1});
 	});
 var _micktwomey$elmo_8$Elmo8_Layers_Pixels$render = function (model) {
-	var _p3 = model.maybePalette;
-	if (_p3.ctor === 'Nothing') {
+	var _p2 = model.maybePalette;
+	if (_p2.ctor === 'Nothing') {
 		return {ctor: '[]'};
 	} else {
 		return A2(
-			_elm_lang$core$List$map,
-			A2(_micktwomey$elmo_8$Elmo8_Layers_Pixels$renderPixel, model, _p3._0),
+			_elm_lang$core$List$filterMap,
+			A2(_micktwomey$elmo_8$Elmo8_Layers_Pixels$renderPixel, model, _p2._0),
 			_elm_lang$core$Dict$toList(model.pixels));
 	}
 };
 var _micktwomey$elmo_8$Elmo8_Layers_Pixels$update = F2(
 	function (msg, model) {
-		var _p4 = msg;
-		switch (_p4.ctor) {
+		var _p3 = msg;
+		switch (_p3.ctor) {
 			case 'SetPixel':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
@@ -12088,8 +14645,8 @@ var _micktwomey$elmo_8$Elmo8_Layers_Pixels$update = F2(
 						{
 							pixels: A3(
 								_elm_lang$core$Dict$insert,
-								{ctor: '_Tuple2', _0: _p4._0, _1: _p4._1},
-								_p4._2,
+								{ctor: '_Tuple2', _0: _p3._0, _1: _p3._1},
+								_p3._2,
 								model.pixels)
 						}),
 					{ctor: '[]'});
@@ -12111,7 +14668,7 @@ var _micktwomey$elmo_8$Elmo8_Layers_Pixels$update = F2(
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{
-							maybePalette: _elm_lang$core$Maybe$Just(_p4._0)
+							maybePalette: _elm_lang$core$Maybe$Just(_p3._0)
 						}),
 					{ctor: '[]'});
 		}
@@ -12238,27 +14795,14 @@ var _micktwomey$elmo_8$Elmo8_Layers_Pixels$init = function (canvasSize) {
 			_0: A2(
 				_elm_lang$core$Task$attempt,
 				function (result) {
-					var _p5 = result;
-					if (_p5.ctor === 'Err') {
-						return _micktwomey$elmo_8$Elmo8_Layers_Pixels$TextureError(_p5._0);
+					var _p4 = result;
+					if (_p4.ctor === 'Err') {
+						return _micktwomey$elmo_8$Elmo8_Layers_Pixels$TextureError(_p4._0);
 					} else {
-						return _micktwomey$elmo_8$Elmo8_Layers_Pixels$TextureLoad(_p5._0);
+						return _micktwomey$elmo_8$Elmo8_Layers_Pixels$TextureLoad(_p4._0);
 					}
 				},
-				_micktwomey$elmo_8$Elmo8_Assets$loadWebglTextureWithFallbacks(
-					{
-						ctor: '::',
-						_0: _micktwomey$elmo_8$Elmo8_Textures_Pico8PaletteMap$pico8PaletteMapDataUri,
-						_1: {
-							ctor: '::',
-							_0: _micktwomey$elmo_8$Elmo8_Layers_Common$pico8PaletteMapRelativeUri,
-							_1: {
-								ctor: '::',
-								_0: _micktwomey$elmo_8$Elmo8_Layers_Common$pico8PaletteMapUri,
-								_1: {ctor: '[]'}
-							}
-						}
-					})),
+				_micktwomey$elmo_8$Elmo8_Assets$loadPaletteMapTexture),
 			_1: {ctor: '[]'}
 		});
 };
@@ -12267,10 +14811,6 @@ var _micktwomey$elmo_8$Elmo8_Layers_Pixels$SetPixel = F3(
 		return {ctor: 'SetPixel', _0: a, _1: b, _2: c};
 	});
 
-var _micktwomey$elmo_8$Elmo8_Textures_Pico8Font$pico8FontDataUri = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAAAXNSR0IArs4c6QAACVBJREFUeAHtmuuW2zYQg5Oevv8rt53N+RJoClKULKeVBf/oXIABKSxNb5399i2vRzvwnaf/659X5d//eWlePa01H2HV19eqJjPFJyf2dauvPc1HM44D911R1yTva6k/YOrBkTmdZw6tXhf3DwYSn+nAn2cfm9M0m+fkFUfz2UzHWEfnXQ9cMddb0e+cM7Xuo8/3fRXuesyBUaOtcw6jN4u5AWbuPACzN0A/cb0uX+i500iPCLfmXK/6+lKOzipnJUcHLnVpkjuMnsbOB3tlf2jsxdHaOjfjzLDcAOriA/OfN8DRk+xOlevhKdhsHTC4zJ6NXY+69MhZi1rXUszhyv0d+WwPYOy59kOPvSlGLzcATjw0/rwBOB391Ix8gcdc8XqP2mkwpxx6jq89ZuBXrTnc3ut18dBipqLjKd5z5WveedRwqCv2HrXujx5z+tz0jsbcAEcdCz8OfJIDX1+59quFB9QrRq8i8JU5uETVpEd0a4CNInvYm53xwPoaqgnH9dwcfIfR65zSdr0Rn76bU4zcxXwEOFce1Pv5S2A9s57uFQ86v59e1VzF4Kn20V7fe2nVq/pOC4w5OI4PpjPkYOhUdBg8MOWTgzkuGFyNM0x55LkBcOKhcXMDcNrwQk/TDIPvYp9TjsN0TbjaY0Z7jkevR+acDr0+s1fP5sBYd09rBZ9pzjCnnRvAufKg3tcN0E8np0h9gOMw5fXczdGDq5rkytEefe05HXoVmanczVW/Xsr70fn3fx2HHto61TFq5RzNZxozzK2TG8C58qDe1w3gTm73YIXTZ6o+OqcnmFntsQY95dCDo1F52tfccdAEg0+fehT7XPGY7Rj94nSserw6pnNwVmNugFWnwosDn+jA5q9v3dVCj2tGa/JuTHFXsJkmmGqvaMJfmS/OTBMtOKpJDw5xxtlbD000tNa81tJa8yNYcfMRUC48+LX5JZCTt+oH/H4Ca36Greqf4bl1+/6oVb/PFQavY9TFIYfr5qrHq/OpwX93zA3wux3/n623+Sp4tjc94TPeEQzNo+8C+MwfWXPEPavFHHtSfTB6jgP2rsia7IWa9XID4MRDo70B3Gnh5IBd4VfXpL5C+6jGbG2e2XHoKYceewCjfiXOtBxGjz31OjfAKz+ND5jd3ACcjtXn6nzqOm3kq1qd1+c5wZ13pEZzVQsec0T6o7Xhge/xO6/PF44GGDWzZ2NugLPOZS4OfIID9u/k9Joh7w9bV1DHtOeuKMdHF8zNwdF4lK+zyX85kI+AX148Mtv8Eugc6O9I3nnKVQ45POrik4NVj7xj1MVxL3CdJ+/84naM+eJ2jPkr52aaDmN/7M3txc3RI6JD3WNugO7Iw+rNDcBpcx6A7Z0oNzvrdb1ez2YLc3x67HlPA5w5ao1gaFI7jvbIj/KZ04iG28MMU42e5wbojjys/roBOD08OyesavLOgft/jOzZ7Y3ngEPtuKu9mcYMQ9/thR6cd8XcAO9y9ia6XzfAymnrHD3ZYNojV4x81ZsRH+2RDribdz10OoZO4WDaW5mD4yKaDmMd5WheM9TFJXdas15ugJk7weLApzuw+avgT3/YT3++/jGgHw18pHQP8hHQHXlYvfklkFPCSdo7QfC6ZzoHhjZ1xT7v5uDrPHOuB5844+yt19fRWvNaS2vNr8Z4LqI+36wH1mNugO7Iw2r7VbA7VWd9QUvfFZqXLrWu0eeU1zHq4pCrJjnYbB3HUf6rOfqzPYHpWszRU47m4KsxN8CqUx/K29wAnDJOFPXes8Njbo+/gs+0wFhX9RzWeY6jGkdytNyMw+ixJ63poQVWNTkcYmHkcKq3+soNsOrUh/I2N8DsGfvp4tTNZvYwNJ3WrMccUbnkipGzHzjUowivzxe/Y9QjrZW+W6fPdY5bF47Dul5ugO5I6jjwJAc2fxXMg69cHcXlqmFuNZY+s6x1pO7cvXUdn97eLPsrHjPa0/k9fEXD6Wmvcl2fNeGAjfrwiPkIwImHxs0/BnFqOEXOE+WQO96sp/po0NurSxfObA2H1Rp9lnU7f4UHZ09DcWb6etTFHXHQAZ9x0SMyS03MDYATD432fwPPnLCj/ukaNXu0rhlONbPV09certyVnHXQJTK7h8NzsWs5DvoOO9vLDXDWuQ+ZszeAO42u94oH6HGqV+tX1nSzo/Udlz2C9dkZDpfZqyJrjvTBR+vlBhg585D+Lb8H4GczOvXgRPcuODPLjNOrtfZw9qNxNgOm/MpH6xfGzIxTPF65AXAiMQ480YHNF0EYwDVCTZxdK//1DHsk6l5He4M7iqoBZ6Sl3BEHDaLO0COiMePAfSXmI+AV9z5gdnMDcOp4Lk7fqA+vYueAoUE94yqncp1d1e+80qCHHvVoPXD4ylvB4Lv5wtBwvI45Dr0rYm6AK1y8scbXF0GjUzd6Lvh1wsmv4HYNtN07yfX6fK/R633qPRze0YjubM9wRtrgpaF58Y/WukZuAHXjgfnXDcDJ5CTt+QC/eOSjWXDHBWN2VLv99BnH6T30e7/XaFdf885brVfWhTNaD7zW1PxMrfvODaBuPDDf/GMQJ4tTSMQXcGoX4fRZx+292cxIdzQDX9cYcZXzSs6arEMcacJXnB6z1Mq5Ms8NcKWb0YoDd3Ng+kXQ6GFWrqWVKwzOaB36ut6ZGXT+q3hmz6sz/ZnUq465Oh8BzpUH9Zb+HmB0Gt1pO8LF55WZPc4MB2O/vWYfLu5xZzgYuqP1Rzzm3hlzA7zT3RtoL90APIc7qb0Hdy/yblAeWjMMvuMUhobjgfXZ3u+16jLbOb3WGfZC7Br0iYWjR281or3Kzw2w6tSH8jZfBI2ecXYaOXEzjurC116fpXZcnTuaj/Toz9bd4+zhtdcRh3X1eeBq7x15boB3uHojzcu+B+AUj06uw+nt+aWaZ2b29N+Nn9nz6kzfu3rVMVfnBnCupBcHHuVAXTf14qF/VOs1c4n3cyAfAff7mV264xyAS+28n1gOwP1+ZpfuOAfgUjvvJ5YDcL+f2aU7zgG41M77ieUA3O9ndumOcwAutfN+YjkA9/uZZcdxIA7EgTgQB+JAHIgDcSAOxIE4EAfiQByIA3EgDsSBOBAH4kAciANxIA7EgTgQB+JAHIgDcSAOxIE4EAfiQByIA3EgDsSBOBAH4kAciANxIA7EgTgQB+JAHIgDT3Xgb1iQqbZElHg2AAAAAElFTkSuQmCC';
-
-var _micktwomey$elmo_8$Elmo8_Layers_Text$fragmentShader = {'src': '\n  precision mediump float;\n  uniform mat4 projectionMatrix;\n  uniform sampler2D fontTexture;\n  uniform vec2 textureSize;\n  uniform vec2 charCoords;\n  uniform sampler2D paletteTexture;\n  uniform vec2 paletteTextureSize;\n  varying vec2 texturePos;\n  varying float colourIndex;\n  void main () {\n    vec2 size = vec2(64.0, 64.0) / textureSize;\n\n    vec2 textureClipSpace = (projectionMatrix * vec4((charCoords + texturePos) * size, 0, 1)).xy;\n    vec4 temp = texture2D(fontTexture, textureClipSpace);\n\n    float index = colourIndex / paletteTextureSize.x;\n    // float remap = 0.999 - (colourRemap / paletteSize.y);\n    float remap = 0.999 - 0.0;\n    vec4 paletteColour = texture2D(paletteTexture, vec2(index, remap));\n\n    gl_FragColor = vec4(paletteColour.rgb, temp.a);\n  }\n'};
-var _micktwomey$elmo_8$Elmo8_Layers_Text$vertexShader = {'src': '\n  precision mediump float;\n  attribute vec2 position;\n  uniform vec2 screenSize;\n  uniform mat4 theMatrix;\n  uniform int colour;\n  varying vec2 texturePos;\n  varying float colourIndex;\n  void main () {\n    texturePos = position;\n    colourIndex = float(colour);\n    gl_Position = vec4((theMatrix * vec4(position, 0.0, 1.0)).xy, 0, 1);\n  }\n'};
 var _micktwomey$elmo_8$Elmo8_Layers_Text$meshWidthHeight = F2(
 	function (width, height) {
 		return _elm_community$webgl$WebGL$Triangle(
@@ -12300,32 +14840,6 @@ var _micktwomey$elmo_8$Elmo8_Layers_Text$meshWidthHeight = F2(
 				}
 			});
 	});
-var _micktwomey$elmo_8$Elmo8_Layers_Text$mesh = _elm_community$webgl$WebGL$Triangle(
-	{
-		ctor: '::',
-		_0: {
-			ctor: '_Tuple3',
-			_0: _micktwomey$elmo_8$Elmo8_Layers_Common$Vertex(
-				A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)),
-			_1: _micktwomey$elmo_8$Elmo8_Layers_Common$Vertex(
-				A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)),
-			_2: _micktwomey$elmo_8$Elmo8_Layers_Common$Vertex(
-				A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 0))
-		},
-		_1: {
-			ctor: '::',
-			_0: {
-				ctor: '_Tuple3',
-				_0: _micktwomey$elmo_8$Elmo8_Layers_Common$Vertex(
-					A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)),
-				_1: _micktwomey$elmo_8$Elmo8_Layers_Common$Vertex(
-					A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 1)),
-				_2: _micktwomey$elmo_8$Elmo8_Layers_Common$Vertex(
-					A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1))
-			},
-			_1: {ctor: '[]'}
-		}
-	});
 var _micktwomey$elmo_8$Elmo8_Layers_Text$getNextPosition = F2(
 	function (character, _p0) {
 		var _p1 = _p0;
@@ -12334,41 +14848,17 @@ var _micktwomey$elmo_8$Elmo8_Layers_Text$getNextPosition = F2(
 var _micktwomey$elmo_8$Elmo8_Layers_Text$renderChar = F6(
 	function (model, texture, paletteTexture, colour, _p2, character) {
 		var _p3 = _p2;
-		return A4(
-			_elm_community$webgl$WebGL$render,
-			_micktwomey$elmo_8$Elmo8_Layers_Text$vertexShader,
-			_micktwomey$elmo_8$Elmo8_Layers_Text$fragmentShader,
-			A2(
-				_elm_lang$core$Maybe$withDefault,
-				_micktwomey$elmo_8$Elmo8_Layers_Text$mesh,
-				A2(
-					_elm_lang$core$Dict$get,
-					{ctor: '_Tuple2', _0: character.width, _1: character.height},
-					model.meshes)),
+		return A2(
+			_micktwomey$elmo_8$Elmo8_GL_Renderers$renderChar,
 			{
 				screenSize: model.canvasSize,
-				fontTexture: texture,
-				textureSize: model.textureSize,
 				projectionMatrix: model.projectionMatrix,
-				charCoords: A2(
-					_elm_community$linear_algebra$Math_Vector2$vec2,
-					_elm_lang$core$Basics$toFloat(character.x),
-					_elm_lang$core$Basics$toFloat(character.y)),
-				colour: colour,
-				paletteTexture: paletteTexture,
-				paletteTextureSize: model.paletteTextureSize,
-				theMatrix: A4(
-					_elm_community$linear_algebra$Math_Matrix4$scale3,
-					0.5,
-					0.5,
-					1.0,
-					A4(
-						_elm_community$linear_algebra$Math_Matrix4$translate3,
-						_elm_lang$core$Basics$toFloat(_p3._0),
-						_elm_lang$core$Basics$toFloat(_p3._1),
-						0.0,
-						model.projectionMatrix))
-			});
+				resolution: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 128.0, 128.0),
+				font: {texture: texture, textureSize: model.textureSize},
+				palette: {texture: paletteTexture, textureSize: model.paletteTextureSize},
+				fontMeshes: model.meshes
+			},
+			{x: _p3._0, y: _p3._1, colour: colour, character: character});
 	});
 var _micktwomey$elmo_8$Elmo8_Layers_Text$update = F2(
 	function (msg, model) {
@@ -13492,20 +15982,7 @@ var _micktwomey$elmo_8$Elmo8_Layers_Text$init = function (canvasSize) {
 						return _micktwomey$elmo_8$Elmo8_Layers_Text$TextureLoad(_p9._0);
 					}
 				},
-				_micktwomey$elmo_8$Elmo8_Assets$loadWebglTextureWithFallbacks(
-					{
-						ctor: '::',
-						_0: _micktwomey$elmo_8$Elmo8_Textures_Pico8Font$pico8FontDataUri,
-						_1: {
-							ctor: '::',
-							_0: '/assets/pico-8_regular_8.png',
-							_1: {
-								ctor: '::',
-								_0: _micktwomey$elmo_8$Elmo8_Layers_Common$pico8FontUri,
-								_1: {ctor: '[]'}
-							}
-						}
-					})),
+				_micktwomey$elmo_8$Elmo8_Assets$loadFontTexture),
 			_1: {
 				ctor: '::',
 				_0: A2(
@@ -13518,61 +15995,34 @@ var _micktwomey$elmo_8$Elmo8_Layers_Text$init = function (canvasSize) {
 							return _micktwomey$elmo_8$Elmo8_Layers_Text$PaletteTextureLoad(_p10._0);
 						}
 					},
-					_micktwomey$elmo_8$Elmo8_Assets$loadWebglTextureWithFallbacks(
-						{
-							ctor: '::',
-							_0: _micktwomey$elmo_8$Elmo8_Textures_Pico8PaletteMap$pico8PaletteMapDataUri,
-							_1: {
-								ctor: '::',
-								_0: '/assets/pico-8-palette-map.png',
-								_1: {
-									ctor: '::',
-									_0: _micktwomey$elmo_8$Elmo8_Layers_Common$pico8PaletteMapUri,
-									_1: {ctor: '[]'}
-								}
-							}
-						})),
+					_micktwomey$elmo_8$Elmo8_Assets$loadPaletteMapTexture),
 				_1: {ctor: '[]'}
 			}
 		});
 };
 
-var _micktwomey$elmo_8$Elmo8_Layers_Sprites$fragmentShader = {'src': '\n  precision mediump float;\n  uniform mat4 projectionMatrix;\n  uniform sampler2D texture;\n  uniform vec2 textureSize;\n  uniform int spriteIndex;\n  varying vec2 texturePos;\n  void main () {\n    vec2 size = vec2(64.0, 64.0) / textureSize;\n\n    int sprites = 16;\n    float spriteX = mod((8.0 * float(spriteIndex)), textureSize.x);\n    float spriteY = float(spriteIndex / sprites) * 8.0;\n    vec2 spriteOffset = vec2(spriteX, spriteY);\n\n    vec2 textureClipSpace = (projectionMatrix * vec4((spriteOffset + texturePos) * size, 0, 1)).xy;\n    vec4 temp = texture2D(texture, textureClipSpace);\n    gl_FragColor = temp;\n  }\n'};
-var _micktwomey$elmo_8$Elmo8_Layers_Sprites$vertexShader = {'src': '\n  precision mediump float;\n  attribute vec2 position;\n  uniform int spriteX;\n  uniform int spriteY;\n  uniform vec2 screenSize;\n  uniform mat4 projectionMatrix;\n  varying vec2 texturePos;\n  void main () {\n    texturePos = position;\n    gl_Position = projectionMatrix * vec4(position.x + float(spriteX), position.y + float(spriteY), 0.0, 1.0);\n  }\n'};
-var _micktwomey$elmo_8$Elmo8_Layers_Sprites$mesh = _elm_community$webgl$WebGL$Triangle(
-	{
-		ctor: '::',
-		_0: {
-			ctor: '_Tuple3',
-			_0: _micktwomey$elmo_8$Elmo8_Layers_Common$Vertex(
-				A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)),
-			_1: _micktwomey$elmo_8$Elmo8_Layers_Common$Vertex(
-				A2(_elm_community$linear_algebra$Math_Vector2$vec2, 8, 8)),
-			_2: _micktwomey$elmo_8$Elmo8_Layers_Common$Vertex(
-				A2(_elm_community$linear_algebra$Math_Vector2$vec2, 8, 0))
-		},
-		_1: {
-			ctor: '::',
-			_0: {
-				ctor: '_Tuple3',
-				_0: _micktwomey$elmo_8$Elmo8_Layers_Common$Vertex(
-					A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)),
-				_1: _micktwomey$elmo_8$Elmo8_Layers_Common$Vertex(
-					A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 8)),
-				_2: _micktwomey$elmo_8$Elmo8_Layers_Common$Vertex(
-					A2(_elm_community$linear_algebra$Math_Vector2$vec2, 8, 8))
-			},
-			_1: {ctor: '[]'}
-		}
-	});
 var _micktwomey$elmo_8$Elmo8_Layers_Sprites$renderSprite = F3(
 	function (model, texture, sprite) {
-		return A4(
-			_elm_community$webgl$WebGL$render,
-			_micktwomey$elmo_8$Elmo8_Layers_Sprites$vertexShader,
-			_micktwomey$elmo_8$Elmo8_Layers_Sprites$fragmentShader,
-			_micktwomey$elmo_8$Elmo8_Layers_Sprites$mesh,
-			{screenSize: model.screenSize, texture: texture, textureSize: model.textureSize, projectionMatrix: model.projectionMatrix, spriteX: sprite.x, spriteY: sprite.y, spriteIndex: sprite.sprite});
+		return A3(
+			_micktwomey$elmo_8$Elmo8_GL_Renderers$renderSprite,
+			{
+				screenSize: model.screenSize,
+				projectionMatrix: model.projectionMatrix,
+				resolution: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 128.0, 128.0)
+			},
+			{
+				textures: _elm_lang$core$Dict$fromList(
+					{
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: 'sprite',
+							_1: {texture: texture, textureSize: model.textureSize}
+						},
+						_1: {ctor: '[]'}
+					})
+			},
+			{x: sprite.x, y: sprite.y, sprite: sprite.sprite, textureKey: 'sprite'});
 	});
 var _micktwomey$elmo_8$Elmo8_Layers_Sprites$render = function (model) {
 	var _p0 = model.maybeTexture;
@@ -13580,7 +16030,7 @@ var _micktwomey$elmo_8$Elmo8_Layers_Sprites$render = function (model) {
 		return {ctor: '[]'};
 	} else {
 		return A2(
-			_elm_lang$core$List$map,
+			_elm_lang$core$List$filterMap,
 			A2(_micktwomey$elmo_8$Elmo8_Layers_Sprites$renderSprite, model, _p0._0),
 			model.sprites);
 	}
@@ -14132,6 +16582,7 @@ var _micktwomey$elmo_8$Elmo8_Pico8$darkgreen = 3;
 var _micktwomey$elmo_8$Elmo8_Pico8$darkpurple = 2;
 var _micktwomey$elmo_8$Elmo8_Pico8$darkblue = 1;
 var _micktwomey$elmo_8$Elmo8_Pico8$black = 0;
+var _micktwomey$elmo_8$Elmo8_Pico8$Model = {};
 
 var _micktwomey$elmo_8$Basic$update = function (model) {
 	return model;
@@ -14159,6 +16610,275 @@ var _micktwomey$elmo_8$Basic$main = _micktwomey$elmo_8$Elmo8_Console$boot(
 		spritesUrl: 'birdwatching.png'
 	})();
 var _micktwomey$elmo_8$Basic$Model = {};
+
+var _micktwomey$elmo_8$Elmo8_GL_Display$view = F2(
+	function (model, renderables) {
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$style(
+					{
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'background-color', _1: '#000'},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'display', _1: 'flex'},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'align-items', _1: 'center'},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'justify-content', _1: 'center'},
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A3(
+					_elm_community$webgl$WebGL$toHtmlWith,
+					{
+						ctor: '::',
+						_0: _elm_community$webgl$WebGL$Enable(_elm_community$webgl$WebGL$Blend),
+						_1: {
+							ctor: '::',
+							_0: _elm_community$webgl$WebGL$BlendFunc(
+								{ctor: '_Tuple2', _0: _elm_community$webgl$WebGL$SrcAlpha, _1: _elm_community$webgl$WebGL$OneMinusSrcAlpha}),
+							_1: {ctor: '[]'}
+						}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$width(
+							_elm_lang$core$Basics$round(
+								_elm_community$linear_algebra$Math_Vector2$getX(model.screenSize))),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$height(
+								_elm_lang$core$Basics$round(
+									_elm_community$linear_algebra$Math_Vector2$getY(model.screenSize))),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$style(
+									{
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'display', _1: 'block'},
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}
+					},
+					renderables),
+				_1: {ctor: '[]'}
+			});
+	});
+var _micktwomey$elmo_8$Elmo8_GL_Display$update = F2(
+	function (msg, model) {
+		return A2(
+			_elm_lang$core$Platform_Cmd_ops['!'],
+			model,
+			{ctor: '[]'});
+	});
+var _micktwomey$elmo_8$Elmo8_GL_Display$init = A2(
+	_elm_lang$core$Platform_Cmd_ops['!'],
+	{
+		screenSize: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 512.0, 512.0),
+		resolution: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 128.0, 128.0),
+		projectionMatrix: A4(_elm_community$linear_algebra$Math_Matrix4$makeOrtho2D, 0.0, 128.0, 128.0, 0.0)
+	},
+	{ctor: '[]'});
+var _micktwomey$elmo_8$Elmo8_GL_Display$Model = F3(
+	function (a, b, c) {
+		return {screenSize: a, resolution: b, projectionMatrix: c};
+	});
+var _micktwomey$elmo_8$Elmo8_GL_Display$Nothing = {ctor: 'Nothing'};
+
+var _micktwomey$elmo_8$Elmo8_Scene$renderItem = F3(
+	function (display, assets, _p0) {
+		var _p1 = _p0;
+		var _p4 = _p1._0._2;
+		var _p3 = _p1._0._1;
+		var _p2 = _p1._1;
+		switch (_p2.ctor) {
+			case 'PixelRenderable':
+				return A3(
+					_micktwomey$elmo_8$Elmo8_GL_Renderers$renderPixel,
+					display,
+					assets,
+					{x: _p3, y: _p4, colour: _p2._0});
+			case 'SpriteRenderable':
+				return A3(
+					_micktwomey$elmo_8$Elmo8_GL_Renderers$renderSprite,
+					display,
+					assets,
+					{x: _p3, y: _p4, textureKey: _p2._0, sprite: _p2._1});
+			default:
+				return _elm_lang$core$Maybe$Nothing;
+		}
+	});
+var _micktwomey$elmo_8$Elmo8_Scene$render = F3(
+	function (display, assets, model) {
+		return A2(
+			_elm_lang$core$List$filterMap,
+			A2(_micktwomey$elmo_8$Elmo8_Scene$renderItem, display, assets),
+			_elm_lang$core$Dict$toList(model.renderables));
+	});
+var _micktwomey$elmo_8$Elmo8_Scene$updateRenderable = F2(
+	function (model, _p5) {
+		var _p6 = _p5;
+		var _p11 = _p6.renderable;
+		var _p10 = _p6.id;
+		var key = {ctor: '_Tuple3', _0: 0 - _p6.layer, _1: _p6.x, _2: _p6.y};
+		var _p7 = A2(_elm_community$intdict$IntDict$get, _p10, model.idToRenderable);
+		if (_p7.ctor === 'Just') {
+			var _p9 = _p7._0;
+			var _p8 = _elm_lang$core$Native_Utils.eq(_p9, key);
+			if (_p8 === true) {
+				return model;
+			} else {
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						renderables: A2(
+							_elm_lang$core$Dict$remove,
+							_p9,
+							A3(_elm_lang$core$Dict$insert, key, _p11, model.renderables)),
+						idToRenderable: A2(
+							_elm_lang$core$Result$withDefault,
+							model.idToRenderable,
+							A3(_elm_community$intdict$IntDict_Safe$safeInsert, _p10, key, model.idToRenderable))
+					});
+			}
+		} else {
+			return _elm_lang$core$Native_Utils.update(
+				model,
+				{
+					renderables: A3(_elm_lang$core$Dict$insert, key, _p11, model.renderables),
+					idToRenderable: A2(
+						_elm_lang$core$Result$withDefault,
+						model.idToRenderable,
+						A3(_elm_community$intdict$IntDict_Safe$safeInsert, _p10, key, model.idToRenderable))
+				});
+		}
+	});
+var _micktwomey$elmo_8$Elmo8_Scene$getNextId = function (model) {
+	var nextId = model.idCounter + 1;
+	return {
+		ctor: '_Tuple2',
+		_0: _elm_lang$core$Native_Utils.update(
+			model,
+			{idCounter: nextId}),
+		_1: nextId
+	};
+};
+var _micktwomey$elmo_8$Elmo8_Scene$init = {idCounter: 0, idToRenderable: _elm_community$intdict$IntDict$empty, renderables: _elm_lang$core$Dict$empty};
+var _micktwomey$elmo_8$Elmo8_Scene$clear = function (model) {
+	return _micktwomey$elmo_8$Elmo8_Scene$init;
+};
+var _micktwomey$elmo_8$Elmo8_Scene$Model = F3(
+	function (a, b, c) {
+		return {idCounter: a, idToRenderable: b, renderables: c};
+	});
+var _micktwomey$elmo_8$Elmo8_Scene$TextRenderable = F2(
+	function (a, b) {
+		return {ctor: 'TextRenderable', _0: a, _1: b};
+	});
+var _micktwomey$elmo_8$Elmo8_Scene$updateText = F2(
+	function (model, _p12) {
+		var _p13 = _p12;
+		return A2(
+			_micktwomey$elmo_8$Elmo8_Scene$updateRenderable,
+			model,
+			{
+				x: _p13.x,
+				y: _p13.y,
+				layer: _p13.layer,
+				id: _p13.id,
+				renderable: A2(_micktwomey$elmo_8$Elmo8_Scene$TextRenderable, _p13.text, _p13.colour)
+			});
+	});
+var _micktwomey$elmo_8$Elmo8_Scene$addText = F2(
+	function (model, text) {
+		var _p14 = _micktwomey$elmo_8$Elmo8_Scene$getNextId(model);
+		var updatedModel = _p14._0;
+		var id = _p14._1;
+		var updatedText = _elm_lang$core$Native_Utils.update(
+			text,
+			{id: id});
+		return {
+			ctor: '_Tuple2',
+			_0: A2(_micktwomey$elmo_8$Elmo8_Scene$updateText, updatedModel, updatedText),
+			_1: updatedText
+		};
+	});
+var _micktwomey$elmo_8$Elmo8_Scene$SpriteRenderable = F2(
+	function (a, b) {
+		return {ctor: 'SpriteRenderable', _0: a, _1: b};
+	});
+var _micktwomey$elmo_8$Elmo8_Scene$updateSprite = F2(
+	function (model, _p15) {
+		var _p16 = _p15;
+		return A2(
+			_micktwomey$elmo_8$Elmo8_Scene$updateRenderable,
+			model,
+			{
+				x: _p16.x,
+				y: _p16.y,
+				layer: _p16.layer,
+				id: _p16.id,
+				renderable: A2(_micktwomey$elmo_8$Elmo8_Scene$SpriteRenderable, _p16.textureKey, _p16.sprite)
+			});
+	});
+var _micktwomey$elmo_8$Elmo8_Scene$addSprite = F2(
+	function (model, sprite) {
+		var _p17 = _micktwomey$elmo_8$Elmo8_Scene$getNextId(model);
+		var updatedModel = _p17._0;
+		var id = _p17._1;
+		var updatedSprite = _elm_lang$core$Native_Utils.update(
+			sprite,
+			{id: id});
+		return {
+			ctor: '_Tuple2',
+			_0: A2(_micktwomey$elmo_8$Elmo8_Scene$updateSprite, updatedModel, updatedSprite),
+			_1: updatedSprite
+		};
+	});
+var _micktwomey$elmo_8$Elmo8_Scene$PixelRenderable = function (a) {
+	return {ctor: 'PixelRenderable', _0: a};
+};
+var _micktwomey$elmo_8$Elmo8_Scene$updatePixel = F2(
+	function (model, _p18) {
+		var _p19 = _p18;
+		return A2(
+			_micktwomey$elmo_8$Elmo8_Scene$updateRenderable,
+			model,
+			{
+				x: _p19.x,
+				y: _p19.y,
+				layer: _p19.layer,
+				id: _p19.id,
+				renderable: _micktwomey$elmo_8$Elmo8_Scene$PixelRenderable(_p19.colour)
+			});
+	});
+var _micktwomey$elmo_8$Elmo8_Scene$addPixel = F2(
+	function (model, pixel) {
+		var _p20 = _micktwomey$elmo_8$Elmo8_Scene$getNextId(model);
+		var updatedModel = _p20._0;
+		var id = _p20._1;
+		var updatedPixel = _elm_lang$core$Native_Utils.update(
+			pixel,
+			{id: id});
+		return {
+			ctor: '_Tuple2',
+			_0: A2(_micktwomey$elmo_8$Elmo8_Scene$updatePixel, updatedModel, updatedPixel),
+			_1: updatedPixel
+		};
+	});
 
 var _micktwomey$elmo_8$HelloPico8$update = function (model) {
 	return model;
@@ -14294,6 +17014,1127 @@ var _micktwomey$elmo_8$HelloWorld$Model = function (a) {
 	return {t: a};
 };
 
+var _ohanhi$keyboard_extra$Keyboard_Arrows$boolToInt = function (bool) {
+	return bool ? 1 : 0;
+};
+var _ohanhi$keyboard_extra$Keyboard_Arrows$determineArrows = function (keys) {
+	var toInt = function (key) {
+		return _ohanhi$keyboard_extra$Keyboard_Arrows$boolToInt(
+			A2(_elm_lang$core$Set$member, key, keys));
+	};
+	var x = toInt(39) - toInt(37);
+	var y = toInt(38) - toInt(40);
+	return {x: x, y: y};
+};
+var _ohanhi$keyboard_extra$Keyboard_Arrows$determineWasd = function (keys) {
+	var toInt = function (key) {
+		return _ohanhi$keyboard_extra$Keyboard_Arrows$boolToInt(
+			A2(_elm_lang$core$Set$member, key, keys));
+	};
+	var x = toInt(68) - toInt(65);
+	var y = toInt(87) - toInt(83);
+	return {x: x, y: y};
+};
+var _ohanhi$keyboard_extra$Keyboard_Arrows$init = {x: 0, y: 0};
+var _ohanhi$keyboard_extra$Keyboard_Arrows$Arrows = F2(
+	function (a, b) {
+		return {x: a, y: b};
+	});
+
+var _ohanhi$keyboard_extra$Keyboard_Extra$wasd = function (model) {
+	return _ohanhi$keyboard_extra$Keyboard_Arrows$determineWasd(model.keysDown);
+};
+var _ohanhi$keyboard_extra$Keyboard_Extra$arrows = function (model) {
+	return _ohanhi$keyboard_extra$Keyboard_Arrows$determineArrows(model.keysDown);
+};
+var _ohanhi$keyboard_extra$Keyboard_Extra$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		if (_p0.ctor === 'Down') {
+			var keysDown = A2(_elm_lang$core$Set$insert, _p0._0, model.keysDown);
+			return A2(
+				_elm_lang$core$Platform_Cmd_ops['!'],
+				_elm_lang$core$Native_Utils.update(
+					model,
+					{keysDown: keysDown}),
+				{ctor: '[]'});
+		} else {
+			var keysDown = A2(_elm_lang$core$Set$remove, _p0._0, model.keysDown);
+			return A2(
+				_elm_lang$core$Platform_Cmd_ops['!'],
+				_elm_lang$core$Native_Utils.update(
+					model,
+					{keysDown: keysDown}),
+				{ctor: '[]'});
+		}
+	});
+var _ohanhi$keyboard_extra$Keyboard_Extra$Model = function (a) {
+	return {keysDown: a};
+};
+var _ohanhi$keyboard_extra$Keyboard_Extra$init = {
+	ctor: '_Tuple2',
+	_0: _ohanhi$keyboard_extra$Keyboard_Extra$Model(_elm_lang$core$Set$empty),
+	_1: _elm_lang$core$Platform_Cmd$none
+};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Up = function (a) {
+	return {ctor: 'Up', _0: a};
+};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Down = function (a) {
+	return {ctor: 'Down', _0: a};
+};
+var _ohanhi$keyboard_extra$Keyboard_Extra$subscriptions = _elm_lang$core$Platform_Sub$batch(
+	{
+		ctor: '::',
+		_0: _elm_lang$keyboard$Keyboard$downs(_ohanhi$keyboard_extra$Keyboard_Extra$Down),
+		_1: {
+			ctor: '::',
+			_0: _elm_lang$keyboard$Keyboard$ups(_ohanhi$keyboard_extra$Keyboard_Extra$Up),
+			_1: {ctor: '[]'}
+		}
+	});
+var _ohanhi$keyboard_extra$Keyboard_Extra$NoDirection = {ctor: 'NoDirection'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$NorthWest = {ctor: 'NorthWest'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$West = {ctor: 'West'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$SouthWest = {ctor: 'SouthWest'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$South = {ctor: 'South'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$SouthEast = {ctor: 'SouthEast'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$East = {ctor: 'East'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$NorthEast = {ctor: 'NorthEast'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$North = {ctor: 'North'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$arrowsToDir = function (_p1) {
+	var _p2 = _p1;
+	var _p3 = {ctor: '_Tuple2', _0: _p2.x, _1: _p2.y};
+	_v2_8:
+	do {
+		if (_p3.ctor === '_Tuple2') {
+			switch (_p3._0) {
+				case 1:
+					switch (_p3._1) {
+						case 1:
+							return _ohanhi$keyboard_extra$Keyboard_Extra$NorthEast;
+						case 0:
+							return _ohanhi$keyboard_extra$Keyboard_Extra$East;
+						case -1:
+							return _ohanhi$keyboard_extra$Keyboard_Extra$SouthEast;
+						default:
+							break _v2_8;
+					}
+				case 0:
+					switch (_p3._1) {
+						case 1:
+							return _ohanhi$keyboard_extra$Keyboard_Extra$North;
+						case -1:
+							return _ohanhi$keyboard_extra$Keyboard_Extra$South;
+						default:
+							break _v2_8;
+					}
+				case -1:
+					switch (_p3._1) {
+						case -1:
+							return _ohanhi$keyboard_extra$Keyboard_Extra$SouthWest;
+						case 0:
+							return _ohanhi$keyboard_extra$Keyboard_Extra$West;
+						case 1:
+							return _ohanhi$keyboard_extra$Keyboard_Extra$NorthWest;
+						default:
+							break _v2_8;
+					}
+				default:
+					break _v2_8;
+			}
+		} else {
+			break _v2_8;
+		}
+	} while(false);
+	return _ohanhi$keyboard_extra$Keyboard_Extra$NoDirection;
+};
+var _ohanhi$keyboard_extra$Keyboard_Extra$arrowsDirection = function (_p4) {
+	return _ohanhi$keyboard_extra$Keyboard_Extra$arrowsToDir(
+		_ohanhi$keyboard_extra$Keyboard_Extra$arrows(_p4));
+};
+var _ohanhi$keyboard_extra$Keyboard_Extra$wasdDirection = function (_p5) {
+	return _ohanhi$keyboard_extra$Keyboard_Extra$arrowsToDir(
+		_ohanhi$keyboard_extra$Keyboard_Extra$wasd(_p5));
+};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Other = {ctor: 'Other'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Altgr = {ctor: 'Altgr'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Meta = {ctor: 'Meta'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Quote = {ctor: 'Quote'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$CloseBracket = {ctor: 'CloseBracket'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$BackSlash = {ctor: 'BackSlash'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$OpenBracket = {ctor: 'OpenBracket'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$BackQuote = {ctor: 'BackQuote'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Slash = {ctor: 'Slash'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Period = {ctor: 'Period'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Minus = {ctor: 'Minus'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Comma = {ctor: 'Comma'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$VolumeUp = {ctor: 'VolumeUp'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$VolumeDown = {ctor: 'VolumeDown'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$VolumeMute = {ctor: 'VolumeMute'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Tilde = {ctor: 'Tilde'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$CloseCurlyBracket = {ctor: 'CloseCurlyBracket'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$OpenCurlyBracket = {ctor: 'OpenCurlyBracket'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$HyphenMinus = {ctor: 'HyphenMinus'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Pipe = {ctor: 'Pipe'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Plus = {ctor: 'Plus'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Asterisk = {ctor: 'Asterisk'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$CloseParen = {ctor: 'CloseParen'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$OpenParen = {ctor: 'OpenParen'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Underscore = {ctor: 'Underscore'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Ampersand = {ctor: 'Ampersand'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Percent = {ctor: 'Percent'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Dollar = {ctor: 'Dollar'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Hash = {ctor: 'Hash'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$DoubleQuote = {ctor: 'DoubleQuote'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Exclamation = {ctor: 'Exclamation'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Circumflex = {ctor: 'Circumflex'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$ScrollLock = {ctor: 'ScrollLock'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$NumLock = {ctor: 'NumLock'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$F24 = {ctor: 'F24'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$F23 = {ctor: 'F23'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$F22 = {ctor: 'F22'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$F21 = {ctor: 'F21'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$F20 = {ctor: 'F20'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$F19 = {ctor: 'F19'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$F18 = {ctor: 'F18'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$F17 = {ctor: 'F17'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$F16 = {ctor: 'F16'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$F15 = {ctor: 'F15'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$F14 = {ctor: 'F14'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$F13 = {ctor: 'F13'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$F12 = {ctor: 'F12'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$F11 = {ctor: 'F11'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$F10 = {ctor: 'F10'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$F9 = {ctor: 'F9'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$F8 = {ctor: 'F8'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$F7 = {ctor: 'F7'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$F6 = {ctor: 'F6'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$F5 = {ctor: 'F5'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$F4 = {ctor: 'F4'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$F3 = {ctor: 'F3'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$F2 = {ctor: 'F2'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$F1 = {ctor: 'F1'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Divide = {ctor: 'Divide'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Decimal = {ctor: 'Decimal'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Subtract = {ctor: 'Subtract'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Separator = {ctor: 'Separator'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Add = {ctor: 'Add'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Multiply = {ctor: 'Multiply'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Numpad9 = {ctor: 'Numpad9'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Numpad8 = {ctor: 'Numpad8'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Numpad7 = {ctor: 'Numpad7'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Numpad6 = {ctor: 'Numpad6'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Numpad5 = {ctor: 'Numpad5'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Numpad4 = {ctor: 'Numpad4'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Numpad3 = {ctor: 'Numpad3'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Numpad2 = {ctor: 'Numpad2'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Numpad1 = {ctor: 'Numpad1'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Numpad0 = {ctor: 'Numpad0'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Sleep = {ctor: 'Sleep'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$ContextMenu = {ctor: 'ContextMenu'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Super = {ctor: 'Super'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$CharZ = {ctor: 'CharZ'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$CharY = {ctor: 'CharY'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$CharX = {ctor: 'CharX'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$CharW = {ctor: 'CharW'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$CharV = {ctor: 'CharV'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$CharU = {ctor: 'CharU'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$CharT = {ctor: 'CharT'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$CharS = {ctor: 'CharS'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$CharR = {ctor: 'CharR'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$CharQ = {ctor: 'CharQ'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$CharP = {ctor: 'CharP'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$CharO = {ctor: 'CharO'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$CharN = {ctor: 'CharN'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$CharM = {ctor: 'CharM'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$CharL = {ctor: 'CharL'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$CharK = {ctor: 'CharK'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$CharJ = {ctor: 'CharJ'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$CharI = {ctor: 'CharI'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$CharH = {ctor: 'CharH'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$CharG = {ctor: 'CharG'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$CharF = {ctor: 'CharF'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$CharE = {ctor: 'CharE'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$CharD = {ctor: 'CharD'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$CharC = {ctor: 'CharC'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$CharB = {ctor: 'CharB'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$CharA = {ctor: 'CharA'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$At = {ctor: 'At'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$QuestionMark = {ctor: 'QuestionMark'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$GreaterThan = {ctor: 'GreaterThan'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Equals = {ctor: 'Equals'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$LessThan = {ctor: 'LessThan'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Semicolon = {ctor: 'Semicolon'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Colon = {ctor: 'Colon'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Number9 = {ctor: 'Number9'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Number8 = {ctor: 'Number8'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Number7 = {ctor: 'Number7'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Number6 = {ctor: 'Number6'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Number5 = {ctor: 'Number5'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Number4 = {ctor: 'Number4'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Number3 = {ctor: 'Number3'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Number2 = {ctor: 'Number2'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Number1 = {ctor: 'Number1'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Number0 = {ctor: 'Number0'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Delete = {ctor: 'Delete'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Insert = {ctor: 'Insert'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$PrintScreen = {ctor: 'PrintScreen'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Execute = {ctor: 'Execute'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Print = {ctor: 'Print'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Select = {ctor: 'Select'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$ArrowDown = {ctor: 'ArrowDown'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$ArrowRight = {ctor: 'ArrowRight'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$ArrowUp = {ctor: 'ArrowUp'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$ArrowLeft = {ctor: 'ArrowLeft'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Home = {ctor: 'Home'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$End = {ctor: 'End'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$PageDown = {ctor: 'PageDown'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$PageUp = {ctor: 'PageUp'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Space = {ctor: 'Space'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$ModeChange = {ctor: 'ModeChange'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Accept = {ctor: 'Accept'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$NonConvert = {ctor: 'NonConvert'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Convert = {ctor: 'Convert'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Escape = {ctor: 'Escape'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$CapsLock = {ctor: 'CapsLock'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Pause = {ctor: 'Pause'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Alt = {ctor: 'Alt'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Control = {ctor: 'Control'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Shift = {ctor: 'Shift'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Enter = {ctor: 'Enter'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Clear = {ctor: 'Clear'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Tab = {ctor: 'Tab'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$BackSpace = {ctor: 'BackSpace'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Help = {ctor: 'Help'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$Cancel = {ctor: 'Cancel'};
+var _ohanhi$keyboard_extra$Keyboard_Extra$codeBook = {
+	ctor: '::',
+	_0: {ctor: '_Tuple2', _0: 3, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Cancel},
+	_1: {
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: 6, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Help},
+		_1: {
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 8, _1: _ohanhi$keyboard_extra$Keyboard_Extra$BackSpace},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 9, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Tab},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 12, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Clear},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 13, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Enter},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 16, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Shift},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 17, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Control},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 18, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Alt},
+									_1: {
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 19, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Pause},
+										_1: {
+											ctor: '::',
+											_0: {ctor: '_Tuple2', _0: 20, _1: _ohanhi$keyboard_extra$Keyboard_Extra$CapsLock},
+											_1: {
+												ctor: '::',
+												_0: {ctor: '_Tuple2', _0: 27, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Escape},
+												_1: {
+													ctor: '::',
+													_0: {ctor: '_Tuple2', _0: 28, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Convert},
+													_1: {
+														ctor: '::',
+														_0: {ctor: '_Tuple2', _0: 29, _1: _ohanhi$keyboard_extra$Keyboard_Extra$NonConvert},
+														_1: {
+															ctor: '::',
+															_0: {ctor: '_Tuple2', _0: 30, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Accept},
+															_1: {
+																ctor: '::',
+																_0: {ctor: '_Tuple2', _0: 31, _1: _ohanhi$keyboard_extra$Keyboard_Extra$ModeChange},
+																_1: {
+																	ctor: '::',
+																	_0: {ctor: '_Tuple2', _0: 32, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Space},
+																	_1: {
+																		ctor: '::',
+																		_0: {ctor: '_Tuple2', _0: 33, _1: _ohanhi$keyboard_extra$Keyboard_Extra$PageUp},
+																		_1: {
+																			ctor: '::',
+																			_0: {ctor: '_Tuple2', _0: 34, _1: _ohanhi$keyboard_extra$Keyboard_Extra$PageDown},
+																			_1: {
+																				ctor: '::',
+																				_0: {ctor: '_Tuple2', _0: 35, _1: _ohanhi$keyboard_extra$Keyboard_Extra$End},
+																				_1: {
+																					ctor: '::',
+																					_0: {ctor: '_Tuple2', _0: 36, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Home},
+																					_1: {
+																						ctor: '::',
+																						_0: {ctor: '_Tuple2', _0: 37, _1: _ohanhi$keyboard_extra$Keyboard_Extra$ArrowLeft},
+																						_1: {
+																							ctor: '::',
+																							_0: {ctor: '_Tuple2', _0: 38, _1: _ohanhi$keyboard_extra$Keyboard_Extra$ArrowUp},
+																							_1: {
+																								ctor: '::',
+																								_0: {ctor: '_Tuple2', _0: 39, _1: _ohanhi$keyboard_extra$Keyboard_Extra$ArrowRight},
+																								_1: {
+																									ctor: '::',
+																									_0: {ctor: '_Tuple2', _0: 40, _1: _ohanhi$keyboard_extra$Keyboard_Extra$ArrowDown},
+																									_1: {
+																										ctor: '::',
+																										_0: {ctor: '_Tuple2', _0: 41, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Select},
+																										_1: {
+																											ctor: '::',
+																											_0: {ctor: '_Tuple2', _0: 42, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Print},
+																											_1: {
+																												ctor: '::',
+																												_0: {ctor: '_Tuple2', _0: 43, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Execute},
+																												_1: {
+																													ctor: '::',
+																													_0: {ctor: '_Tuple2', _0: 44, _1: _ohanhi$keyboard_extra$Keyboard_Extra$PrintScreen},
+																													_1: {
+																														ctor: '::',
+																														_0: {ctor: '_Tuple2', _0: 45, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Insert},
+																														_1: {
+																															ctor: '::',
+																															_0: {ctor: '_Tuple2', _0: 46, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Delete},
+																															_1: {
+																																ctor: '::',
+																																_0: {ctor: '_Tuple2', _0: 48, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Number0},
+																																_1: {
+																																	ctor: '::',
+																																	_0: {ctor: '_Tuple2', _0: 49, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Number1},
+																																	_1: {
+																																		ctor: '::',
+																																		_0: {ctor: '_Tuple2', _0: 50, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Number2},
+																																		_1: {
+																																			ctor: '::',
+																																			_0: {ctor: '_Tuple2', _0: 51, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Number3},
+																																			_1: {
+																																				ctor: '::',
+																																				_0: {ctor: '_Tuple2', _0: 52, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Number4},
+																																				_1: {
+																																					ctor: '::',
+																																					_0: {ctor: '_Tuple2', _0: 53, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Number5},
+																																					_1: {
+																																						ctor: '::',
+																																						_0: {ctor: '_Tuple2', _0: 54, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Number6},
+																																						_1: {
+																																							ctor: '::',
+																																							_0: {ctor: '_Tuple2', _0: 55, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Number7},
+																																							_1: {
+																																								ctor: '::',
+																																								_0: {ctor: '_Tuple2', _0: 56, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Number8},
+																																								_1: {
+																																									ctor: '::',
+																																									_0: {ctor: '_Tuple2', _0: 57, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Number9},
+																																									_1: {
+																																										ctor: '::',
+																																										_0: {ctor: '_Tuple2', _0: 58, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Colon},
+																																										_1: {
+																																											ctor: '::',
+																																											_0: {ctor: '_Tuple2', _0: 59, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Semicolon},
+																																											_1: {
+																																												ctor: '::',
+																																												_0: {ctor: '_Tuple2', _0: 60, _1: _ohanhi$keyboard_extra$Keyboard_Extra$LessThan},
+																																												_1: {
+																																													ctor: '::',
+																																													_0: {ctor: '_Tuple2', _0: 61, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Equals},
+																																													_1: {
+																																														ctor: '::',
+																																														_0: {ctor: '_Tuple2', _0: 62, _1: _ohanhi$keyboard_extra$Keyboard_Extra$GreaterThan},
+																																														_1: {
+																																															ctor: '::',
+																																															_0: {ctor: '_Tuple2', _0: 63, _1: _ohanhi$keyboard_extra$Keyboard_Extra$QuestionMark},
+																																															_1: {
+																																																ctor: '::',
+																																																_0: {ctor: '_Tuple2', _0: 64, _1: _ohanhi$keyboard_extra$Keyboard_Extra$At},
+																																																_1: {
+																																																	ctor: '::',
+																																																	_0: {ctor: '_Tuple2', _0: 65, _1: _ohanhi$keyboard_extra$Keyboard_Extra$CharA},
+																																																	_1: {
+																																																		ctor: '::',
+																																																		_0: {ctor: '_Tuple2', _0: 66, _1: _ohanhi$keyboard_extra$Keyboard_Extra$CharB},
+																																																		_1: {
+																																																			ctor: '::',
+																																																			_0: {ctor: '_Tuple2', _0: 67, _1: _ohanhi$keyboard_extra$Keyboard_Extra$CharC},
+																																																			_1: {
+																																																				ctor: '::',
+																																																				_0: {ctor: '_Tuple2', _0: 68, _1: _ohanhi$keyboard_extra$Keyboard_Extra$CharD},
+																																																				_1: {
+																																																					ctor: '::',
+																																																					_0: {ctor: '_Tuple2', _0: 69, _1: _ohanhi$keyboard_extra$Keyboard_Extra$CharE},
+																																																					_1: {
+																																																						ctor: '::',
+																																																						_0: {ctor: '_Tuple2', _0: 70, _1: _ohanhi$keyboard_extra$Keyboard_Extra$CharF},
+																																																						_1: {
+																																																							ctor: '::',
+																																																							_0: {ctor: '_Tuple2', _0: 71, _1: _ohanhi$keyboard_extra$Keyboard_Extra$CharG},
+																																																							_1: {
+																																																								ctor: '::',
+																																																								_0: {ctor: '_Tuple2', _0: 72, _1: _ohanhi$keyboard_extra$Keyboard_Extra$CharH},
+																																																								_1: {
+																																																									ctor: '::',
+																																																									_0: {ctor: '_Tuple2', _0: 73, _1: _ohanhi$keyboard_extra$Keyboard_Extra$CharI},
+																																																									_1: {
+																																																										ctor: '::',
+																																																										_0: {ctor: '_Tuple2', _0: 74, _1: _ohanhi$keyboard_extra$Keyboard_Extra$CharJ},
+																																																										_1: {
+																																																											ctor: '::',
+																																																											_0: {ctor: '_Tuple2', _0: 75, _1: _ohanhi$keyboard_extra$Keyboard_Extra$CharK},
+																																																											_1: {
+																																																												ctor: '::',
+																																																												_0: {ctor: '_Tuple2', _0: 76, _1: _ohanhi$keyboard_extra$Keyboard_Extra$CharL},
+																																																												_1: {
+																																																													ctor: '::',
+																																																													_0: {ctor: '_Tuple2', _0: 77, _1: _ohanhi$keyboard_extra$Keyboard_Extra$CharM},
+																																																													_1: {
+																																																														ctor: '::',
+																																																														_0: {ctor: '_Tuple2', _0: 78, _1: _ohanhi$keyboard_extra$Keyboard_Extra$CharN},
+																																																														_1: {
+																																																															ctor: '::',
+																																																															_0: {ctor: '_Tuple2', _0: 79, _1: _ohanhi$keyboard_extra$Keyboard_Extra$CharO},
+																																																															_1: {
+																																																																ctor: '::',
+																																																																_0: {ctor: '_Tuple2', _0: 80, _1: _ohanhi$keyboard_extra$Keyboard_Extra$CharP},
+																																																																_1: {
+																																																																	ctor: '::',
+																																																																	_0: {ctor: '_Tuple2', _0: 81, _1: _ohanhi$keyboard_extra$Keyboard_Extra$CharQ},
+																																																																	_1: {
+																																																																		ctor: '::',
+																																																																		_0: {ctor: '_Tuple2', _0: 82, _1: _ohanhi$keyboard_extra$Keyboard_Extra$CharR},
+																																																																		_1: {
+																																																																			ctor: '::',
+																																																																			_0: {ctor: '_Tuple2', _0: 83, _1: _ohanhi$keyboard_extra$Keyboard_Extra$CharS},
+																																																																			_1: {
+																																																																				ctor: '::',
+																																																																				_0: {ctor: '_Tuple2', _0: 84, _1: _ohanhi$keyboard_extra$Keyboard_Extra$CharT},
+																																																																				_1: {
+																																																																					ctor: '::',
+																																																																					_0: {ctor: '_Tuple2', _0: 85, _1: _ohanhi$keyboard_extra$Keyboard_Extra$CharU},
+																																																																					_1: {
+																																																																						ctor: '::',
+																																																																						_0: {ctor: '_Tuple2', _0: 86, _1: _ohanhi$keyboard_extra$Keyboard_Extra$CharV},
+																																																																						_1: {
+																																																																							ctor: '::',
+																																																																							_0: {ctor: '_Tuple2', _0: 87, _1: _ohanhi$keyboard_extra$Keyboard_Extra$CharW},
+																																																																							_1: {
+																																																																								ctor: '::',
+																																																																								_0: {ctor: '_Tuple2', _0: 88, _1: _ohanhi$keyboard_extra$Keyboard_Extra$CharX},
+																																																																								_1: {
+																																																																									ctor: '::',
+																																																																									_0: {ctor: '_Tuple2', _0: 89, _1: _ohanhi$keyboard_extra$Keyboard_Extra$CharY},
+																																																																									_1: {
+																																																																										ctor: '::',
+																																																																										_0: {ctor: '_Tuple2', _0: 90, _1: _ohanhi$keyboard_extra$Keyboard_Extra$CharZ},
+																																																																										_1: {
+																																																																											ctor: '::',
+																																																																											_0: {ctor: '_Tuple2', _0: 91, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Super},
+																																																																											_1: {
+																																																																												ctor: '::',
+																																																																												_0: {ctor: '_Tuple2', _0: 93, _1: _ohanhi$keyboard_extra$Keyboard_Extra$ContextMenu},
+																																																																												_1: {
+																																																																													ctor: '::',
+																																																																													_0: {ctor: '_Tuple2', _0: 95, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Sleep},
+																																																																													_1: {
+																																																																														ctor: '::',
+																																																																														_0: {ctor: '_Tuple2', _0: 96, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Numpad0},
+																																																																														_1: {
+																																																																															ctor: '::',
+																																																																															_0: {ctor: '_Tuple2', _0: 97, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Numpad1},
+																																																																															_1: {
+																																																																																ctor: '::',
+																																																																																_0: {ctor: '_Tuple2', _0: 98, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Numpad2},
+																																																																																_1: {
+																																																																																	ctor: '::',
+																																																																																	_0: {ctor: '_Tuple2', _0: 99, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Numpad3},
+																																																																																	_1: {
+																																																																																		ctor: '::',
+																																																																																		_0: {ctor: '_Tuple2', _0: 100, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Numpad4},
+																																																																																		_1: {
+																																																																																			ctor: '::',
+																																																																																			_0: {ctor: '_Tuple2', _0: 101, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Numpad5},
+																																																																																			_1: {
+																																																																																				ctor: '::',
+																																																																																				_0: {ctor: '_Tuple2', _0: 102, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Numpad6},
+																																																																																				_1: {
+																																																																																					ctor: '::',
+																																																																																					_0: {ctor: '_Tuple2', _0: 103, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Numpad7},
+																																																																																					_1: {
+																																																																																						ctor: '::',
+																																																																																						_0: {ctor: '_Tuple2', _0: 104, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Numpad8},
+																																																																																						_1: {
+																																																																																							ctor: '::',
+																																																																																							_0: {ctor: '_Tuple2', _0: 105, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Numpad9},
+																																																																																							_1: {
+																																																																																								ctor: '::',
+																																																																																								_0: {ctor: '_Tuple2', _0: 106, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Multiply},
+																																																																																								_1: {
+																																																																																									ctor: '::',
+																																																																																									_0: {ctor: '_Tuple2', _0: 107, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Add},
+																																																																																									_1: {
+																																																																																										ctor: '::',
+																																																																																										_0: {ctor: '_Tuple2', _0: 108, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Separator},
+																																																																																										_1: {
+																																																																																											ctor: '::',
+																																																																																											_0: {ctor: '_Tuple2', _0: 109, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Subtract},
+																																																																																											_1: {
+																																																																																												ctor: '::',
+																																																																																												_0: {ctor: '_Tuple2', _0: 110, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Decimal},
+																																																																																												_1: {
+																																																																																													ctor: '::',
+																																																																																													_0: {ctor: '_Tuple2', _0: 111, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Divide},
+																																																																																													_1: {
+																																																																																														ctor: '::',
+																																																																																														_0: {ctor: '_Tuple2', _0: 112, _1: _ohanhi$keyboard_extra$Keyboard_Extra$F1},
+																																																																																														_1: {
+																																																																																															ctor: '::',
+																																																																																															_0: {ctor: '_Tuple2', _0: 113, _1: _ohanhi$keyboard_extra$Keyboard_Extra$F2},
+																																																																																															_1: {
+																																																																																																ctor: '::',
+																																																																																																_0: {ctor: '_Tuple2', _0: 114, _1: _ohanhi$keyboard_extra$Keyboard_Extra$F3},
+																																																																																																_1: {
+																																																																																																	ctor: '::',
+																																																																																																	_0: {ctor: '_Tuple2', _0: 115, _1: _ohanhi$keyboard_extra$Keyboard_Extra$F4},
+																																																																																																	_1: {
+																																																																																																		ctor: '::',
+																																																																																																		_0: {ctor: '_Tuple2', _0: 116, _1: _ohanhi$keyboard_extra$Keyboard_Extra$F5},
+																																																																																																		_1: {
+																																																																																																			ctor: '::',
+																																																																																																			_0: {ctor: '_Tuple2', _0: 117, _1: _ohanhi$keyboard_extra$Keyboard_Extra$F6},
+																																																																																																			_1: {
+																																																																																																				ctor: '::',
+																																																																																																				_0: {ctor: '_Tuple2', _0: 118, _1: _ohanhi$keyboard_extra$Keyboard_Extra$F7},
+																																																																																																				_1: {
+																																																																																																					ctor: '::',
+																																																																																																					_0: {ctor: '_Tuple2', _0: 119, _1: _ohanhi$keyboard_extra$Keyboard_Extra$F8},
+																																																																																																					_1: {
+																																																																																																						ctor: '::',
+																																																																																																						_0: {ctor: '_Tuple2', _0: 120, _1: _ohanhi$keyboard_extra$Keyboard_Extra$F9},
+																																																																																																						_1: {
+																																																																																																							ctor: '::',
+																																																																																																							_0: {ctor: '_Tuple2', _0: 121, _1: _ohanhi$keyboard_extra$Keyboard_Extra$F10},
+																																																																																																							_1: {
+																																																																																																								ctor: '::',
+																																																																																																								_0: {ctor: '_Tuple2', _0: 122, _1: _ohanhi$keyboard_extra$Keyboard_Extra$F11},
+																																																																																																								_1: {
+																																																																																																									ctor: '::',
+																																																																																																									_0: {ctor: '_Tuple2', _0: 123, _1: _ohanhi$keyboard_extra$Keyboard_Extra$F12},
+																																																																																																									_1: {
+																																																																																																										ctor: '::',
+																																																																																																										_0: {ctor: '_Tuple2', _0: 124, _1: _ohanhi$keyboard_extra$Keyboard_Extra$F13},
+																																																																																																										_1: {
+																																																																																																											ctor: '::',
+																																																																																																											_0: {ctor: '_Tuple2', _0: 125, _1: _ohanhi$keyboard_extra$Keyboard_Extra$F14},
+																																																																																																											_1: {
+																																																																																																												ctor: '::',
+																																																																																																												_0: {ctor: '_Tuple2', _0: 126, _1: _ohanhi$keyboard_extra$Keyboard_Extra$F15},
+																																																																																																												_1: {
+																																																																																																													ctor: '::',
+																																																																																																													_0: {ctor: '_Tuple2', _0: 127, _1: _ohanhi$keyboard_extra$Keyboard_Extra$F16},
+																																																																																																													_1: {
+																																																																																																														ctor: '::',
+																																																																																																														_0: {ctor: '_Tuple2', _0: 128, _1: _ohanhi$keyboard_extra$Keyboard_Extra$F17},
+																																																																																																														_1: {
+																																																																																																															ctor: '::',
+																																																																																																															_0: {ctor: '_Tuple2', _0: 129, _1: _ohanhi$keyboard_extra$Keyboard_Extra$F18},
+																																																																																																															_1: {
+																																																																																																																ctor: '::',
+																																																																																																																_0: {ctor: '_Tuple2', _0: 130, _1: _ohanhi$keyboard_extra$Keyboard_Extra$F19},
+																																																																																																																_1: {
+																																																																																																																	ctor: '::',
+																																																																																																																	_0: {ctor: '_Tuple2', _0: 131, _1: _ohanhi$keyboard_extra$Keyboard_Extra$F20},
+																																																																																																																	_1: {
+																																																																																																																		ctor: '::',
+																																																																																																																		_0: {ctor: '_Tuple2', _0: 132, _1: _ohanhi$keyboard_extra$Keyboard_Extra$F21},
+																																																																																																																		_1: {
+																																																																																																																			ctor: '::',
+																																																																																																																			_0: {ctor: '_Tuple2', _0: 133, _1: _ohanhi$keyboard_extra$Keyboard_Extra$F22},
+																																																																																																																			_1: {
+																																																																																																																				ctor: '::',
+																																																																																																																				_0: {ctor: '_Tuple2', _0: 134, _1: _ohanhi$keyboard_extra$Keyboard_Extra$F23},
+																																																																																																																				_1: {
+																																																																																																																					ctor: '::',
+																																																																																																																					_0: {ctor: '_Tuple2', _0: 135, _1: _ohanhi$keyboard_extra$Keyboard_Extra$F24},
+																																																																																																																					_1: {
+																																																																																																																						ctor: '::',
+																																																																																																																						_0: {ctor: '_Tuple2', _0: 144, _1: _ohanhi$keyboard_extra$Keyboard_Extra$NumLock},
+																																																																																																																						_1: {
+																																																																																																																							ctor: '::',
+																																																																																																																							_0: {ctor: '_Tuple2', _0: 145, _1: _ohanhi$keyboard_extra$Keyboard_Extra$ScrollLock},
+																																																																																																																							_1: {
+																																																																																																																								ctor: '::',
+																																																																																																																								_0: {ctor: '_Tuple2', _0: 160, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Circumflex},
+																																																																																																																								_1: {
+																																																																																																																									ctor: '::',
+																																																																																																																									_0: {ctor: '_Tuple2', _0: 161, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Exclamation},
+																																																																																																																									_1: {
+																																																																																																																										ctor: '::',
+																																																																																																																										_0: {ctor: '_Tuple2', _0: 162, _1: _ohanhi$keyboard_extra$Keyboard_Extra$DoubleQuote},
+																																																																																																																										_1: {
+																																																																																																																											ctor: '::',
+																																																																																																																											_0: {ctor: '_Tuple2', _0: 163, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Hash},
+																																																																																																																											_1: {
+																																																																																																																												ctor: '::',
+																																																																																																																												_0: {ctor: '_Tuple2', _0: 164, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Dollar},
+																																																																																																																												_1: {
+																																																																																																																													ctor: '::',
+																																																																																																																													_0: {ctor: '_Tuple2', _0: 165, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Percent},
+																																																																																																																													_1: {
+																																																																																																																														ctor: '::',
+																																																																																																																														_0: {ctor: '_Tuple2', _0: 166, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Ampersand},
+																																																																																																																														_1: {
+																																																																																																																															ctor: '::',
+																																																																																																																															_0: {ctor: '_Tuple2', _0: 167, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Underscore},
+																																																																																																																															_1: {
+																																																																																																																																ctor: '::',
+																																																																																																																																_0: {ctor: '_Tuple2', _0: 168, _1: _ohanhi$keyboard_extra$Keyboard_Extra$OpenParen},
+																																																																																																																																_1: {
+																																																																																																																																	ctor: '::',
+																																																																																																																																	_0: {ctor: '_Tuple2', _0: 169, _1: _ohanhi$keyboard_extra$Keyboard_Extra$CloseParen},
+																																																																																																																																	_1: {
+																																																																																																																																		ctor: '::',
+																																																																																																																																		_0: {ctor: '_Tuple2', _0: 170, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Asterisk},
+																																																																																																																																		_1: {
+																																																																																																																																			ctor: '::',
+																																																																																																																																			_0: {ctor: '_Tuple2', _0: 171, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Plus},
+																																																																																																																																			_1: {
+																																																																																																																																				ctor: '::',
+																																																																																																																																				_0: {ctor: '_Tuple2', _0: 172, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Pipe},
+																																																																																																																																				_1: {
+																																																																																																																																					ctor: '::',
+																																																																																																																																					_0: {ctor: '_Tuple2', _0: 173, _1: _ohanhi$keyboard_extra$Keyboard_Extra$HyphenMinus},
+																																																																																																																																					_1: {
+																																																																																																																																						ctor: '::',
+																																																																																																																																						_0: {ctor: '_Tuple2', _0: 174, _1: _ohanhi$keyboard_extra$Keyboard_Extra$OpenCurlyBracket},
+																																																																																																																																						_1: {
+																																																																																																																																							ctor: '::',
+																																																																																																																																							_0: {ctor: '_Tuple2', _0: 175, _1: _ohanhi$keyboard_extra$Keyboard_Extra$CloseCurlyBracket},
+																																																																																																																																							_1: {
+																																																																																																																																								ctor: '::',
+																																																																																																																																								_0: {ctor: '_Tuple2', _0: 176, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Tilde},
+																																																																																																																																								_1: {
+																																																																																																																																									ctor: '::',
+																																																																																																																																									_0: {ctor: '_Tuple2', _0: 181, _1: _ohanhi$keyboard_extra$Keyboard_Extra$VolumeMute},
+																																																																																																																																									_1: {
+																																																																																																																																										ctor: '::',
+																																																																																																																																										_0: {ctor: '_Tuple2', _0: 182, _1: _ohanhi$keyboard_extra$Keyboard_Extra$VolumeDown},
+																																																																																																																																										_1: {
+																																																																																																																																											ctor: '::',
+																																																																																																																																											_0: {ctor: '_Tuple2', _0: 183, _1: _ohanhi$keyboard_extra$Keyboard_Extra$VolumeUp},
+																																																																																																																																											_1: {
+																																																																																																																																												ctor: '::',
+																																																																																																																																												_0: {ctor: '_Tuple2', _0: 186, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Semicolon},
+																																																																																																																																												_1: {
+																																																																																																																																													ctor: '::',
+																																																																																																																																													_0: {ctor: '_Tuple2', _0: 187, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Equals},
+																																																																																																																																													_1: {
+																																																																																																																																														ctor: '::',
+																																																																																																																																														_0: {ctor: '_Tuple2', _0: 188, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Comma},
+																																																																																																																																														_1: {
+																																																																																																																																															ctor: '::',
+																																																																																																																																															_0: {ctor: '_Tuple2', _0: 189, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Minus},
+																																																																																																																																															_1: {
+																																																																																																																																																ctor: '::',
+																																																																																																																																																_0: {ctor: '_Tuple2', _0: 190, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Period},
+																																																																																																																																																_1: {
+																																																																																																																																																	ctor: '::',
+																																																																																																																																																	_0: {ctor: '_Tuple2', _0: 191, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Slash},
+																																																																																																																																																	_1: {
+																																																																																																																																																		ctor: '::',
+																																																																																																																																																		_0: {ctor: '_Tuple2', _0: 192, _1: _ohanhi$keyboard_extra$Keyboard_Extra$BackQuote},
+																																																																																																																																																		_1: {
+																																																																																																																																																			ctor: '::',
+																																																																																																																																																			_0: {ctor: '_Tuple2', _0: 219, _1: _ohanhi$keyboard_extra$Keyboard_Extra$OpenBracket},
+																																																																																																																																																			_1: {
+																																																																																																																																																				ctor: '::',
+																																																																																																																																																				_0: {ctor: '_Tuple2', _0: 220, _1: _ohanhi$keyboard_extra$Keyboard_Extra$BackSlash},
+																																																																																																																																																				_1: {
+																																																																																																																																																					ctor: '::',
+																																																																																																																																																					_0: {ctor: '_Tuple2', _0: 221, _1: _ohanhi$keyboard_extra$Keyboard_Extra$CloseBracket},
+																																																																																																																																																					_1: {
+																																																																																																																																																						ctor: '::',
+																																																																																																																																																						_0: {ctor: '_Tuple2', _0: 222, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Quote},
+																																																																																																																																																						_1: {
+																																																																																																																																																							ctor: '::',
+																																																																																																																																																							_0: {ctor: '_Tuple2', _0: 224, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Meta},
+																																																																																																																																																							_1: {
+																																																																																																																																																								ctor: '::',
+																																																																																																																																																								_0: {ctor: '_Tuple2', _0: 225, _1: _ohanhi$keyboard_extra$Keyboard_Extra$Altgr},
+																																																																																																																																																								_1: {ctor: '[]'}
+																																																																																																																																																							}
+																																																																																																																																																						}
+																																																																																																																																																					}
+																																																																																																																																																				}
+																																																																																																																																																			}
+																																																																																																																																																		}
+																																																																																																																																																	}
+																																																																																																																																																}
+																																																																																																																																															}
+																																																																																																																																														}
+																																																																																																																																													}
+																																																																																																																																												}
+																																																																																																																																											}
+																																																																																																																																										}
+																																																																																																																																									}
+																																																																																																																																								}
+																																																																																																																																							}
+																																																																																																																																						}
+																																																																																																																																					}
+																																																																																																																																				}
+																																																																																																																																			}
+																																																																																																																																		}
+																																																																																																																																	}
+																																																																																																																																}
+																																																																																																																															}
+																																																																																																																														}
+																																																																																																																													}
+																																																																																																																												}
+																																																																																																																											}
+																																																																																																																										}
+																																																																																																																									}
+																																																																																																																								}
+																																																																																																																							}
+																																																																																																																						}
+																																																																																																																					}
+																																																																																																																				}
+																																																																																																																			}
+																																																																																																																		}
+																																																																																																																	}
+																																																																																																																}
+																																																																																																															}
+																																																																																																														}
+																																																																																																													}
+																																																																																																												}
+																																																																																																											}
+																																																																																																										}
+																																																																																																									}
+																																																																																																								}
+																																																																																																							}
+																																																																																																						}
+																																																																																																					}
+																																																																																																				}
+																																																																																																			}
+																																																																																																		}
+																																																																																																	}
+																																																																																																}
+																																																																																															}
+																																																																																														}
+																																																																																													}
+																																																																																												}
+																																																																																											}
+																																																																																										}
+																																																																																									}
+																																																																																								}
+																																																																																							}
+																																																																																						}
+																																																																																					}
+																																																																																				}
+																																																																																			}
+																																																																																		}
+																																																																																	}
+																																																																																}
+																																																																															}
+																																																																														}
+																																																																													}
+																																																																												}
+																																																																											}
+																																																																										}
+																																																																									}
+																																																																								}
+																																																																							}
+																																																																						}
+																																																																					}
+																																																																				}
+																																																																			}
+																																																																		}
+																																																																	}
+																																																																}
+																																																															}
+																																																														}
+																																																													}
+																																																												}
+																																																											}
+																																																										}
+																																																									}
+																																																								}
+																																																							}
+																																																						}
+																																																					}
+																																																				}
+																																																			}
+																																																		}
+																																																	}
+																																																}
+																																															}
+																																														}
+																																													}
+																																												}
+																																											}
+																																										}
+																																									}
+																																								}
+																																							}
+																																						}
+																																					}
+																																				}
+																																			}
+																																		}
+																																	}
+																																}
+																															}
+																														}
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+};
+var _ohanhi$keyboard_extra$Keyboard_Extra$toCode = function (key) {
+	return A2(
+		_elm_lang$core$Maybe$withDefault,
+		0,
+		_elm_lang$core$List$head(
+			A2(
+				_elm_lang$core$List$map,
+				_elm_lang$core$Tuple$first,
+				A2(
+					_elm_lang$core$List$filter,
+					function (_p6) {
+						return A2(
+							F2(
+								function (x, y) {
+									return _elm_lang$core$Native_Utils.eq(x, y);
+								}),
+							key,
+							_elm_lang$core$Tuple$second(_p6));
+					},
+					_ohanhi$keyboard_extra$Keyboard_Extra$codeBook))));
+};
+var _ohanhi$keyboard_extra$Keyboard_Extra$isPressed = F2(
+	function (key, model) {
+		return A2(
+			_elm_lang$core$Set$member,
+			_ohanhi$keyboard_extra$Keyboard_Extra$toCode(key),
+			model.keysDown);
+	});
+var _ohanhi$keyboard_extra$Keyboard_Extra$codeDict = _elm_lang$core$Dict$fromList(_ohanhi$keyboard_extra$Keyboard_Extra$codeBook);
+var _ohanhi$keyboard_extra$Keyboard_Extra$fromCode = function (code) {
+	return A2(
+		_elm_lang$core$Maybe$withDefault,
+		_ohanhi$keyboard_extra$Keyboard_Extra$Other,
+		A2(_elm_lang$core$Dict$get, code, _ohanhi$keyboard_extra$Keyboard_Extra$codeDict));
+};
+var _ohanhi$keyboard_extra$Keyboard_Extra$pressedDown = function (model) {
+	return A2(
+		_elm_lang$core$List$map,
+		_ohanhi$keyboard_extra$Keyboard_Extra$fromCode,
+		_elm_lang$core$Set$toList(model.keysDown));
+};
+var _ohanhi$keyboard_extra$Keyboard_Extra$targetKey = A2(
+	_elm_lang$core$Json_Decode$map,
+	_ohanhi$keyboard_extra$Keyboard_Extra$fromCode,
+	A2(_elm_lang$core$Json_Decode$field, 'keyCode', _elm_lang$core$Json_Decode$int));
+
+var _micktwomey$elmo_8$NewBasic$birdWatching = 'birdwatching';
+var _micktwomey$elmo_8$NewBasic$Model = F7(
+	function (a, b, c, d, e, f, g) {
+		return {assets: a, display: b, scene: c, player: d, bird: e, hello: f, keyboardModel: g};
+	});
+var _micktwomey$elmo_8$NewBasic$Player = F6(
+	function (a, b, c, d, e, f) {
+		return {x: a, y: b, colour: c, id: d, layer: e, health: f};
+	});
+var _micktwomey$elmo_8$NewBasic$Bird = F6(
+	function (a, b, c, d, e, f) {
+		return {x: a, y: b, sprite: c, textureKey: d, id: e, layer: f};
+	});
+var _micktwomey$elmo_8$NewBasic$Hello = F6(
+	function (a, b, c, d, e, f) {
+		return {x: a, y: b, colour: c, text: d, id: e, layer: f};
+	});
+var _micktwomey$elmo_8$NewBasic$KeyboardMsg = function (a) {
+	return {ctor: 'KeyboardMsg', _0: a};
+};
+var _micktwomey$elmo_8$NewBasic$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$batch(
+		{
+			ctor: '::',
+			_0: A2(_elm_lang$core$Platform_Sub$map, _micktwomey$elmo_8$NewBasic$KeyboardMsg, _ohanhi$keyboard_extra$Keyboard_Extra$subscriptions),
+			_1: {ctor: '[]'}
+		});
+};
+var _micktwomey$elmo_8$NewBasic$DisplayMsg = function (a) {
+	return {ctor: 'DisplayMsg', _0: a};
+};
+var _micktwomey$elmo_8$NewBasic$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$map,
+				_micktwomey$elmo_8$NewBasic$DisplayMsg,
+				A2(
+					_micktwomey$elmo_8$Elmo8_GL_Display$view,
+					model.display,
+					A3(_micktwomey$elmo_8$Elmo8_Scene$render, model.display, model.assets, model.scene))),
+			_1: {ctor: '[]'}
+		});
+};
+var _micktwomey$elmo_8$NewBasic$AssetMsg = function (a) {
+	return {ctor: 'AssetMsg', _0: a};
+};
+var _micktwomey$elmo_8$NewBasic$init = function () {
+	var _p0 = _ohanhi$keyboard_extra$Keyboard_Extra$init;
+	var keyboardModel = _p0._0;
+	var keyboardMsg = _p0._1;
+	var _p1 = A2(
+		_micktwomey$elmo_8$Elmo8_Scene$addPixel,
+		_micktwomey$elmo_8$Elmo8_Scene$init,
+		{x: 10, y: 10, colour: _micktwomey$elmo_8$Elmo8_Pico8$peach, id: 0, health: 100, layer: 0});
+	var scene = _p1._0;
+	var player = _p1._1;
+	var _p2 = A2(
+		_micktwomey$elmo_8$Elmo8_Scene$addSprite,
+		scene,
+		{x: 60, y: 90, sprite: 0, id: 0, layer: 1, textureKey: _micktwomey$elmo_8$NewBasic$birdWatching});
+	var updatedScene = _p2._0;
+	var bird = _p2._1;
+	var _p3 = A2(
+		_micktwomey$elmo_8$Elmo8_Scene$addText,
+		updatedScene,
+		{x: 10, y: 50, colour: _micktwomey$elmo_8$Elmo8_Pico8$orange, text: 'Hello World', layer: 2, id: 0});
+	var updatedScene_ = _p3._0;
+	var hello = _p3._1;
+	var _p4 = _micktwomey$elmo_8$Elmo8_GL_Display$init;
+	var displayModel = _p4._0;
+	var displayMsg = _p4._1;
+	var _p5 = _micktwomey$elmo_8$Elmo8_Assets$init;
+	var assetModel = _p5._0;
+	var assetMsg = _p5._1;
+	var _p6 = A3(
+		_micktwomey$elmo_8$Elmo8_Assets$loadTexture,
+		assetModel,
+		_micktwomey$elmo_8$NewBasic$birdWatching,
+		{
+			ctor: '::',
+			_0: 'birdwatching.png',
+			_1: {ctor: '[]'}
+		});
+	var updatedAssetModel = _p6._0;
+	var spriteMsg = _p6._1;
+	return A2(
+		_elm_lang$core$Platform_Cmd_ops['!'],
+		{assets: updatedAssetModel, player: player, bird: bird, hello: hello, display: displayModel, scene: updatedScene_, keyboardModel: keyboardModel},
+		{
+			ctor: '::',
+			_0: A2(_elm_lang$core$Platform_Cmd$map, _micktwomey$elmo_8$NewBasic$AssetMsg, assetMsg),
+			_1: {
+				ctor: '::',
+				_0: A2(_elm_lang$core$Platform_Cmd$map, _micktwomey$elmo_8$NewBasic$AssetMsg, spriteMsg),
+				_1: {
+					ctor: '::',
+					_0: A2(_elm_lang$core$Platform_Cmd$map, _micktwomey$elmo_8$NewBasic$DisplayMsg, displayMsg),
+					_1: {
+						ctor: '::',
+						_0: A2(_elm_lang$core$Platform_Cmd$map, _micktwomey$elmo_8$NewBasic$KeyboardMsg, keyboardMsg),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		});
+}();
+var _micktwomey$elmo_8$NewBasic$update = F2(
+	function (msg, model) {
+		var _p7 = msg;
+		switch (_p7.ctor) {
+			case 'AssetMsg':
+				var _p8 = A2(_micktwomey$elmo_8$Elmo8_Assets$update, _p7._0, model.assets);
+				var updatedAssets = _p8._0;
+				var newMsg = _p8._1;
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{assets: updatedAssets}),
+					{
+						ctor: '::',
+						_0: A2(_elm_lang$core$Platform_Cmd$map, _micktwomey$elmo_8$NewBasic$AssetMsg, newMsg),
+						_1: {ctor: '[]'}
+					});
+			case 'DisplayMsg':
+				var _p9 = A2(_micktwomey$elmo_8$Elmo8_GL_Display$update, _p7._0, model.display);
+				var updatedDisplay = _p9._0;
+				var newMsg = _p9._1;
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{display: updatedDisplay}),
+					{
+						ctor: '::',
+						_0: A2(_elm_lang$core$Platform_Cmd$map, _micktwomey$elmo_8$NewBasic$DisplayMsg, newMsg),
+						_1: {ctor: '[]'}
+					});
+			default:
+				var bird = model.bird;
+				var player = model.player;
+				var _p10 = A2(_ohanhi$keyboard_extra$Keyboard_Extra$update, _p7._0, model.keyboardModel);
+				var keyboardModel = _p10._0;
+				var keyboardCmd = _p10._1;
+				var arrows = _ohanhi$keyboard_extra$Keyboard_Extra$arrows(keyboardModel);
+				var updatedPlayer = _elm_lang$core$Native_Utils.update(
+					player,
+					{x: player.x + arrows.x, y: player.y - arrows.y});
+				var scene = A2(_micktwomey$elmo_8$Elmo8_Scene$updatePixel, model.scene, updatedPlayer);
+				var wasd = _ohanhi$keyboard_extra$Keyboard_Extra$wasd(keyboardModel);
+				var updatedBird = _elm_lang$core$Native_Utils.update(
+					bird,
+					{x: bird.x + wasd.x, y: bird.y - wasd.y});
+				var updatedScene = A2(_micktwomey$elmo_8$Elmo8_Scene$updateSprite, scene, updatedBird);
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{player: updatedPlayer, scene: updatedScene, keyboardModel: keyboardModel, bird: updatedBird}),
+					{
+						ctor: '::',
+						_0: A2(_elm_lang$core$Platform_Cmd$map, _micktwomey$elmo_8$NewBasic$KeyboardMsg, keyboardCmd),
+						_1: {ctor: '[]'}
+					});
+		}
+	});
+var _micktwomey$elmo_8$NewBasic$main = _elm_lang$html$Html$program(
+	{init: _micktwomey$elmo_8$NewBasic$init, update: _micktwomey$elmo_8$NewBasic$update, subscriptions: _micktwomey$elmo_8$NewBasic$subscriptions, view: _micktwomey$elmo_8$NewBasic$view})();
+
 var Elm = {};
 Elm['Basic'] = Elm['Basic'] || {};
 if (typeof _micktwomey$elmo_8$Basic$main !== 'undefined') {
@@ -14306,6 +18147,10 @@ if (typeof _micktwomey$elmo_8$HelloPico8$main !== 'undefined') {
 Elm['HelloWorld'] = Elm['HelloWorld'] || {};
 if (typeof _micktwomey$elmo_8$HelloWorld$main !== 'undefined') {
     _micktwomey$elmo_8$HelloWorld$main(Elm['HelloWorld'], 'HelloWorld', undefined);
+}
+Elm['NewBasic'] = Elm['NewBasic'] || {};
+if (typeof _micktwomey$elmo_8$NewBasic$main !== 'undefined') {
+    _micktwomey$elmo_8$NewBasic$main(Elm['NewBasic'], 'NewBasic', undefined);
 }
 
 if (typeof define === "function" && define['amd'])
