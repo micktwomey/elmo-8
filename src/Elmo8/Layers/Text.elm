@@ -7,6 +7,8 @@ import String
 import Task
 import WebGL
 import Elmo8.Assets
+import Elmo8.GL.Characters
+import Elmo8.GL.Font
 import Elmo8.GL.Renderers
 import Elmo8.Layers.Common exposing (CanvasSize, Vertex, makeProjectionMatrix)
 
@@ -109,20 +111,36 @@ update msg model =
             { model | maybePaletteTexture = Just texture } ! []
 
 
-renderChar : Model -> WebGL.Texture -> WebGL.Texture -> Int -> ( Int, Int ) -> Character -> WebGL.Renderable
+defaultCharacter : Elmo8.GL.Characters.Character
+defaultCharacter =
+    Elmo8.GL.Font.defaultCharacter
+
+
+renderChar : Model -> WebGL.Texture -> WebGL.Texture -> Int -> ( Int, Int ) -> Character -> Maybe WebGL.Renderable
 renderChar model texture paletteTexture colour ( x, y ) character =
     Elmo8.GL.Renderers.renderChar
         { screenSize = model.canvasSize
         , projectionMatrix = model.projectionMatrix
         , resolution = vec2 128.0 128.0
-        , font = { texture = texture, textureSize = model.textureSize }
-        , palette = { texture = paletteTexture, textureSize = model.paletteTextureSize }
-        , fontMeshes = model.meshes
+        }
+        { characterMeshes = model.meshes
+        , textures =
+            Dict.fromList
+                [ ( Elmo8.Assets.fontKey, { texture = texture, textureSize = model.textureSize } )
+                , ( Elmo8.Assets.paletteKey, { texture = paletteTexture, textureSize = model.paletteTextureSize } )
+                ]
         }
         { x = x
         , y = y
         , colour = colour
-        , character = character
+        , character =
+            { defaultCharacter
+                | x = character.x
+                , y = character.y
+                , width = character.width
+                , height = character.height
+                , characterWidth = 8
+            }
         }
 
 
@@ -132,7 +150,7 @@ getNextPosition character ( x, y ) =
     ( x + 1 + (character.width // 2), y )
 
 
-renderMessage : Model -> WebGL.Texture -> WebGL.Texture -> Message -> List WebGL.Renderable
+renderMessage : Model -> WebGL.Texture -> WebGL.Texture -> Message -> List (Maybe WebGL.Renderable)
 renderMessage model texture paletteTexture message =
     let
         characters =
@@ -149,12 +167,11 @@ render : Model -> List WebGL.Renderable
 render model =
     case ( model.maybeTexture, model.maybePaletteTexture ) of
         ( Just texture, Just paletteTexture ) ->
-            List.map (renderMessage model texture paletteTexture) model.messages
-                |> List.concat
+            List.concatMap (renderMessage model texture paletteTexture) model.messages
+                |> List.filterMap identity
 
         ( _, _ ) ->
             []
-
 
 
 meshWidthHeight : Float -> Float -> WebGL.Drawable Vertex

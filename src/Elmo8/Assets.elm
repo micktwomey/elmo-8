@@ -38,12 +38,14 @@ type alias Texture =
     , textureSize : Vec2
     }
 
+
 type alias Character =
-    { width: Int
-    , height: Int
-    , x: Int
-    , y: Int
+    { width : Int
+    , height : Int
+    , x : Int
+    , y : Int
     }
+
 
 type Msg
     = TextureLoadError String WebGL.Error
@@ -83,17 +85,21 @@ loadTexture model key urls =
                     )
           ]
 
-getTexture : {a | textures : Dict.Dict String Texture } -> String -> Maybe Texture
-getTexture {textures} key =
+
+getTexture : { a | textures : Dict.Dict String Texture } -> String -> Maybe Texture
+getTexture { textures } key =
     Dict.get key textures
 
-getPalette : {a | textures : Dict.Dict String Texture } -> Maybe Texture
+
+getPalette : { a | textures : Dict.Dict String Texture } -> Maybe Texture
 getPalette model =
     getTexture model paletteKey
 
-getFont : {a | textures : Dict.Dict String Texture } -> Maybe Texture
+
+getFont : { a | textures : Dict.Dict String Texture } -> Maybe Texture
 getFont model =
     getTexture model fontKey
+
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =

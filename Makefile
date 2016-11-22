@@ -4,7 +4,7 @@ PICO_8_PALETTE_MAP_PNG=palettes/pico-8-palette-map.png
 PICO_8_FONT_ELM=src/Elmo8/Textures/Pico8Font.elm
 PICO_8_FONT_PNG=font/pico-8_regular_8.png
 
-PICO_8_CHARACTERS_ELM_IN=src/Elmo8/GL/Characters.in.elm
+PICO_8_CHARACTERS_ELM_IN=src/Elmo8/GL/Characters.in
 PICO_8_CHARACTERS_ELM=src/Elmo8/GL/Characters.elm
 PICO_8_FONT_XML=font/pico-8_regular_8.xml
 

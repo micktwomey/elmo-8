@@ -210,21 +210,21 @@ updateText model { x, y, text, colour, layer, id } =
         }
 
 
-renderItem : Elmo8.GL.Display.Model -> Elmo8.Assets.Model -> ( ( Layer, X, Y ), RenderableType ) -> Maybe WebGL.Renderable
+renderItem : Elmo8.GL.Display.Model -> Elmo8.Assets.Model -> ( ( Layer, X, Y ), RenderableType ) -> List (Maybe WebGL.Renderable)
 renderItem display assets ( ( layer, x, y ), renderable ) =
     case renderable of
         PixelRenderable colour ->
-            Elmo8.GL.Renderers.renderPixel
+            [ Elmo8.GL.Renderers.renderPixel
                 display
                 assets
                 { x = x
                 , y = y
                 , colour = colour
                 }
-
+            ]
 
         SpriteRenderable textureKey sprite ->
-            Elmo8.GL.Renderers.renderSprite
+            [ Elmo8.GL.Renderers.renderSprite
                 display
                 assets
                 { x = x
@@ -232,17 +232,17 @@ renderItem display assets ( ( layer, x, y ), renderable ) =
                 , textureKey = textureKey
                 , sprite = sprite
                 }
+            ]
 
-        _ -> Nothing
-        -- TextRenderable text colour ->
-        --     Elmo8.GL.Renderers.renderText
-        --         display
-        --         assets
-        --         { x = x
-        --         , y = y
-        --         , colour = colour
-        --         , text = text
-        --         }
+        TextRenderable text colour ->
+            Elmo8.GL.Renderers.renderText
+                display
+                assets
+                { x = x
+                , y = y
+                , colour = colour
+                , text = text
+                }
 
 
 {-| Render the scene to WebGL renderables
@@ -250,4 +250,5 @@ renderItem display assets ( ( layer, x, y ), renderable ) =
 render : Elmo8.GL.Display.Model -> Elmo8.Assets.Model -> Model -> List WebGL.Renderable
 render display assets model =
     Dict.toList model.renderables
-        |> List.filterMap (renderItem display assets)
+        |> List.concatMap (renderItem display assets)
+        |> List.filterMap identity

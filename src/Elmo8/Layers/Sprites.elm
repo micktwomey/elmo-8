@@ -85,9 +85,10 @@ renderSprite model texture sprite =
         , projectionMatrix = model.projectionMatrix
         , resolution = vec2 128.0 128.0
         }
-        {
-            textures = Dict.fromList [
-                ("sprite", { texture = texture, textureSize = model.textureSize}) ]
+        { textures =
+            Dict.fromList
+                [ ( "sprite", { texture = texture, textureSize = model.textureSize } )
+                ]
         }
         { x = sprite.x
         , y = sprite.y
