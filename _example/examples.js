@@ -14217,7 +14217,46 @@ var _micktwomey$elmo_8$Elmo8_GL_Characters$characterList = {
 	}
 };
 
+var _micktwomey$elmo_8$Elmo8_GL_Font$getNextPosition = F2(
+	function (character, _p0) {
+		var _p1 = _p0;
+		var _p2 = _p1._0;
+		var offsetY = (character.offsetY / 2) | 0;
+		var y = (_p2.y + offsetY) - _p1._1._1;
+		var offsetX = (character.offsetX / 2) | 0;
+		var x = ((_p2.x + offsetX) - _p1._1._0) + ((character.characterWidth / 2) | 0);
+		return {
+			ctor: '_Tuple2',
+			_0: _elm_lang$core$Native_Utils.update(
+				_p2,
+				{x: x, y: y, character: character}),
+			_1: {ctor: '_Tuple2', _0: offsetX, _1: offsetY}
+		};
+	});
+var _micktwomey$elmo_8$Elmo8_GL_Font$getCharacter = F2(
+	function (characters, $char) {
+		return A2(_elm_lang$core$Dict$get, $char, characters);
+	});
 var _micktwomey$elmo_8$Elmo8_GL_Font$fontMap = _elm_lang$core$Dict$fromList(_micktwomey$elmo_8$Elmo8_GL_Characters$characterList);
+var _micktwomey$elmo_8$Elmo8_GL_Font$defaultCharacter = {characterWidth: 0, offsetX: 0, offsetY: 0, x: 0, y: 0, width: 0, height: 0};
+var _micktwomey$elmo_8$Elmo8_GL_Font$textToCharacters = function (_p3) {
+	var _p4 = _p3;
+	return A2(
+		_elm_lang$core$List$map,
+		_elm_lang$core$Tuple$first,
+		A3(
+			_elm_lang$core$List$scanl,
+			_micktwomey$elmo_8$Elmo8_GL_Font$getNextPosition,
+			{
+				ctor: '_Tuple2',
+				_0: {x: _p4.x, y: _p4.y, colour: _p4.colour, character: _micktwomey$elmo_8$Elmo8_GL_Font$defaultCharacter},
+				_1: {ctor: '_Tuple2', _0: 0, _1: 0}
+			},
+			A2(
+				_elm_lang$core$List$filterMap,
+				_micktwomey$elmo_8$Elmo8_GL_Font$getCharacter(_micktwomey$elmo_8$Elmo8_GL_Font$fontMap),
+				_elm_lang$core$String$toList(_p4.text))));
+};
 var _micktwomey$elmo_8$Elmo8_GL_Font$Vertex = function (a) {
 	return {position: a};
 };
@@ -14253,16 +14292,16 @@ var _micktwomey$elmo_8$Elmo8_GL_Font$meshWidthHeight = F2(
 var _micktwomey$elmo_8$Elmo8_GL_Font$meshesFromCharacters = _elm_lang$core$Dict$fromList(
 	A2(
 		_elm_lang$core$List$map,
-		function (_p0) {
-			var _p1 = _p0;
-			var _p2 = _p1._1;
+		function (_p5) {
+			var _p6 = _p5;
+			var _p7 = _p6._1;
 			return {
 				ctor: '_Tuple2',
-				_0: {ctor: '_Tuple2', _0: _p2.width, _1: _p2.height},
+				_0: {ctor: '_Tuple2', _0: _p7.width, _1: _p7.height},
 				_1: A2(
 					_micktwomey$elmo_8$Elmo8_GL_Font$meshWidthHeight,
-					_elm_lang$core$Basics$toFloat(_p2.width),
-					_elm_lang$core$Basics$toFloat(_p2.height))
+					_elm_lang$core$Basics$toFloat(_p7.width),
+					_elm_lang$core$Basics$toFloat(_p7.height))
 			};
 		},
 		_micktwomey$elmo_8$Elmo8_GL_Characters$characterList));
@@ -14459,6 +14498,61 @@ var _micktwomey$elmo_8$Elmo8_GL_Shaders$spriteVertexShader = {'src': '\n  precis
 var _micktwomey$elmo_8$Elmo8_GL_Shaders$pixelsFragmentShader = {'src': '\n    precision mediump float;\n    uniform sampler2D paletteTexture;\n    uniform vec2 paletteSize;\n    varying float colourIndex;\n    varying float colourRemap;\n    void main () {\n        // Texture origin bottom left\n        // Use slightly less than 1.0 to slightly nudge into correct pixel\n        float index = colourIndex / paletteSize.x;\n        float remap = 0.999 - (colourRemap / paletteSize.y);\n        gl_FragColor = texture2D(paletteTexture, vec2(index, remap));\n    }\n'};
 var _micktwomey$elmo_8$Elmo8_GL_Shaders$pixelsVertexShader = {'src': '\n    precision mediump float;\n    attribute vec2 position;\n    uniform vec2 canvasSize;\n    uniform vec2 screenSize;\n    uniform mat4 projectionMatrix;\n    uniform int pixelX;\n    uniform int pixelY;\n    uniform int index;\n    uniform int remap;\n    varying float colourIndex;\n    varying float colourRemap;\n    void main () {\n        gl_PointSize = canvasSize.x / screenSize.x;\n\n        gl_Position = projectionMatrix * vec4(position.x + float(pixelX) + 0.5, position.y + float(pixelY) + 0.5, 0.0, 1.0);\n\n        colourIndex = float(index);\n        colourRemap = float(remap);\n    }\n'};
 
+var _micktwomey$elmo_8$Elmo8_GL_Renderers$renderChar = F3(
+	function (display, assets, _p0) {
+		var _p1 = _p0;
+		var _p5 = _p1.character;
+		var maybeMesh = A2(
+			_elm_lang$core$Dict$get,
+			{ctor: '_Tuple2', _0: _p5.width, _1: _p5.height},
+			assets.characterMeshes);
+		var maybePalette = _micktwomey$elmo_8$Elmo8_Assets$getPalette(assets);
+		var maybeFont = _micktwomey$elmo_8$Elmo8_Assets$getFont(assets);
+		var _p2 = {ctor: '_Tuple3', _0: maybeFont, _1: maybePalette, _2: maybeMesh};
+		if ((((_p2.ctor === '_Tuple3') && (_p2._0.ctor === 'Just')) && (_p2._1.ctor === 'Just')) && (_p2._2.ctor === 'Just')) {
+			var _p4 = _p2._1._0;
+			var _p3 = _p2._0._0;
+			return _elm_lang$core$Maybe$Just(
+				A4(
+					_elm_community$webgl$WebGL$render,
+					_micktwomey$elmo_8$Elmo8_GL_Shaders$textVertexShader,
+					_micktwomey$elmo_8$Elmo8_GL_Shaders$textFragmentShader,
+					_p2._2._0,
+					{
+						screenSize: display.screenSize,
+						fontTexture: _p3.texture,
+						textureSize: _p3.textureSize,
+						projectionMatrix: display.projectionMatrix,
+						charCoords: A2(
+							_elm_community$linear_algebra$Math_Vector2$vec2,
+							_elm_lang$core$Basics$toFloat(_p5.x),
+							_elm_lang$core$Basics$toFloat(_p5.y)),
+						colour: _p1.colour,
+						paletteTexture: _p4.texture,
+						paletteTextureSize: _p4.textureSize,
+						theMatrix: A4(
+							_elm_community$linear_algebra$Math_Matrix4$scale3,
+							0.5,
+							0.5,
+							1.0,
+							A4(
+								_elm_community$linear_algebra$Math_Matrix4$translate3,
+								_elm_lang$core$Basics$toFloat(_p1.x),
+								_elm_lang$core$Basics$toFloat(_p1.y),
+								0.0,
+								display.projectionMatrix))
+					}));
+		} else {
+			return _elm_lang$core$Maybe$Nothing;
+		}
+	});
+var _micktwomey$elmo_8$Elmo8_GL_Renderers$renderText = F3(
+	function (display, assets, text) {
+		return A2(
+			_elm_lang$core$List$map,
+			A2(_micktwomey$elmo_8$Elmo8_GL_Renderers$renderChar, display, assets),
+			_micktwomey$elmo_8$Elmo8_GL_Font$textToCharacters(text));
+	});
 var _micktwomey$elmo_8$Elmo8_GL_Renderers$Vertex = function (a) {
 	return {position: a};
 };
@@ -14470,19 +14564,19 @@ var _micktwomey$elmo_8$Elmo8_GL_Renderers$pixelMesh = _elm_community$webgl$WebGL
 		_1: {ctor: '[]'}
 	});
 var _micktwomey$elmo_8$Elmo8_GL_Renderers$renderPixel = F3(
-	function (_p1, assets, _p0) {
-		var _p2 = _p1;
-		var _p3 = _p0;
-		var _p4 = _micktwomey$elmo_8$Elmo8_Assets$getPalette(assets);
-		if (_p4.ctor === 'Just') {
-			var _p5 = _p4._0;
+	function (_p7, assets, _p6) {
+		var _p8 = _p7;
+		var _p9 = _p6;
+		var _p10 = _micktwomey$elmo_8$Elmo8_Assets$getPalette(assets);
+		if (_p10.ctor === 'Just') {
+			var _p11 = _p10._0;
 			return _elm_lang$core$Maybe$Just(
 				A4(
 					_elm_community$webgl$WebGL$render,
 					_micktwomey$elmo_8$Elmo8_GL_Shaders$pixelsVertexShader,
 					_micktwomey$elmo_8$Elmo8_GL_Shaders$pixelsFragmentShader,
 					_micktwomey$elmo_8$Elmo8_GL_Renderers$pixelMesh,
-					{canvasSize: _p2.screenSize, screenSize: _p2.resolution, projectionMatrix: _p2.projectionMatrix, paletteTexture: _p5.texture, paletteSize: _p5.textureSize, pixelX: _p3.x, pixelY: _p3.y, index: _p3.colour, remap: 0}));
+					{canvasSize: _p8.screenSize, screenSize: _p8.resolution, projectionMatrix: _p8.projectionMatrix, paletteTexture: _p11.texture, paletteSize: _p11.textureSize, pixelX: _p9.x, pixelY: _p9.y, index: _p9.colour, remap: 0}));
 		} else {
 			return _elm_lang$core$Maybe$Nothing;
 		}
@@ -14514,19 +14608,19 @@ var _micktwomey$elmo_8$Elmo8_GL_Renderers$spriteMesh = _elm_community$webgl$WebG
 		}
 	});
 var _micktwomey$elmo_8$Elmo8_GL_Renderers$renderSprite = F3(
-	function (_p7, assets, _p6) {
-		var _p8 = _p7;
-		var _p9 = _p6;
-		var _p10 = A2(_micktwomey$elmo_8$Elmo8_Assets$getTexture, assets, _p9.textureKey);
-		if (_p10.ctor === 'Just') {
-			var _p11 = _p10._0;
+	function (_p13, assets, _p12) {
+		var _p14 = _p13;
+		var _p15 = _p12;
+		var _p16 = A2(_micktwomey$elmo_8$Elmo8_Assets$getTexture, assets, _p15.textureKey);
+		if (_p16.ctor === 'Just') {
+			var _p17 = _p16._0;
 			return _elm_lang$core$Maybe$Just(
 				A4(
 					_elm_community$webgl$WebGL$render,
 					_micktwomey$elmo_8$Elmo8_GL_Shaders$spriteVertexShader,
 					_micktwomey$elmo_8$Elmo8_GL_Shaders$spriteFragmentShader,
 					_micktwomey$elmo_8$Elmo8_GL_Renderers$spriteMesh,
-					{screenSize: _p8.screenSize, texture: _p11.texture, textureSize: _p11.textureSize, projectionMatrix: _p8.projectionMatrix, spriteX: _p9.x, spriteY: _p9.y, spriteIndex: _p9.sprite}));
+					{screenSize: _p14.screenSize, texture: _p17.texture, textureSize: _p17.textureSize, projectionMatrix: _p14.projectionMatrix, spriteX: _p15.x, spriteY: _p15.y, spriteIndex: _p15.sprite}));
 		} else {
 			return _elm_lang$core$Maybe$Nothing;
 		}
@@ -14556,50 +14650,6 @@ var _micktwomey$elmo_8$Elmo8_GL_Renderers$defaultFontMesh = _elm_community$webgl
 			},
 			_1: {ctor: '[]'}
 		}
-	});
-var _micktwomey$elmo_8$Elmo8_GL_Renderers$renderChar = F2(
-	function (_p13, _p12) {
-		var _p14 = _p13;
-		var _p19 = _p14.projectionMatrix;
-		var _p18 = _p14.palette;
-		var _p17 = _p14.font;
-		var _p15 = _p12;
-		var _p16 = _p15.character;
-		return A4(
-			_elm_community$webgl$WebGL$render,
-			_micktwomey$elmo_8$Elmo8_GL_Shaders$textVertexShader,
-			_micktwomey$elmo_8$Elmo8_GL_Shaders$textFragmentShader,
-			A2(
-				_elm_lang$core$Maybe$withDefault,
-				_micktwomey$elmo_8$Elmo8_GL_Renderers$defaultFontMesh,
-				A2(
-					_elm_lang$core$Dict$get,
-					{ctor: '_Tuple2', _0: _p16.width, _1: _p16.height},
-					_p14.fontMeshes)),
-			{
-				screenSize: _p14.screenSize,
-				fontTexture: _p17.texture,
-				textureSize: _p17.textureSize,
-				projectionMatrix: _p19,
-				charCoords: A2(
-					_elm_community$linear_algebra$Math_Vector2$vec2,
-					_elm_lang$core$Basics$toFloat(_p16.x),
-					_elm_lang$core$Basics$toFloat(_p16.y)),
-				colour: _p15.colour,
-				paletteTexture: _p18.texture,
-				paletteTextureSize: _p18.textureSize,
-				theMatrix: A4(
-					_elm_community$linear_algebra$Math_Matrix4$scale3,
-					0.5,
-					0.5,
-					1.0,
-					A4(
-						_elm_community$linear_algebra$Math_Matrix4$translate3,
-						_elm_lang$core$Basics$toFloat(_p15.x),
-						_elm_lang$core$Basics$toFloat(_p15.y),
-						0.0,
-						_p19))
-			});
 	});
 
 var _micktwomey$elmo_8$Elmo8_Layers_Pixels$renderPixel = F3(
@@ -14845,20 +14895,46 @@ var _micktwomey$elmo_8$Elmo8_Layers_Text$getNextPosition = F2(
 		var _p1 = _p0;
 		return {ctor: '_Tuple2', _0: (_p1._0 + 1) + ((character.width / 2) | 0), _1: _p1._1};
 	});
+var _micktwomey$elmo_8$Elmo8_Layers_Text$defaultCharacter = _micktwomey$elmo_8$Elmo8_GL_Font$defaultCharacter;
 var _micktwomey$elmo_8$Elmo8_Layers_Text$renderChar = F6(
 	function (model, texture, paletteTexture, colour, _p2, character) {
 		var _p3 = _p2;
-		return A2(
+		return A3(
 			_micktwomey$elmo_8$Elmo8_GL_Renderers$renderChar,
 			{
 				screenSize: model.canvasSize,
 				projectionMatrix: model.projectionMatrix,
-				resolution: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 128.0, 128.0),
-				font: {texture: texture, textureSize: model.textureSize},
-				palette: {texture: paletteTexture, textureSize: model.paletteTextureSize},
-				fontMeshes: model.meshes
+				resolution: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 128.0, 128.0)
 			},
-			{x: _p3._0, y: _p3._1, colour: colour, character: character});
+			{
+				characterMeshes: model.meshes,
+				textures: _elm_lang$core$Dict$fromList(
+					{
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: _micktwomey$elmo_8$Elmo8_Assets$fontKey,
+							_1: {texture: texture, textureSize: model.textureSize}
+						},
+						_1: {
+							ctor: '::',
+							_0: {
+								ctor: '_Tuple2',
+								_0: _micktwomey$elmo_8$Elmo8_Assets$paletteKey,
+								_1: {texture: paletteTexture, textureSize: model.paletteTextureSize}
+							},
+							_1: {ctor: '[]'}
+						}
+					})
+			},
+			{
+				x: _p3._0,
+				y: _p3._1,
+				colour: colour,
+				character: _elm_lang$core$Native_Utils.update(
+					_micktwomey$elmo_8$Elmo8_Layers_Text$defaultCharacter,
+					{x: character.x, y: character.y, width: character.width, height: character.height, characterWidth: 8})
+			});
 	});
 var _micktwomey$elmo_8$Elmo8_Layers_Text$update = F2(
 	function (msg, model) {
@@ -15916,9 +15992,11 @@ var _micktwomey$elmo_8$Elmo8_Layers_Text$renderMessage = F4(
 var _micktwomey$elmo_8$Elmo8_Layers_Text$render = function (model) {
 	var _p8 = {ctor: '_Tuple2', _0: model.maybeTexture, _1: model.maybePaletteTexture};
 	if ((_p8._0.ctor === 'Just') && (_p8._1.ctor === 'Just')) {
-		return _elm_lang$core$List$concat(
+		return A2(
+			_elm_lang$core$List$filterMap,
+			_elm_lang$core$Basics$identity,
 			A2(
-				_elm_lang$core$List$map,
+				_elm_lang$core$List$concatMap,
 				A3(_micktwomey$elmo_8$Elmo8_Layers_Text$renderMessage, model, _p8._0._0, _p8._1._0),
 				model.messages));
 	} else {
@@ -16706,27 +16784,42 @@ var _micktwomey$elmo_8$Elmo8_Scene$renderItem = F3(
 		var _p2 = _p1._1;
 		switch (_p2.ctor) {
 			case 'PixelRenderable':
-				return A3(
-					_micktwomey$elmo_8$Elmo8_GL_Renderers$renderPixel,
-					display,
-					assets,
-					{x: _p3, y: _p4, colour: _p2._0});
+				return {
+					ctor: '::',
+					_0: A3(
+						_micktwomey$elmo_8$Elmo8_GL_Renderers$renderPixel,
+						display,
+						assets,
+						{x: _p3, y: _p4, colour: _p2._0}),
+					_1: {ctor: '[]'}
+				};
 			case 'SpriteRenderable':
+				return {
+					ctor: '::',
+					_0: A3(
+						_micktwomey$elmo_8$Elmo8_GL_Renderers$renderSprite,
+						display,
+						assets,
+						{x: _p3, y: _p4, textureKey: _p2._0, sprite: _p2._1}),
+					_1: {ctor: '[]'}
+				};
+			default:
 				return A3(
-					_micktwomey$elmo_8$Elmo8_GL_Renderers$renderSprite,
+					_micktwomey$elmo_8$Elmo8_GL_Renderers$renderText,
 					display,
 					assets,
-					{x: _p3, y: _p4, textureKey: _p2._0, sprite: _p2._1});
-			default:
-				return _elm_lang$core$Maybe$Nothing;
+					{x: _p3, y: _p4, colour: _p2._1, text: _p2._0});
 		}
 	});
 var _micktwomey$elmo_8$Elmo8_Scene$render = F3(
 	function (display, assets, model) {
 		return A2(
 			_elm_lang$core$List$filterMap,
-			A2(_micktwomey$elmo_8$Elmo8_Scene$renderItem, display, assets),
-			_elm_lang$core$Dict$toList(model.renderables));
+			_elm_lang$core$Basics$identity,
+			A2(
+				_elm_lang$core$List$concatMap,
+				A2(_micktwomey$elmo_8$Elmo8_Scene$renderItem, display, assets),
+				_elm_lang$core$Dict$toList(model.renderables)));
 	});
 var _micktwomey$elmo_8$Elmo8_Scene$updateRenderable = F2(
 	function (model, _p5) {
@@ -18031,7 +18124,7 @@ var _micktwomey$elmo_8$NewBasic$init = function () {
 	var _p3 = A2(
 		_micktwomey$elmo_8$Elmo8_Scene$addText,
 		updatedScene,
-		{x: 10, y: 50, colour: _micktwomey$elmo_8$Elmo8_Pico8$orange, text: 'Hello World', layer: 2, id: 0});
+		{x: 10, y: 50, colour: _micktwomey$elmo_8$Elmo8_Pico8$orange, text: 'Hello World!', layer: 2, id: 0});
 	var updatedScene_ = _p3._0;
 	var hello = _p3._1;
 	var _p4 = _micktwomey$elmo_8$Elmo8_GL_Display$init;
