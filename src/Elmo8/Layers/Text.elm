@@ -7,9 +7,10 @@ import String
 import Task
 import WebGL
 import Elmo8.Assets
-import Elmo8.Layers.Common exposing (CanvasSize, Vertex, makeProjectionMatrix, pico8FontUri, pico8PaletteMapUri)
-import Elmo8.Textures.Pico8Font exposing (pico8FontDataUri)
-import Elmo8.Textures.Pico8PaletteMap exposing (pico8PaletteMapDataUri)
+import Elmo8.GL.Characters
+import Elmo8.GL.Font
+import Elmo8.GL.Renderers
+import Elmo8.Layers.Common exposing (CanvasSize, Vertex, makeProjectionMatrix)
 
 
 -- TODO: represent more of the metrics for better layout.
@@ -71,7 +72,7 @@ init canvasSize =
     , maybePaletteTexture = Nothing
     , paletteTextureSize = vec2 16.0 16.0
     }
-        ! [ Elmo8.Assets.loadWebglTextureWithFallbacks [ pico8FontDataUri, "/assets/pico-8_regular_8.png", pico8FontUri ]
+        ! [ Elmo8.Assets.loadFontTexture
                 |> Task.attempt
                     (\result ->
                         case result of
@@ -81,7 +82,7 @@ init canvasSize =
                             Ok val ->
                                 TextureLoad val
                     )
-          , Elmo8.Assets.loadWebglTextureWithFallbacks [ pico8PaletteMapDataUri, "/assets/pico-8-palette-map.png", pico8PaletteMapUri ]
+          , Elmo8.Assets.loadPaletteMapTexture
                 |> Task.attempt
                     (\result ->
                         case result of
@@ -110,21 +111,36 @@ update msg model =
             { model | maybePaletteTexture = Just texture } ! []
 
 
-renderChar : Model -> WebGL.Texture -> WebGL.Texture -> Int -> ( Int, Int ) -> Character -> WebGL.Renderable
+defaultCharacter : Elmo8.GL.Characters.Character
+defaultCharacter =
+    Elmo8.GL.Font.defaultCharacter
+
+
+renderChar : Model -> WebGL.Texture -> WebGL.Texture -> Int -> ( Int, Int ) -> Character -> Maybe WebGL.Renderable
 renderChar model texture paletteTexture colour ( x, y ) character =
-    WebGL.render
-        vertexShader
-        fragmentShader
-        (Dict.get ( character.width, character.height ) model.meshes |> Maybe.withDefault mesh)
+    Elmo8.GL.Renderers.renderChar
         { screenSize = model.canvasSize
-        , fontTexture = texture
-        , textureSize = model.textureSize
         , projectionMatrix = model.projectionMatrix
-        , charCoords = vec2 (toFloat character.x) (toFloat character.y)
+        , resolution = vec2 128.0 128.0
+        }
+        { characterMeshes = model.meshes
+        , textures =
+            Dict.fromList
+                [ ( Elmo8.Assets.fontKey, { texture = texture, textureSize = model.textureSize } )
+                , ( Elmo8.Assets.paletteKey, { texture = paletteTexture, textureSize = model.paletteTextureSize } )
+                ]
+        }
+        { x = x
+        , y = y
         , colour = colour
-        , paletteTexture = paletteTexture
-        , paletteTextureSize = model.paletteTextureSize
-        , theMatrix = Math.Matrix4.translate3 (toFloat x) (toFloat y) 0.0 model.projectionMatrix |> Math.Matrix4.scale3 0.5 0.5 1.0
+        , character =
+            { defaultCharacter
+                | x = character.x
+                , y = character.y
+                , width = character.width
+                , height = character.height
+                , characterWidth = 8
+            }
         }
 
 
@@ -134,7 +150,7 @@ getNextPosition character ( x, y ) =
     ( x + 1 + (character.width // 2), y )
 
 
-renderMessage : Model -> WebGL.Texture -> WebGL.Texture -> Message -> List WebGL.Renderable
+renderMessage : Model -> WebGL.Texture -> WebGL.Texture -> Message -> List (Maybe WebGL.Renderable)
 renderMessage model texture paletteTexture message =
     let
         characters =
@@ -151,22 +167,11 @@ render : Model -> List WebGL.Renderable
 render model =
     case ( model.maybeTexture, model.maybePaletteTexture ) of
         ( Just texture, Just paletteTexture ) ->
-            List.map (renderMessage model texture paletteTexture) model.messages
-                |> List.concat
+            List.concatMap (renderMessage model texture paletteTexture) model.messages
+                |> List.filterMap identity
 
         ( _, _ ) ->
             []
-
-
-{-| mesh for a character
-
--}
-mesh : WebGL.Drawable Vertex
-mesh =
-    WebGL.Triangle
-        [ ( Vertex (vec2 0 0), Vertex (vec2 1 1), Vertex (vec2 1 0) )
-        , ( Vertex (vec2 0 0), Vertex (vec2 0 1), Vertex (vec2 1 1) )
-        ]
 
 
 meshWidthHeight : Float -> Float -> WebGL.Drawable Vertex
@@ -181,52 +186,6 @@ meshesFromCharacters : Dict.Dict ( Int, Int ) (WebGL.Drawable Vertex)
 meshesFromCharacters =
     List.map (\( _, char ) -> ( ( char.width, char.height ), meshWidthHeight (toFloat char.width) (toFloat char.height) )) fontList
         |> Dict.fromList
-
-
-vertexShader : WebGL.Shader { attr | position : Vec2 } { unif | screenSize : Vec2, theMatrix : Mat4, colour : Int } { texturePos : Vec2, colourIndex : Float }
-vertexShader =
-    [glsl|
-  precision mediump float;
-  attribute vec2 position;
-  uniform vec2 screenSize;
-  uniform mat4 theMatrix;
-  uniform int colour;
-  varying vec2 texturePos;
-  varying float colourIndex;
-  void main () {
-    texturePos = position;
-    colourIndex = float(colour);
-    gl_Position = vec4((theMatrix * vec4(position, 0.0, 1.0)).xy, 0, 1);
-  }
-|]
-
-
-fragmentShader : WebGL.Shader {} { u | fontTexture : WebGL.Texture, textureSize : Vec2, projectionMatrix : Mat4, charCoords : Vec2, paletteTexture : WebGL.Texture, paletteTextureSize : Vec2 } { texturePos : Vec2, colourIndex : Float }
-fragmentShader =
-    [glsl|
-  precision mediump float;
-  uniform mat4 projectionMatrix;
-  uniform sampler2D fontTexture;
-  uniform vec2 textureSize;
-  uniform vec2 charCoords;
-  uniform sampler2D paletteTexture;
-  uniform vec2 paletteTextureSize;
-  varying vec2 texturePos;
-  varying float colourIndex;
-  void main () {
-    vec2 size = vec2(64.0, 64.0) / textureSize;
-
-    vec2 textureClipSpace = (projectionMatrix * vec4((charCoords + texturePos) * size, 0, 1)).xy;
-    vec4 temp = texture2D(fontTexture, textureClipSpace);
-
-    float index = colourIndex / paletteTextureSize.x;
-    // float remap = 0.999 - (colourRemap / paletteSize.y);
-    float remap = 0.999 - 0.0;
-    vec4 paletteColour = texture2D(paletteTexture, vec2(index, remap));
-
-    gl_FragColor = vec4(paletteColour.rgb, temp.a);
-  }
-|]
 
 
 

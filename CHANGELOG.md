@@ -1,3 +1,7 @@
+# 2.0.2
+- No visible changes in the PICO-8 style API but the internals have been completely rewritten
+- New example, NewBasic.elm to show off rewrite. Now you can use the debug view to easily view your model! (Works really well if you don't have any timer events.)
+
 # 2.0.1
 - Fix https://github.com/micktwomey/elmo-8/issues/1 via attempting to load textures from multiple sources (data URL first, then local asset, finally elmo-8.twomeylee.name)
 

@@ -1,5 +1,5 @@
 {
-    "version": "2.0.1",
+    "version": "2.0.2",
     "summary": "ELMO-8: A PICO-8 inspired fantasy 8-bit game library implemented in WebGL.",
     "repository": "https://github.com/micktwomey/elmo-8.git",
     "license": "MIT",
@@ -12,13 +12,16 @@
         "Elmo8.Pico8"
     ],
     "dependencies": {
+        "elm-community/intdict": "2.0.0 <= v < 3.0.0",
         "elm-community/linear-algebra": "1.0.0 <= v < 2.0.0",
         "elm-community/webgl": "1.0.0 <= v < 2.0.0",
         "elm-lang/animation-frame": "1.0.1 <= v < 2.0.0",
         "elm-lang/core": "5.0.0 <= v < 6.0.0",
         "elm-lang/html": "2.0.0 <= v < 3.0.0",
+        "elm-lang/keyboard": "1.0.1 <= v < 2.0.0",
         "elm-lang/window": "1.0.1 <= v < 2.0.0",
-        "nphollon/update-clock": "1.0.3 <= v < 2.0.0"
+        "nphollon/update-clock": "2.0.0 <= v < 3.0.0",
+        "ohanhi/keyboard-extra": "1.2.0 <= v < 2.0.0"
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
 }
