@@ -79,7 +79,7 @@ init =
             Elmo8.Scene.addSprite scene { x = 60, y = 90, sprite = 0, id = 0, layer = 1, textureKey = birdWatching }
 
         ( updatedScene_, hello ) =
-            Elmo8.Scene.addText updatedScene { x = 10, y = 50, colour = Pico8.orange, text = "Hello World", layer = 2, id = 0 }
+            Elmo8.Scene.addText updatedScene { x = 10, y = 50, colour = Pico8.orange, text = "Hello World!", layer = 2, id = 0 }
 
         ( keyboardModel, keyboardMsg ) =
             Keyboard.Extra.init

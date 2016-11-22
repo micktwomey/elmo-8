@@ -59,15 +59,24 @@ textToCharacters : { a | x : Int, y : Int, colour : Int, text : String } -> List
 textToCharacters { x, y, colour, text } =
     String.toList text
         |> List.filterMap (getCharacter fontMap)
-        |> List.scanl getNextPosition ( { x = x, y = y, colour = colour, character = defaultCharacter }, y )
+        |> List.scanl getNextPosition ( { x = x, y = y, colour = colour, character = defaultCharacter }, ( 0, 0 ) )
         |> List.map Tuple.first
 
 
-getNextPosition : Character -> ( { a | x : Int, y : Int, colour : Int, character : Character }, Int ) -> ( { a | x : Int, y : Int, colour : Int, character : Character }, Int )
-getNextPosition character ( result, baselineY ) =
+getNextPosition : Character -> ( { a | x : Int, y : Int, colour : Int, character : Character }, ( Int, Int ) ) -> ( { a | x : Int, y : Int, colour : Int, character : Character }, ( Int, Int ) )
+getNextPosition character ( result, ( previousOffsetX, previousOffsetY ) ) =
     let
         -- Pixels are doubled in font sprite sheet so halve them
+        offsetX =
+            (character.offsetX // 2)
+
+        x =
+            result.x + offsetX - previousOffsetX + (character.characterWidth // 2)
+
+        offsetY =
+            (character.offsetY // 2)
+
         y =
-            baselineY + (character.offsetY // 2)
+            result.y + offsetY - previousOffsetY
     in
-        ( { result | x = result.x + (character.characterWidth // 2), y = y, character = character }, baselineY )
+        ( { result | x = x, y = y, character = character }, ( offsetX, offsetY ) )
