@@ -40,10 +40,10 @@ type RenderableType
     | SpriteRenderable String Int
     | TextRenderable String Int
 
+type alias Renderables = Dict.Dict ( Layer, X, Y ) RenderableType
 
 type alias Pixel a =
     { a | x : Int, y : Int, id : Int, layer : Int, colour : Int }
-
 
 type alias Sprite a =
     { a | x : Int, y : Int, id : Int, layer : Int, sprite : Int, textureKey : String }
@@ -140,14 +140,36 @@ addText model text =
         )
 
 
+toPixel : Pixel a -> (( Layer, X, Y ), RenderableType)
+toPixel {x, y, colour, layer} =
+    ((layer, x, y), PixelRenderable colour)
+
+toSprite : Sprite a -> (( Layer, X, Y ), RenderableType)
+toSprite {x, y, layer, textureKey, sprite} =
+    ((layer, x, y), SpriteRenderable textureKey sprite)
+
+toText : Text a -> (( Layer, X, Y ), RenderableType)
+toText {x, y, layer, text, colour} =
+    ((layer, x, y), TextRenderable text colour)
+
+createLayer : ({ a | x : Int, y: Int, layer: Int } -> (( Layer, X, Y ), RenderableType)) -> List { a | x : Int, y: Int, layer: Int } -> List (( Layer, X, Y ), RenderableType)
+createLayer converter renderables =
+    List.map converter renderables
+
+layersToRenderables : List (List (( Layer, X, Y ), RenderableType)) -> Dict.Dict ( Layer, X, Y ) RenderableType
+layersToRenderables layers =
+    List.map Dict.fromList layers
+    |> List.foldl Dict.union Dict.empty
+
+
 updateRenderable : Model -> Renderable a -> Model
 updateRenderable model { x, y, id, layer, renderable } =
     let
+        -- negate the layer to get them to sort the way we want (0 on the bottom)
         key =
             ( 0 - layer, x, y )
-
-        -- negate the layer to get them to sort the way we want (0 on the bottom)
     in
+        -- If the id is already in the idToRenderable dict retrieve it and update
         case IntDict.get id model.idToRenderable of
             Just renderableKey ->
                 case renderableKey == key of
@@ -158,6 +180,7 @@ updateRenderable model { x, y, id, layer, renderable } =
                         { model
                             | renderables =
                                 Dict.insert key renderable model.renderables
+                                    -- Only one instance of this renderable can exist on this layer, so remove the old one
                                     |> Dict.remove renderableKey
                             , idToRenderable =
                                 IntDict.Safe.safeInsert id key model.idToRenderable
