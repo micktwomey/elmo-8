@@ -29,7 +29,6 @@ type alias Player =
     { x : Int
     , y : Int
     , colour : Int
-    , id : Int
     , layer : Int
     , health : Int
     }
@@ -40,7 +39,6 @@ type alias Bird =
     , y : Int
     , sprite : Int
     , textureKey : String
-    , id : Int
     , layer : Int
     }
 
@@ -50,7 +48,6 @@ type alias Hello =
     , y : Int
     , colour : Int
     , text : String
-    , id : Int
     , layer : Int
     }
 
@@ -72,24 +69,30 @@ init =
         ( displayModel, displayMsg ) =
             Elmo8.GL.Display.init
 
-        ( scene, player ) =
-            Elmo8.Scene.addPixel Elmo8.Scene.init { x = 10, y = 10, colour = Pico8.peach, id = 0, health = 100, layer = 0 }
+        player =
+            { x = 10, y = 10, colour = Pico8.peach, health = 100, layer = 1 }
 
-        ( updatedScene, bird ) =
-            Elmo8.Scene.addSprite scene { x = 60, y = 90, sprite = 0, id = 0, layer = 1, textureKey = birdWatching }
+        bird =
+            { x = 60, y = 90, sprite = 0, layer = 0, textureKey = birdWatching }
 
-        ( updatedScene_, hello ) =
-            Elmo8.Scene.addText updatedScene { x = 10, y = 50, colour = Pico8.orange, text = "Hello World!", layer = 2, id = 0 }
+        hello =
+            { x = 10, y = 50, colour = Pico8.orange, text = "Hello World!", layer = 2 }
 
         ( keyboardModel, keyboardMsg ) =
             Keyboard.Extra.init
+
+        scene =
+            Elmo8.Scene.init
+
+        updatedScene =
+            { scene | renderables = renderLayers bird player hello }
     in
         { assets = updatedAssetModel
         , player = player
         , bird = bird
         , hello = hello
         , display = displayModel
-        , scene = updatedScene_
+        , scene = updatedScene
         , keyboardModel = keyboardModel
         }
             ! [ Cmd.map AssetMsg assetMsg
@@ -97,6 +100,15 @@ init =
               , Cmd.map DisplayMsg displayMsg
               , Cmd.map KeyboardMsg keyboardMsg
               ]
+
+
+renderLayers : Bird -> Player -> Hello -> Elmo8.Scene.Renderables
+renderLayers bird player hello =
+    Elmo8.Scene.layersToRenderables
+        [ Elmo8.Scene.createLayer Elmo8.Scene.toSprite [ bird ]
+        , Elmo8.Scene.createLayer Elmo8.Scene.toPixel [ player ]
+        , Elmo8.Scene.createLayer Elmo8.Scene.toText [ hello ]
+        ]
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -133,17 +145,17 @@ update msg model =
                 updatedPlayer =
                     { player | x = player.x + arrows.x, y = player.y - arrows.y }
 
-                scene =
-                    Elmo8.Scene.updatePixel model.scene updatedPlayer
-
                 bird =
                     model.bird
 
                 updatedBird =
                     { bird | x = bird.x + wasd.x, y = bird.y - wasd.y }
 
+                scene =
+                    model.scene
+
                 updatedScene =
-                    Elmo8.Scene.updateSprite scene updatedBird
+                    { scene | renderables = renderLayers model.bird model.player model.hello }
             in
                 { model
                     | player = updatedPlayer

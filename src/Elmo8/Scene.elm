@@ -21,9 +21,6 @@ use multiple layers.
 -}
 
 import Dict
-import Result
-import IntDict
-import IntDict.Safe
 import WebGL
 import Elmo8.Assets
 import Elmo8.GL.Renderers
@@ -40,21 +37,21 @@ type RenderableType
     | SpriteRenderable String Int
     | TextRenderable String Int
 
-type alias Renderables = Dict.Dict ( Layer, X, Y ) RenderableType
+
+type alias Renderables =
+    Dict.Dict ( Layer, X, Y ) RenderableType
+
 
 type alias Pixel a =
-    { a | x : Int, y : Int, id : Int, layer : Int, colour : Int }
+    { a | x : Int, y : Int, layer : Int, colour : Int }
+
 
 type alias Sprite a =
-    { a | x : Int, y : Int, id : Int, layer : Int, sprite : Int, textureKey : String }
+    { a | x : Int, y : Int, layer : Int, sprite : Int, textureKey : String }
 
 
 type alias Text a =
-    { a | x : Int, y : Int, text : String, colour : Int, layer : Int, id : Int }
-
-
-type alias Renderable a =
-    { a | x : Int, y : Int, id : Int, layer : Int, renderable : RenderableType }
+    { a | x : Int, y : Int, text : String, colour : Int, layer : Int }
 
 
 type alias Layer =
@@ -70,17 +67,13 @@ type alias Y =
 
 
 type alias Model =
-    { idCounter : Int
-    , idToRenderable : IntDict.IntDict ( Layer, X, Y )
-    , renderables : Dict.Dict ( Layer, X, Y ) RenderableType
+    { renderables : Dict.Dict ( Layer, X, Y ) RenderableType
     }
 
 
 init : Model
 init =
-    { idCounter = 0
-    , idToRenderable = IntDict.empty
-    , renderables = Dict.empty
+    { renderables = Dict.empty
     }
 
 
@@ -89,148 +82,30 @@ clear model =
     init
 
 
-getNextId : Model -> ( Model, Int )
-getNextId model =
-    let
-        nextId =
-            model.idCounter + 1
-    in
-        ( { model | idCounter = nextId }, nextId )
+toPixel : Pixel a -> ( ( Layer, X, Y ), RenderableType )
+toPixel { x, y, colour, layer } =
+    ( ( layer, x, y ), PixelRenderable colour )
 
 
-addPixel : Model -> Pixel a -> ( Model, Pixel a )
-addPixel model pixel =
-    let
-        ( updatedModel, id ) =
-            getNextId model
-
-        updatedPixel =
-            { pixel | id = id }
-    in
-        ( updatePixel updatedModel updatedPixel
-        , updatedPixel
-        )
+toSprite : Sprite a -> ( ( Layer, X, Y ), RenderableType )
+toSprite { x, y, layer, textureKey, sprite } =
+    ( ( layer, x, y ), SpriteRenderable textureKey sprite )
 
 
-addSprite : Model -> Sprite a -> ( Model, Sprite a )
-addSprite model sprite =
-    let
-        ( updatedModel, id ) =
-            getNextId model
-
-        updatedSprite =
-            { sprite | id = id }
-    in
-        ( updateSprite updatedModel updatedSprite
-        , updatedSprite
-        )
+toText : Text a -> ( ( Layer, X, Y ), RenderableType )
+toText { x, y, layer, text, colour } =
+    ( ( layer, x, y ), TextRenderable text colour )
 
 
-addText : Model -> Text a -> ( Model, Text a )
-addText model text =
-    let
-        ( updatedModel, id ) =
-            getNextId model
-
-        updatedText =
-            { text | id = id }
-    in
-        ( updateText updatedModel updatedText
-        , updatedText
-        )
-
-
-toPixel : Pixel a -> (( Layer, X, Y ), RenderableType)
-toPixel {x, y, colour, layer} =
-    ((layer, x, y), PixelRenderable colour)
-
-toSprite : Sprite a -> (( Layer, X, Y ), RenderableType)
-toSprite {x, y, layer, textureKey, sprite} =
-    ((layer, x, y), SpriteRenderable textureKey sprite)
-
-toText : Text a -> (( Layer, X, Y ), RenderableType)
-toText {x, y, layer, text, colour} =
-    ((layer, x, y), TextRenderable text colour)
-
-createLayer : ({ a | x : Int, y: Int, layer: Int } -> (( Layer, X, Y ), RenderableType)) -> List { a | x : Int, y: Int, layer: Int } -> List (( Layer, X, Y ), RenderableType)
+createLayer : ({ a | x : Int, y : Int, layer : Int } -> ( ( Layer, X, Y ), RenderableType )) -> List { a | x : Int, y : Int, layer : Int } -> List ( ( Layer, X, Y ), RenderableType )
 createLayer converter renderables =
     List.map converter renderables
 
-layersToRenderables : List (List (( Layer, X, Y ), RenderableType)) -> Dict.Dict ( Layer, X, Y ) RenderableType
+
+layersToRenderables : List (List ( ( Layer, X, Y ), RenderableType )) -> Dict.Dict ( Layer, X, Y ) RenderableType
 layersToRenderables layers =
     List.map Dict.fromList layers
-    |> List.foldl Dict.union Dict.empty
-
-
-updateRenderable : Model -> Renderable a -> Model
-updateRenderable model { x, y, id, layer, renderable } =
-    let
-        -- negate the layer to get them to sort the way we want (0 on the bottom)
-        key =
-            ( 0 - layer, x, y )
-    in
-        -- If the id is already in the idToRenderable dict retrieve it and update
-        case IntDict.get id model.idToRenderable of
-            Just renderableKey ->
-                case renderableKey == key of
-                    True ->
-                        model
-
-                    False ->
-                        { model
-                            | renderables =
-                                Dict.insert key renderable model.renderables
-                                    -- Only one instance of this renderable can exist on this layer, so remove the old one
-                                    |> Dict.remove renderableKey
-                            , idToRenderable =
-                                IntDict.Safe.safeInsert id key model.idToRenderable
-                                    |> Result.withDefault model.idToRenderable
-                        }
-
-            Nothing ->
-                { model
-                    | renderables =
-                        Dict.insert key renderable model.renderables
-                    , idToRenderable =
-                        IntDict.Safe.safeInsert id key model.idToRenderable
-                            |> Result.withDefault model.idToRenderable
-                }
-
-
-updateSprite : Model -> Sprite a -> Model
-updateSprite model { x, y, textureKey, sprite, layer, id } =
-    updateRenderable
-        model
-        { x = x
-        , y = y
-        , layer = layer
-        , id = id
-        , renderable = SpriteRenderable textureKey sprite
-        }
-
-
-updatePixel : Model -> Pixel a -> Model
-updatePixel model { x, y, colour, layer, id } =
-    updateRenderable
-        model
-        { x = x
-        , y = y
-        , layer = layer
-        , id = id
-        , renderable = PixelRenderable colour
-        }
-
-
-updateText : Model -> Text a -> Model
-updateText model { x, y, text, colour, layer, id } =
-    updateRenderable
-        model
-        { x = x
-        , y = y
-        , layer = layer
-        , id = id
-        , renderable = TextRenderable text colour
-        }
+        |> List.foldl Dict.union Dict.empty
 
 
 renderItem : Elmo8.GL.Display.Model -> Elmo8.Assets.Model -> ( ( Layer, X, Y ), RenderableType ) -> List (Maybe WebGL.Renderable)
@@ -273,5 +148,6 @@ renderItem display assets ( ( layer, x, y ), renderable ) =
 render : Elmo8.GL.Display.Model -> Elmo8.Assets.Model -> Model -> List WebGL.Renderable
 render display assets model =
     Dict.toList model.renderables
+        |> List.sortBy (\( ( l, x, y ), item ) -> ( -l, x, y ))
         |> List.concatMap (renderItem display assets)
         |> List.filterMap identity

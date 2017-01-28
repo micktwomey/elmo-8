@@ -20,8 +20,10 @@ import Elmo8.GL.Display
 
 -- type alias Pixel = Elmo8.Scene.Pixel {}
 
-type alias Pixel
-    = Elmo8.Scene.Pixel {}
+
+type alias Pixel =
+    Elmo8.Scene.Pixel {}
+
 
 type alias Pixels =
     Dict.Dict ( Int, Int ) Pixel
@@ -62,8 +64,9 @@ renderLayers : Cursor -> Pixels -> Elmo8.Scene.Renderables
 renderLayers cursor pixels =
     Elmo8.Scene.layersToRenderables
         [ Elmo8.Scene.createLayer Elmo8.Scene.toPixel (Dict.values pixels)
-        , Elmo8.Scene.createLayer Elmo8.Scene.toPixel [cursor]
+        , Elmo8.Scene.createLayer Elmo8.Scene.toPixel [ cursor ]
         ]
+
 
 init : ( Model, Cmd Msg )
 init =
@@ -77,17 +80,18 @@ init =
         ( keyboardModel, keyboardMsg ) =
             Keyboard.Extra.init
 
-        -- ( scene, cursor ) =
-        --     Elmo8.Scene.addPixel Elmo8.Scene.init { x = 64, y = 64, value = 8.0, colour = 8, layer = 1, id = 0 }
+        cursor =
+            { x = 64, y = 64, value = 8.0, colour = 8, layer = 1 }
 
-        -- (sceneWithPixels, pixels) = drawPixel scene cursor Dict.empty
+        pixels =
+            drawPixel cursor Dict.empty
 
-        cursor = { x = 64, y = 64, value = 8.0, colour = 8, layer = 1, id = 0 }
-        (_, pixels) = drawPixel scene cursor Dict.empty
-        scene = Elmo8.Scene.init
+        scene =
+            Elmo8.Scene.init
+
         renderedScene =
             { scene
-            | renderables = renderLayers cursor pixels
+                | renderables = renderLayers cursor pixels
             }
     in
         { assets = assetModel
@@ -103,32 +107,13 @@ init =
               ]
 
 
-drawPixel : Elmo8.Scene.Model -> Cursor -> Pixels -> ( Elmo8.Scene.Model, Pixels )
-drawPixel scene {x, y, colour} pixels =
+drawPixel : Cursor -> Pixels -> Pixels
+drawPixel { x, y, colour } pixels =
     let
-        maybePixel =
-            Dict.get ( x, y ) pixels
-
-        ( updatedScene, newPixel ) =
-            case maybePixel of
-                Just p ->
-                    ( scene, { p | colour = colour } )
-
-                Nothing ->
-                    Elmo8.Scene.addPixel scene {x=x, y=y, colour=colour, id=0, layer=0}
+        newPixel =
+            { x = x, y = y, colour = colour, layer = 0 }
     in
-        ( Elmo8.Scene.updatePixel updatedScene newPixel, Dict.insert ( newPixel.x, newPixel.y ) newPixel pixels )
-
-
-renderPixels : Pixels -> Elmo8.Scene.Model -> Elmo8.Scene.Model
-renderPixels pixels scene =
-    let
-        updateScene: Pixel -> Elmo8.Scene.Model -> Elmo8.Scene.Model
-        updateScene pixel scene =
-            Elmo8.Scene.updatePixel scene pixel
-    in
-        Dict.values pixels
-            |> List.foldl updateScene scene
+        Dict.insert ( newPixel.x, newPixel.y ) newPixel pixels
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -160,7 +145,9 @@ update msg model =
                     model.cursor
 
                 -- TODO: change colour based on timer to more closely match Lua code
-                possibleValue = cursor.value + 0.1
+                possibleValue =
+                    cursor.value + 0.1
+
                 updatedValue =
                     if possibleValue >= 15.0 then
                         8.0
@@ -169,16 +156,18 @@ update msg model =
 
                 updatedCursor =
                     { cursor
-                    | x = cursor.x + arrows.x
-                    , y = cursor.y - arrows.y
-                    , value = updatedValue
-                    , colour = round (updatedValue)
+                        | x = cursor.x + arrows.x
+                        , y = cursor.y - arrows.y
+                        , value = updatedValue
+                        , colour = round (updatedValue)
                     }
 
-                ( updatedScene, updatedPixels ) =
-                    drawPixel model.scene updatedCursor model.pixels
+                updatedPixels =
+                    drawPixel updatedCursor model.pixels
 
-                scene = model.scene
+                scene =
+                    model.scene
+
                 finalScene =
                     { scene | renderables = renderLayers updatedCursor updatedPixels }
             in
