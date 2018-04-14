@@ -46,13 +46,12 @@ draw model =
 update : Model -> Model
 update model = model
 
-main : Program Never
 main =
     Console.boot
         { draw = draw
         , init = {}
         , update = update
-        , spritesUri = "birdwatching.png"
+        , spritesUrl = "birdwatching.png"
         }
 ```
 
